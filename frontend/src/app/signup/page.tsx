@@ -39,7 +39,7 @@ export default function SignupPage() {
       }
 
       // Success, route to dashboard
-      router.push('/');
+      router.push('/dashboard');
       router.refresh();
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred');
