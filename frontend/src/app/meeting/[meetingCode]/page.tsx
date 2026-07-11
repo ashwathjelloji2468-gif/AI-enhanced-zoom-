@@ -89,10 +89,10 @@ export default function MeetingPage() {
           <h2 className="text-2xl font-black">Connection Failed</h2>
           <p className="text-slate-400 text-sm">{error}</p>
           <button 
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/dashboard')}
             className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg transition-all"
           >
-            Back to Home
+            Back to Dashboard
           </button>
         </div>
       </div>

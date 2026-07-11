@@ -21,6 +21,16 @@ export type AuthenticatedHandler = (
  */
 export function withAuth(handler: AuthenticatedHandler) {
   return async (req: NextRequest, segmentData: any) => {
+    // Resolve params if it is an asynchronous Promise (Next.js 15+ compatibility)
+    let resolvedParams = segmentData?.params;
+    if (resolvedParams && typeof resolvedParams.then === 'function') {
+      resolvedParams = await resolvedParams;
+    }
+    const context = {
+      ...segmentData,
+      params: resolvedParams
+    };
+
     let token: string | undefined;
 
     // 1. Try to get token from cookies
@@ -77,7 +87,7 @@ export function withAuth(handler: AuthenticatedHandler) {
                 const newAccessToken = signAccessToken(payload);
 
                 // Call the route handler
-                const response = await handler(req, { ...segmentData, user: payload });
+                const response = await handler(req, { ...context, user: payload });
 
                 // Set new cookie on the response
                 response.cookies.set('access_token', newAccessToken, cookieOptions);
@@ -97,6 +107,6 @@ export function withAuth(handler: AuthenticatedHandler) {
     }
 
     // Pass the user information to the handler
-    return handler(req, { ...segmentData, user: payload });
+    return handler(req, { ...context, user: payload });
   };
 }

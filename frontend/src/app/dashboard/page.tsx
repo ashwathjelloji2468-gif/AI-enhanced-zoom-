@@ -109,6 +109,21 @@ export default function DashboardHome() {
     }
   };
 
+  const startPersonalRoom = async () => {
+    try {
+      const response = await fetch('/api/meetings/personal', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      // Redirect to meeting room
+      router.push(`/meeting/${data.code}`);
+    } catch (err: any) {
+      alert(err.message || 'Could not start personal room');
+    }
+  };
+
   const handleJoinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setJoinError('');
@@ -235,7 +250,7 @@ export default function DashboardHome() {
 
           {/* Personal meeting room option */}
           <button 
-            onClick={() => router.push(`/meeting/${user?.id || 'personal-room'}`)}
+            onClick={startPersonalRoom}
             className="flex flex-col items-center justify-center p-6 h-40 rounded-3xl bg-slate-900 border border-slate-800 hover:bg-slate-800/80 hover:border-slate-700 active:scale-[0.98] transition-all text-slate-100 font-medium"
           >
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 mb-3 text-blue-500">
