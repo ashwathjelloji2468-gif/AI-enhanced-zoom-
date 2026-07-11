@@ -1,0 +1,116 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── AUTH / USERS ───────────────────────────────
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  passwordHash  String
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  meetingsHosted   Meeting[]     @relation("HostedMeetings")
+  participations   Participant[]
+  refreshTokens    RefreshToken[]
+
+  @@index([email])
+}
+
+// Store refresh tokens server-side so you can revoke sessions
+// (logout, "log out of all devices", etc.) — access tokens stay stateless JWTs
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique   // store a hash of the token, not the raw value
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revoked   Boolean  @default(false)
+
+  @@index([userId])
+}
+
+// ─── MEETINGS ───────────────────────────────────
+
+enum MeetingStatus {
+  SCHEDULED
+  ONGOING
+  ENDED
+  CANCELLED
+}
+
+model Meeting {
+  id           String        @id @default(uuid())
+  code         String        @unique   // short human-friendly join code, e.g. "abc-defg-hij"
+  title        String        @default("Untitled Meeting")
+  hostId       String
+  host         User          @relation("HostedMeetings", fields: [hostId], references: [id], onDelete: Cascade)
+
+  status       MeetingStatus @default(SCHEDULED)
+  scheduledAt  DateTime?
+  startedAt    DateTime?
+  endedAt      DateTime?
+
+  isLocked     Boolean       @default(false)   // host can lock room after start
+  waitingRoom  Boolean       @default(true)
+
+  participants Participant[]
+  chatMessages ChatMessage[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([hostId])
+  @@index([code])
+}
+
+// ─── PARTICIPANTS ───────────────────────────────
+
+enum ParticipantRole {
+  HOST
+  CO_HOST
+  PARTICIPANT
+}
+
+model Participant {
+  id          String          @id @default(uuid())
+  meetingId   String
+  meeting     Meeting         @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  role        ParticipantRole @default(PARTICIPANT)
+  joinedAt    DateTime        @default(now())
+  leftAt      DateTime?
+
+  micOn       Boolean         @default(true)
+  cameraOn    Boolean         @default(true)
+
+  @@unique([meetingId, userId])   // prevents duplicate join rows per user per meeting
+  @@index([meetingId])
+  @@index([userId])
+}
+
+// ─── CHAT (in-meeting) ──────────────────────────
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  meetingId String
+  meeting   Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  senderId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([meetingId])
+}

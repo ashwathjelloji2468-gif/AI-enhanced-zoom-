@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: zoom_clone_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zoomclone
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    container_name: zoom_clone_web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/zoomclone?schema=public
+      - JWT_SECRET=your-super-secret-jwt-key-for-development-change-this-in-production
+      - JWT_REFRESH_SECRET=your-super-secret-jwt-refresh-key-for-development
+      - PORT=3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  socket-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.socket
+    container_name: zoom_clone_socket
+    restart: always
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/zoomclone?schema=public
+      - JWT_SECRET=your-super-secret-jwt-key-for-development-change-this-in-production
+      - JWT_REFRESH_SECRET=your-super-secret-jwt-refresh-key-for-development
+      - PORT=5001
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
