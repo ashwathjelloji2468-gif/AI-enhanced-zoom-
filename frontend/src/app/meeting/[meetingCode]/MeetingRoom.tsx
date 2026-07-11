@@ -746,7 +746,7 @@ function MeetingCallContent({
                     {tracks
                       .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                       .map((track) => (
-                        <div key={track.participant.identity} className="h-full aspect-video rounded-xl overflow-hidden shadow flex-shrink-0">
+                        <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="h-full aspect-video rounded-xl overflow-hidden shadow flex-shrink-0">
                           <ParticipantTile 
                             track={track} 
                             isLocal={track.participant.isLocal} 
@@ -769,7 +769,7 @@ function MeetingCallContent({
                     tracks.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'
                   }`}>
                     {tracks.map((track) => (
-                      <div key={track.participant.identity} className="relative rounded-2xl overflow-hidden aspect-video shadow-lg">
+                      <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="relative rounded-2xl overflow-hidden aspect-video shadow-lg">
                         <ParticipantTile 
                           track={track} 
                           isLocal={track.participant.isLocal} 
@@ -799,7 +799,7 @@ function MeetingCallContent({
                           {tracks
                             .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                             .map((track) => (
-                              <div key={track.participant.identity} className="rounded-xl overflow-hidden aspect-video relative shadow">
+                              <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="rounded-xl overflow-hidden aspect-video relative shadow">
                                 <ParticipantTile 
                                   track={track} 
                                   isLocal={track.participant.isLocal} 
