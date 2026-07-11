@@ -108,115 +108,223 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
       
-      {/* ──── LEFT SIDEBAR NAV ──── */}
-      <aside className="w-20 bg-slate-900 border-r border-slate-800 flex flex-col items-center justify-between py-6 z-20">
-        <div className="flex flex-col items-center space-y-8 w-full">
+      {/* ──── SIDEBAR NAV (Tablet/Desktop) ──── */}
+      <aside className="hidden md:flex md:w-20 lg:w-64 bg-slate-900 border-r border-slate-800 flex-col items-center lg:items-start justify-between py-6 lg:px-4 z-20 transition-all duration-200">
+        <div className="flex flex-col items-center lg:items-start space-y-8 w-full">
           {/* Logo */}
           <div 
             onClick={() => router.push('/dashboard')}
-            className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-md shadow-blue-500/20 cursor-pointer active:scale-95 transition-transform"
+            className="flex h-12 w-12 lg:w-auto lg:h-12 items-center justify-center lg:justify-start lg:space-x-3 rounded-2xl bg-blue-600 lg:bg-transparent lg:shadow-none shadow-md shadow-blue-500/20 cursor-pointer active:scale-95 transition-all lg:px-4"
           >
-            <Video className="h-6 w-6 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-md shadow-blue-500/20">
+              <Video className="h-6 w-6 text-white" />
+            </div>
+            <span className="hidden lg:block font-display font-bold text-lg text-white tracking-wide">
+              Connect
+            </span>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-col items-center space-y-4 w-full">
+          <nav className="flex flex-col items-center lg:items-start space-y-3 w-full">
             <button 
               onClick={() => router.push('/dashboard')}
-              className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl transition-all ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
                 pathname === '/dashboard' 
                   ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
               }`}
             >
-              <Tv className="h-5 w-5" />
-              <span className="text-[10px] mt-1 font-medium">Home</span>
+              <Tv className="h-5 w-5 flex-shrink-0" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Home</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/meetings')}
-              className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl transition-all ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
                 pathname.startsWith('/dashboard/meetings') 
                   ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
               }`}
             >
-              <Clock className="h-5 w-5" />
-              <span className="text-[10px] mt-1 font-medium">Meetings</span>
+              <Clock className="h-5 w-5 flex-shrink-0" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Meetings</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/contacts')}
-              className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl transition-all ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
                 pathname.startsWith('/dashboard/contacts') 
                   ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
               }`}
             >
-              <Users className="h-5 w-5" />
-              <span className="text-[10px] mt-1 font-medium">Contacts</span>
+              <Users className="h-5 w-5 flex-shrink-0" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Contacts</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/settings')}
-              className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl transition-all ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
                 pathname.startsWith('/dashboard/settings') 
                   ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
               }`}
             >
-              <Settings className="h-5 w-5" />
-              <span className="text-[10px] mt-1 font-medium">Settings</span>
+              <Settings className="h-5 w-5 flex-shrink-0" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Settings</span>
             </button>
           </nav>
         </div>
 
         {/* Profile Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="outline-none focus:ring-0 active:scale-95 transition-transform cursor-pointer">
-            <Avatar className="h-10 w-10 ring-2 ring-slate-800 hover:ring-blue-500/50 transition-all">
-              <AvatarImage src={user?.avatarUrl || undefined} />
-              <AvatarFallback className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold">
-                {user?.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-xl" align="end">
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-semibold">{user?.name}</p>
-                <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+        <div className="lg:px-4 w-full flex justify-center lg:justify-start">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="outline-none focus:ring-0 active:scale-95 transition-transform cursor-pointer">
+              <div className="flex items-center space-x-3">
+                <Avatar className="h-10 w-10 ring-2 ring-slate-800 hover:ring-blue-500/50 transition-all">
+                  <AvatarImage src={user?.avatarUrl || undefined} />
+                  <AvatarFallback className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold">
+                    {user?.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden lg:flex flex-col items-start text-left max-w-[140px]">
+                  <span className="text-sm font-semibold text-slate-250 truncate w-full">{user?.name}</span>
+                  <span className="text-xs text-slate-500 truncate w-full">{user?.email}</span>
+                </div>
               </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-slate-800" />
-            <DropdownMenuItem 
-              onClick={() => router.push('/dashboard/settings')}
-              className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
-            >
-              <UserIcon className="mr-2 h-4 w-4 text-slate-400" />
-              My Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={() => router.push('/dashboard/settings')}
-              className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
-            >
-              <Settings className="mr-2 h-4 w-4 text-slate-400" />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-slate-800" />
-            <DropdownMenuItem 
-              onClick={handleLogout}
-              className="focus:bg-red-900/50 focus:text-red-300 text-red-400 cursor-pointer py-2"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-xl" align="start">
+              <DropdownMenuLabel className="font-normal lg:hidden">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-semibold">{user?.name}</p>
+                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-slate-800 lg:hidden" />
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/settings')}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <UserIcon className="mr-2 h-4 w-4 text-slate-400" />
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/settings')}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <Settings className="mr-2 h-4 w-4 text-slate-400" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="focus:bg-red-900/50 focus:text-red-300 text-red-400 cursor-pointer py-2"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </aside>
 
+      {/* ──── MOBILE BOTTOM NAV BAR ──── */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-slate-900 border-t border-slate-800 z-35 flex items-center justify-around px-2 pb-safe">
+        <button 
+          onClick={() => router.push('/dashboard')}
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+            pathname === '/dashboard' 
+              ? 'text-blue-400 font-semibold' 
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Tv className="h-5 w-5" />
+          <span className="text-[10px] mt-0.5 font-medium">Home</span>
+        </button>
+
+        <button 
+          onClick={() => router.push('/dashboard/meetings')}
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+            pathname.startsWith('/dashboard/meetings') 
+              ? 'text-blue-400 font-semibold' 
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Clock className="h-5 w-5" />
+          <span className="text-[10px] mt-0.5 font-medium">Meetings</span>
+        </button>
+
+        <button 
+          onClick={() => router.push('/dashboard/contacts')}
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+            pathname.startsWith('/dashboard/contacts') 
+              ? 'text-blue-400 font-semibold' 
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Users className="h-5 w-5" />
+          <span className="text-[10px] mt-0.5 font-medium">Contacts</span>
+        </button>
+
+        <button 
+          onClick={() => router.push('/dashboard/settings')}
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+            pathname.startsWith('/dashboard/settings') 
+              ? 'text-blue-400 font-semibold' 
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Settings className="h-5 w-5" />
+          <span className="text-[10px] mt-0.5 font-medium">Settings</span>
+        </button>
+
+        <div className="flex-1 flex justify-center items-center h-12 min-h-[44px]">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="outline-none focus:ring-0 active:scale-95 transition-transform cursor-pointer">
+              <Avatar className="h-7 w-7 ring-2 ring-slate-800">
+                <AvatarImage src={user?.avatarUrl || undefined} />
+                <AvatarFallback className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold text-[10px]">
+                  {user?.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-xl" align="end">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-semibold">{user?.name}</p>
+                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/settings')}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <UserIcon className="mr-2 h-4 w-4 text-slate-400" />
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/settings')}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <Settings className="mr-2 h-4 w-4 text-slate-400" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="focus:bg-red-900/50 focus:text-red-300 text-red-400 cursor-pointer py-2"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </nav>
+
       {/* ──── TAB / PAGE CONTENT VIEWPORT ──── */}
-      <main className="flex-1 flex flex-col bg-slate-950 overflow-hidden relative">
+      <main className="flex-1 flex flex-col bg-slate-950 overflow-hidden relative pb-16 md:pb-0">
         <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-blue-600/5 blur-[128px]" />
         {children}
       </main>

@@ -30,7 +30,8 @@ import {
   Award,
   Grid,
   WifiOff,
-  Brain
+  Brain,
+  MoreHorizontal
 } from 'lucide-react';
 import AskAIPanel from './AskAIPanel';
 import { Button } from '@/components/ui/button';
@@ -661,74 +662,117 @@ function MeetingCallContent({
         </header>
 
         {/* Video Grid */}
-        <div className="flex-1 flex items-center justify-center p-6 pt-20 pb-28">
+        <div className="flex-1 flex items-center justify-center p-4 md:p-6 pt-20 pb-28 overflow-hidden">
           {tracks.length === 0 ? (
             <div className="text-slate-500 text-sm">Waiting for other participants...</div>
-          ) : layoutMode === 'gallery' ? (
-            
-            // GALLERY VIEW
-            <div className={`grid gap-4 w-full h-full max-w-5xl items-center justify-center ${
-              tracks.length === 1 ? 'grid-cols-1 max-w-2xl' :
-              tracks.length === 2 ? 'grid-cols-2' :
-              tracks.length <= 4 ? 'grid-cols-2' : 'grid-cols-3'
-            }`}>
-              {tracks.map((track) => (
-                <div key={track.participant.identity} className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video shadow-lg border border-slate-800">
-                  <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
-                    {track.participant.name || track.participant.identity} {track.participant.isLocal ? '(You)' : ''}
-                  </span>
-                </div>
-              ))}
-            </div>
-
           ) : (
-
-            // SPEAKER VIEW
-            <div className="flex flex-col md:flex-row gap-4 w-full h-full max-w-6xl">
-              {activeSpeakerTrack && (
+            <>
+              {/* MOBILE SPOTLIGHT + FILMSTRIP VIEW (<768px) */}
+              <div className="flex md:hidden flex-col w-full h-full gap-3 overflow-hidden">
+                {/* Spotlight Dominant Tile */}
                 <div className="flex-1 rounded-2xl overflow-hidden bg-slate-900 relative shadow-xl border border-slate-800">
-                  <VideoTrack trackRef={activeSpeakerTrack as any} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-4 left-4 bg-black/60 backdrop-blur px-4 py-2 rounded-xl text-sm font-bold text-white flex items-center">
-                    <Award className="h-4 w-4 text-yellow-500 mr-2" />
-                    {activeSpeakerTrack.participant.name || activeSpeakerTrack.participant.identity} {activeSpeakerTrack.participant.isLocal ? '(You)' : ''}
-                  </span>
+                  {activeSpeakerTrack ? (
+                    <>
+                      <VideoTrack trackRef={activeSpeakerTrack as any} className="w-full h-full object-cover" />
+                      <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
+                        {activeSpeakerTrack.participant.name || activeSpeakerTrack.participant.identity} {activeSpeakerTrack.participant.isLocal ? '(You)' : ''}
+                      </span>
+                    </>
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-slate-500 text-sm">
+                      No feed available
+                    </div>
+                  )}
                 </div>
-              )}
 
-              {tracks.length > 1 && (
-                <ScrollArea className="md:w-60 flex flex-col gap-2 max-h-full">
-                  <div className="space-y-3 pr-2">
+                {/* Horizontal Filmstrip of other participants */}
+                {tracks.length > 1 && (
+                  <div className="h-20 flex overflow-x-auto space-x-2 pb-1 scrollbar-thin scrollbar-thumb-slate-800">
                     {tracks
                       .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                       .map((track) => (
-                        <div key={track.participant.identity} className="rounded-xl overflow-hidden bg-slate-900 aspect-video relative border border-slate-800 shadow">
+                        <div key={track.participant.identity} className="h-full aspect-video rounded-xl overflow-hidden bg-slate-900 relative border border-slate-850 shadow flex-shrink-0">
                           <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
-                          <span className="absolute bottom-2 left-2 bg-black/75 px-2 py-1 rounded-lg text-[10px] font-semibold text-white">
+                          <span className="absolute bottom-1 left-1 bg-black/75 px-1.5 py-0.5 rounded text-[8px] font-semibold text-white truncate max-w-[80px]">
                             {track.participant.name || track.participant.identity}
                           </span>
                         </div>
                       ))}
                   </div>
-                </ScrollArea>
-              )}
-            </div>
+                )}
+              </div>
+
+              {/* TABLET / DESKTOP VIEWS (>=768px) */}
+              <div className="hidden md:flex w-full h-full items-center justify-center">
+                {layoutMode === 'gallery' ? (
+                  
+                  // GALLERY VIEW
+                  <div className={`grid gap-4 w-full h-full max-w-5xl items-center justify-center ${
+                    tracks.length === 1 ? 'grid-cols-1 max-w-2xl' :
+                    tracks.length === 2 ? 'grid-cols-2' :
+                    tracks.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'
+                  }`}>
+                    {tracks.map((track) => (
+                      <div key={track.participant.identity} className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video shadow-lg border border-slate-800">
+                        <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
+                        <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
+                          {track.participant.name || track.participant.identity} {track.participant.isLocal ? '(You)' : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                ) : (
+
+                  // SPEAKER VIEW
+                  <div className="flex flex-col md:flex-row gap-4 w-full h-full max-w-6xl">
+                    {activeSpeakerTrack && (
+                      <div className="flex-1 rounded-2xl overflow-hidden bg-slate-900 relative shadow-xl border border-slate-800">
+                        <VideoTrack trackRef={activeSpeakerTrack as any} className="w-full h-full object-cover" />
+                        <span className="absolute bottom-4 left-4 bg-black/60 backdrop-blur px-4 py-2 rounded-xl text-sm font-bold text-white flex items-center">
+                          <Award className="h-4 w-4 text-yellow-500 mr-2" />
+                          {activeSpeakerTrack.participant.name || activeSpeakerTrack.participant.identity} {activeSpeakerTrack.participant.isLocal ? '(You)' : ''}
+                        </span>
+                      </div>
+                    )}
+
+                    {tracks.length > 1 && (
+                      <ScrollArea className="md:w-60 flex flex-col gap-2 max-h-full">
+                        <div className="space-y-3 pr-2">
+                          {tracks
+                            .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
+                            .map((track) => (
+                              <div key={track.participant.identity} className="rounded-xl overflow-hidden bg-slate-900 aspect-video relative border border-slate-800 shadow">
+                                <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
+                                <span className="absolute bottom-2 left-2 bg-black/75 px-2 py-1 rounded-lg text-[10px] font-semibold text-white">
+                                  {track.participant.name || track.participant.identity}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      </ScrollArea>
+                    )}
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
 
         {/* BOTTOM ACTION BAR */}
-        <footer className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black to-transparent flex items-center justify-between px-8 z-10">
+        <footer className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black to-transparent flex items-center justify-between px-4 md:px-8 z-10">
           
-          {/* Audio/Video toggles with direct TooltipTrigger button styling */}
-          <div className="flex items-center space-x-3">
+          {/* Audio/Video toggles */}
+          <div className="flex items-center space-x-2 md:space-x-3">
             <Tooltip>
               <TooltipTrigger 
                 onClick={() => localParticipant && handleToggleMic(localParticipant)}
-                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all ${
+                className={`h-11 w-11 md:h-12 md:w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all ${
                   localMicOn 
                     ? 'bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800' 
                     : 'bg-red-600 hover:bg-red-500 text-white'
                 }`}
+                aria-label={localMicOn ? 'Mute Microphone' : 'Unmute Microphone'}
               >
                 {localMicOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
               </TooltipTrigger>
@@ -740,22 +784,24 @@ function MeetingCallContent({
             <Tooltip>
               <TooltipTrigger 
                 onClick={() => localParticipant && handleToggleCam(localParticipant)}
-                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all ${
+                className={`h-11 w-11 md:h-12 md:w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all ${
                   localCamOn 
                     ? 'bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800' 
                     : 'bg-red-600 hover:bg-red-500 text-white'
                 }`}
+                aria-label={localCamOn ? 'Stop Video' : 'Start Video'}
               >
                 {localCamOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
               </TooltipTrigger>
               <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">
-                {localCamOn ? 'Stop Camera' : 'Start Camera'}
+                {localCamOn ? 'Stop Video' : 'Start Video'}
               </TooltipContent>
             </Tooltip>
           </div>
 
-          {/* Center bar actions */}
-          <div className="flex items-center space-x-3 bg-slate-900/60 backdrop-blur-md px-6 py-2 rounded-2xl border border-slate-850">
+          {/* Center icons tray */}
+          <div className="flex items-center space-x-1 sm:space-x-3 bg-slate-900/90 backdrop-blur px-3 py-1.5 md:px-6 md:py-2 rounded-2xl border border-slate-850 shadow-2xl">
+            
             {/* Participants */}
             <Tooltip>
               <TooltipTrigger 
@@ -764,9 +810,10 @@ function MeetingCallContent({
                   setIsChatOpen(false);
                   setIsAskAIOpen(false);
                 }}
-                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
+                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px] ${
                   isParticipantsOpen ? 'text-blue-500 hover:text-blue-400' : ''
                 }`}
+                aria-label="Toggle Participants"
               >
                 <Users className="h-5 w-5" />
                 <span className="text-[10px] mt-1 hidden sm:block">Participants</span>
@@ -782,9 +829,10 @@ function MeetingCallContent({
                   setIsParticipantsOpen(false);
                   setIsAskAIOpen(false);
                 }}
-                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
+                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px] ${
                   isChatOpen ? 'text-blue-500 hover:text-blue-400' : ''
                 }`}
+                aria-label="Toggle Chat"
               >
                 <MessageSquare className="h-5 w-5" />
                 <span className="text-[10px] mt-1 hidden sm:block">Chat</span>
@@ -792,65 +840,72 @@ function MeetingCallContent({
               <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Toggle Chat Panel</TooltipContent>
             </Tooltip>
 
-            {/* Ask AI */}
-            <Tooltip>
-              <TooltipTrigger 
-                onClick={() => {
-                  setIsAskAIOpen(!isAskAIOpen);
-                  setIsChatOpen(false);
-                  setIsParticipantsOpen(false);
-                }}
-                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
-                  isAskAIOpen ? 'text-indigo-400 hover:text-indigo-300' : ''
-                }`}
-              >
-                <Brain className="h-5 w-5 text-indigo-400 animate-pulse" />
-                <span className="text-[10px] mt-1 hidden sm:block font-bold">Ask AI</span>
-              </TooltipTrigger>
-              <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Ask questions about this meeting</TooltipContent>
-            </Tooltip>
-
-            {/* Share Screen */}
-            <Tooltip>
-              <TooltipTrigger 
-                onClick={() => {
-                  if (localParticipant) {
-                    const isSharing = localParticipant.isScreenShareEnabled;
-                    localParticipant.setScreenShareEnabled(!isSharing);
-                  }
-                }}
-                className="text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer"
-              >
-                <Monitor className="h-5 w-5 text-green-500" />
-                <span className="text-[10px] mt-1 hidden sm:block">Share Screen</span>
-              </TooltipTrigger>
-              <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Start / Stop Screen Share</TooltipContent>
-            </Tooltip>
-
-            {/* Cloud Recording Control */}
-            {isHost && (
+            {/* Ask AI Companion - Visible on Desktop/Tablet, nested in More on mobile */}
+            <div className="hidden md:block">
               <Tooltip>
                 <TooltipTrigger 
-                  onClick={handleToggleRecording}
-                  disabled={isProcessingRecording}
-                  className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
-                    isRecording ? 'text-red-500 hover:text-red-400' : ''
-                  } ${isProcessingRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => {
+                    setIsAskAIOpen(!isAskAIOpen);
+                    setIsChatOpen(false);
+                    setIsParticipantsOpen(false);
+                  }}
+                  className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px] ${
+                    isAskAIOpen ? 'text-indigo-400 hover:text-indigo-305' : ''
+                  }`}
+                  aria-label="Ask AI Companion"
                 >
-                  <Square className={`h-5 w-5 ${isRecording ? 'fill-red-500' : ''} ${isProcessingRecording ? 'animate-pulse' : ''}`} />
-                  <span className="text-[10px] mt-1 hidden sm:block">
-                    {isProcessingRecording ? 'Processing...' : isRecording ? 'Recording' : 'Record'}
-                  </span>
+                  <Brain className="h-5 w-5 text-indigo-400" />
+                  <span className="text-[10px] mt-1 hidden sm:block">Ask AI</span>
                 </TooltipTrigger>
-                <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">
-                  {isProcessingRecording ? 'Processing request...' : isRecording ? 'Stop Recording' : 'Start Recording'}
-                </TooltipContent>
+                <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Ask questions about this meeting</TooltipContent>
               </Tooltip>
+            </div>
+
+            {/* Share Screen - Visible on Desktop/Tablet, nested in More on mobile */}
+            <div className="hidden md:block">
+              <Tooltip>
+                <TooltipTrigger 
+                  onClick={() => {
+                    if (localParticipant) {
+                      const isSharing = localParticipant.isScreenShareEnabled;
+                      localParticipant.setScreenShareEnabled(!isSharing);
+                    }
+                  }}
+                  className="text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px]"
+                  aria-label="Share Screen"
+                >
+                  <Monitor className="h-5 w-5 text-green-500" />
+                  <span className="text-[10px] mt-1 hidden sm:block">Share Screen</span>
+                </TooltipTrigger>
+                <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Start / Stop Screen Share</TooltipContent>
+              </Tooltip>
+            </div>
+
+            {/* Cloud Recording Control - Visible on Desktop/Tablet (Host Only), nested in More on mobile */}
+            {isHost && (
+              <div className="hidden md:block">
+                <Tooltip>
+                  <TooltipTrigger 
+                    onClick={handleToggleRecording}
+                    disabled={isProcessingRecording}
+                    className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px] ${
+                      isRecording ? 'text-red-500 hover:text-red-400' : ''
+                    } ${isProcessingRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    aria-label="Toggle Recording"
+                  >
+                    <Square className="h-5 w-5" />
+                    <span className="text-[10px] mt-1 hidden sm:block">Record</span>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">
+                    {isProcessingRecording ? 'Processing request...' : isRecording ? 'Stop Recording' : 'Start Recording'}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             )}
 
             {/* Reactions Menubar */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer">
+              <DropdownMenuTrigger className="text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px]">
                 <Smile className="h-5 w-5" />
                 <span className="text-[10px] mt-1 hidden sm:block">Reactions</span>
               </DropdownMenuTrigger>
@@ -867,15 +922,71 @@ function MeetingCallContent({
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* MOBILE OVERFLOW MENU (...) */}
+            <div className="flex md:hidden items-center justify-center p-1">
+              <DropdownMenu>
+                <DropdownMenuTrigger 
+                  className="text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer min-h-[40px] min-w-[40px]"
+                  aria-label="More options"
+                >
+                  <MoreHorizontal className="h-5 w-5" />
+                  <span className="text-[10px] mt-1 hidden sm:block">More</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-slate-900 border-slate-800 text-slate-100 shadow-xl rounded-xl" align="end">
+                  
+                  {/* Share Screen */}
+                  <DropdownMenuItem 
+                    onClick={() => {
+                      if (localParticipant) {
+                        const isSharing = localParticipant.isScreenShareEnabled;
+                        localParticipant.setScreenShareEnabled(!isSharing);
+                      }
+                    }}
+                    className="focus:bg-slate-800 focus:text-white cursor-pointer py-2.5 text-xs flex items-center"
+                  >
+                    <Monitor className="h-4 w-4 mr-2.5 text-green-500" />
+                    Share Screen
+                  </DropdownMenuItem>
+
+                  {/* Ask AI Companion */}
+                  <DropdownMenuItem 
+                    onClick={() => {
+                      setIsAskAIOpen(!isAskAIOpen);
+                      setIsChatOpen(false);
+                      setIsParticipantsOpen(false);
+                    }}
+                    className="focus:bg-slate-800 focus:text-white cursor-pointer py-2.5 text-xs flex items-center"
+                  >
+                    <Brain className="h-4 w-4 mr-2.5 text-indigo-400" />
+                    Ask AI Companion
+                  </DropdownMenuItem>
+
+                  {/* Cloud Recording */}
+                  {isHost && (
+                    <DropdownMenuItem 
+                      onClick={handleToggleRecording}
+                      disabled={isProcessingRecording}
+                      className="focus:bg-slate-800 focus:text-white cursor-pointer py-2.5 text-xs flex items-center"
+                    >
+                      <Square className={`h-4 w-4 mr-2.5 ${isRecording ? 'text-red-500' : 'text-slate-400'}`} />
+                      {isRecording ? 'Stop Recording' : 'Record to Cloud'}
+                    </DropdownMenuItem>
+                  )}
+                  
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
           </div>
 
           {/* Leave Button */}
           <Button 
             onClick={handleLeaveTrigger}
-            className="bg-red-600 hover:bg-red-500 text-white font-bold px-6 h-12 rounded-xl flex items-center shadow-lg shadow-red-600/25 active:scale-[0.98] transition-all"
+            className="bg-red-600 hover:bg-red-500 text-white font-bold px-4 md:px-6 h-11 md:h-12 rounded-xl flex items-center shadow-lg shadow-red-600/25 active:scale-[0.98] transition-all min-h-[44px]"
+            aria-label="Leave Meeting"
           >
-            <PhoneOff className="h-4 w-4 mr-2" />
-            Leave
+            <PhoneOff className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:block">Leave</span>
           </Button>
 
         </footer>
@@ -883,7 +994,7 @@ function MeetingCallContent({
 
       {/* Sidebar Slideovers */}
       {(isChatOpen || isParticipantsOpen || isAskAIOpen) && (
-        <aside className="w-80 border-l border-slate-800 bg-slate-900 flex flex-col h-full z-10">
+        <aside className="fixed inset-0 z-50 md:static md:z-10 w-full md:w-60 lg:w-80 h-full bg-slate-900 flex flex-col md:border-l md:border-slate-800 transition-all duration-200">
           
           {/* ASK AI PANEL */}
           {isAskAIOpen && (
