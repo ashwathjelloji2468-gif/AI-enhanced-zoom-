@@ -27,26 +27,29 @@ export const POST = withAuth(async (req, { params, user }) => {
       return NextResponse.json({ error: 'Only the host can stop recording' }, { status: 403 });
     }
 
-    // Find the active processing recording
+    // Find the active processing or failed recording
     const activeRecording = await prisma.recording.findFirst({
       where: {
         meetingId: meeting.id,
-        status: 'PROCESSING'
+        status: { in: ['PROCESSING', 'FAILED'] }
       }
     });
 
     if (!activeRecording) {
-      return NextResponse.json({ error: 'No active recording found for this meeting' }, { status: 404 });
+      return NextResponse.json({ error: 'No active or failed recording found for this meeting' }, { status: 404 });
     }
 
     // Calculate duration since start
     const durationMs = Date.now() - new Date(activeRecording.createdAt).getTime();
     const durationSec = Math.max(1, Math.round(durationMs / 1000));
 
-    // Update Recording entry
+    // Update Recording entry and reset status to PROCESSING for the worker
     const recording = await prisma.recording.update({
       where: { id: activeRecording.id },
-      data: { durationSec }
+      data: { 
+        durationSec,
+        status: 'PROCESSING'
+      }
     });
 
     console.log(`Recording stopped for meeting ${meeting.code}. Active duration: ${durationSec}s. Enqueuing summary job...`);

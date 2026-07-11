@@ -113,6 +113,12 @@ Alex: Perfect. Let's also wrap up the call and end the session. Thanks everyone.
         `.trim();
       }
 
+      // Length guard: Truncate transcript to prevent overflowing Claude's token limits in extremely long meetings (e.g. 2+ hours)
+      if (transcript.length > 50000) {
+        console.warn(`[Job ${job.id}] Transcript length (${transcript.length} characters) exceeds limit. Truncating content safely...`);
+        transcript = transcript.slice(0, 35000) + "\n\n[... Transcript Truncated Due to Length ...] \n\n" + transcript.slice(-15000);
+      }
+
       // 3. Summarization phase (Anthropic Claude or Mock Fallback)
       let summaryObj: {
         overview: string;
@@ -152,7 +158,14 @@ JSON keys required:
             ],
           });
 
-          const rawText = message.content[0].type === 'text' ? message.content[0].text : '';
+          let rawText = message.content[0].type === 'text' ? message.content[0].text : '';
+          
+          // Robust JSON Parser: Extract JSON substring if Claude returns markdown codeblocks
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            rawText = jsonMatch[0];
+          }
+
           summaryObj = JSON.parse(rawText.trim());
           console.log(`[Job ${job.id}] Claude successfully returned parsed meeting summary.`);
         } catch (summaryErr: any) {

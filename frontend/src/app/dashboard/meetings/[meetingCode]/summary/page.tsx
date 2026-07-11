@@ -72,6 +72,9 @@ export default function MeetingSummaryPage() {
 
       if (data.status === 'PROCESSING') {
         setStatus('PROCESSING');
+      } else if (data.status === 'FAILED') {
+        setErrorMsg(data.error || 'AI summary compilation failed.');
+        setStatus('ERROR');
       } else if (data.status === 'READY') {
         setSummary(data.summary);
         setActionItems(data.actionItems);
@@ -212,10 +215,35 @@ export default function MeetingSummaryPage() {
               </div>
             </div>
             <h2 className="text-xl font-bold text-white">Summary Unavailable</h2>
-            <p className="text-slate-400 text-sm max-w-sm mx-auto">{errorMsg || 'Failed to load summaries'}</p>
-            <Button onClick={() => router.push('/dashboard/meetings')} className="bg-slate-800 hover:bg-slate-700 text-slate-200">
-              Go Back
-            </Button>
+            <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">{errorMsg || 'Failed to load summaries'}</p>
+            <div className="flex justify-center gap-3">
+              <Button onClick={() => router.push('/dashboard/meetings')} className="bg-slate-850 hover:bg-slate-800 text-slate-400 border border-slate-800 cursor-pointer">
+                Go Back
+              </Button>
+              {(errorMsg?.includes('failed') || errorMsg?.includes('timeout') || errorMsg?.includes('recording')) && (
+                <Button 
+                  onClick={async () => {
+                    setStatus('LOADING');
+                    try {
+                      const res = await fetch(`/api/meetings/${meetingCode}/recording/stop`, { method: 'POST' });
+                      const data = await res.json();
+                      if (res.ok) {
+                        setStatus('PROCESSING');
+                      } else {
+                        alert(data.error || 'Failed to trigger retry');
+                        setStatus('ERROR');
+                      }
+                    } catch (err) {
+                      alert('Error triggering retry');
+                      setStatus('ERROR');
+                    }
+                  }} 
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
+                >
+                  Retry AI Compilation
+                </Button>
+              )}
+            </div>
           </Card>
         )}
 

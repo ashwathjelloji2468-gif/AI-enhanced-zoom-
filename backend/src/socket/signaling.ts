@@ -15,6 +15,12 @@ export function setupSignaling(io: Server) {
   io.on('connection', (socket: Socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
+    // Join personal notification room
+    socket.on('join-user', ({ userId }: { userId: string }) => {
+      socket.join(`user-${userId}`);
+      console.log(`Socket ${socket.id} joined personal notification room user-${userId}`);
+    });
+
     // Join a meeting room
     socket.on(
       'join-room',
@@ -210,9 +216,36 @@ export function setupSignaling(io: Server) {
     });
 
     // Worker notifies that AI summary is completed and ready
-    socket.on('summary-finished', ({ room, meetingId, summaryId }: { room: string; meetingId: string; summaryId: string }) => {
-      console.log(`Worker completed summary for room ${room}. Broadcasting summary-ready...`);
+    socket.on('summary-finished', async ({ room, meetingId, summaryId }: { room: string; meetingId: string; summaryId: string }) => {
+      console.log(`Worker completed summary for room ${room}. Broadcasting to room...`);
       io.to(room).emit('summary-ready', { meetingId, summaryId });
+
+      // Query database for all participants of this meeting and broadcast globally to their personal notification rooms
+      try {
+        const participants = await prisma.participant.findMany({
+          where: { meetingId }
+        });
+        
+        const hostMeeting = await prisma.meeting.findUnique({
+          where: { id: meetingId }
+        });
+
+        const userIds = new Set<string>();
+        if (hostMeeting) userIds.add(hostMeeting.hostId);
+        participants.forEach(p => userIds.add(p.userId));
+
+        console.log(`Broadcasting summary-ready globally to ${userIds.size} participant(s)...`);
+        userIds.forEach(userId => {
+          io.to(`user-${userId}`).emit('global-summary-ready', {
+            meetingId,
+            summaryId,
+            meetingCode: room,
+            meetingTitle: hostMeeting?.title || 'Video Call'
+          });
+        });
+      } catch (err) {
+        console.error('Failed to broadcast global summary-ready notifications:', err);
+      }
     });
 
     // Handle explicit disconnect or leaving room

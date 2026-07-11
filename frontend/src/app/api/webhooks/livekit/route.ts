@@ -5,7 +5,6 @@ import { WebhookReceiver } from 'livekit-server-sdk';
 
 const apiKey = process.env.LIVEKIT_API_KEY || '';
 const apiSecret = process.env.LIVEKIT_API_SECRET || '';
-const webhookSecret = process.env.LIVEKIT_WEBHOOK_SECRET || '';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,25 +12,26 @@ export async function POST(req: NextRequest) {
     const authHeader = req.headers.get('Authorization') || '';
     
     let eventPayload: any;
-    let signatureVerified = false;
 
-    // 1. Try to verify webhook signature in production if credentials exist
-    if (apiKey && apiSecret && authHeader) {
+    // 1. Enforce strict webhook signature verification in production if credentials exist
+    if (apiKey && apiSecret) {
+      if (!authHeader) {
+        console.error('Missing Authorization header for webhook signature verification');
+        return NextResponse.json({ error: 'Missing webhook Authorization signature' }, { status: 401 });
+      }
       try {
         const receiver = new WebhookReceiver(apiKey, apiSecret);
         eventPayload = await receiver.receive(rawBody, authHeader);
-        signatureVerified = true;
         console.log(`LiveKit webhook signature verified for event: ${eventPayload.event}`);
       } catch (err: any) {
-        console.warn('LiveKit webhook signature verification failed:', err.message);
+        console.error('LiveKit webhook signature verification failed:', err.message);
+        return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });
       }
-    }
-
-    // 2. Parse payload directly in development or fallback mode
-    if (!signatureVerified) {
+    } else {
+      // In local development fallback mode, parse payload directly
       try {
         eventPayload = JSON.parse(rawBody);
-        console.log(`Parsed webhook payload directly (unverified) for event: ${eventPayload?.event}`);
+        console.log(`Parsed webhook payload directly (unverified/dev mode) for event: ${eventPayload?.event}`);
       } catch (parseErr) {
         return NextResponse.json({ error: 'Invalid JSON payload' }, { status: 400 });
       }
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
     const eventName = eventPayload?.event;
     console.log(`Processing webhook event: ${eventName}`, eventPayload);
 
-    // Support multiple webhook triggers for maximum resilience
     let meetingCode: string | undefined;
 
     if (eventName === 'room_finished' && eventPayload?.room?.name) {
@@ -55,6 +54,10 @@ export async function POST(req: NextRequest) {
         where: { id: eventPayload.recordingId }
       });
       if (recording) {
+        // Idempotency: Skip if already processed or failed
+        if (recording.status !== 'PROCESSING') {
+          return NextResponse.json({ message: 'Recording is already processed or failed', status: recording.status });
+        }
         await enqueueSummaryJob(recording.id);
         return NextResponse.json({ message: 'Mock job enqueued successfully', recordingId: recording.id });
       }
@@ -94,7 +97,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: `No active processing recording found for meeting ${meeting.code}. Webhook ignored.` });
     }
 
-    // Enqueue summary job
+    // Enqueue summary job (deduplicated by BullMQ using rec-[recordingId] jobId)
     await enqueueSummaryJob(recording.id);
 
     return NextResponse.json({
