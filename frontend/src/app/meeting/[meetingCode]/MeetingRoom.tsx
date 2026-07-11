@@ -29,8 +29,10 @@ import {
   Square,
   Award,
   Grid,
-  WifiOff
+  WifiOff,
+  Brain
 } from 'lucide-react';
+import AskAIPanel from './AskAIPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -106,6 +108,7 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   // Sidebar & Layout toggle state
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isParticipantsOpen, setIsParticipantsOpen] = useState(false);
+  const [isAskAIOpen, setIsAskAIOpen] = useState(false);
   const [layoutMode, setLayoutMode] = useState<'gallery' | 'speaker'>('gallery');
 
   // Leave meeting dialog state
@@ -426,6 +429,8 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
           setIsChatOpen={setIsChatOpen}
           isParticipantsOpen={isParticipantsOpen}
           setIsParticipantsOpen={setIsParticipantsOpen}
+          isAskAIOpen={isAskAIOpen}
+          setIsAskAIOpen={setIsAskAIOpen}
           chatMessages={chatMessages}
           chatInput={chatInput}
           setChatInput={setChatInput}
@@ -501,6 +506,8 @@ interface MeetingCallContentProps {
   setIsChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isParticipantsOpen: boolean;
   setIsParticipantsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAskAIOpen: boolean;
+  setIsAskAIOpen: React.Dispatch<React.SetStateAction<boolean>>;
   chatMessages: ChatMessage[];
   chatInput: string;
   setChatInput: React.Dispatch<React.SetStateAction<string>>;
@@ -532,6 +539,8 @@ function MeetingCallContent({
   setIsChatOpen,
   isParticipantsOpen,
   setIsParticipantsOpen,
+  isAskAIOpen,
+  setIsAskAIOpen,
   chatMessages,
   chatInput,
   setChatInput,
@@ -753,6 +762,7 @@ function MeetingCallContent({
                 onClick={() => {
                   setIsParticipantsOpen(!isParticipantsOpen);
                   setIsChatOpen(false);
+                  setIsAskAIOpen(false);
                 }}
                 className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
                   isParticipantsOpen ? 'text-blue-500 hover:text-blue-400' : ''
@@ -770,6 +780,7 @@ function MeetingCallContent({
                 onClick={() => {
                   setIsChatOpen(!isChatOpen);
                   setIsParticipantsOpen(false);
+                  setIsAskAIOpen(false);
                 }}
                 className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
                   isChatOpen ? 'text-blue-500 hover:text-blue-400' : ''
@@ -779,6 +790,24 @@ function MeetingCallContent({
                 <span className="text-[10px] mt-1 hidden sm:block">Chat</span>
               </TooltipTrigger>
               <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Toggle Chat Panel</TooltipContent>
+            </Tooltip>
+
+            {/* Ask AI */}
+            <Tooltip>
+              <TooltipTrigger 
+                onClick={() => {
+                  setIsAskAIOpen(!isAskAIOpen);
+                  setIsChatOpen(false);
+                  setIsParticipantsOpen(false);
+                }}
+                className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
+                  isAskAIOpen ? 'text-indigo-400 hover:text-indigo-300' : ''
+                }`}
+              >
+                <Brain className="h-5 w-5 text-indigo-400 animate-pulse" />
+                <span className="text-[10px] mt-1 hidden sm:block font-bold">Ask AI</span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">Ask questions about this meeting</TooltipContent>
             </Tooltip>
 
             {/* Share Screen */}
@@ -853,9 +882,14 @@ function MeetingCallContent({
       </div>
 
       {/* Sidebar Slideovers */}
-      {(isChatOpen || isParticipantsOpen) && (
+      {(isChatOpen || isParticipantsOpen || isAskAIOpen) && (
         <aside className="w-80 border-l border-slate-800 bg-slate-900 flex flex-col h-full z-10">
           
+          {/* ASK AI PANEL */}
+          {isAskAIOpen && (
+            <AskAIPanel meetingCode={meetingCode} onClose={() => setIsAskAIOpen(false)} />
+          )}
+
           {/* CHAT PANEL */}
           {isChatOpen && (
             <div className="flex flex-col h-full">

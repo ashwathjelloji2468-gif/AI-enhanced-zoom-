@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { PrismaClient } from '@prisma/client';
+import IORedis from 'ioredis';
 import {
   joinRoom,
   leaveAllRooms,
@@ -10,6 +11,7 @@ import {
 } from './rooms';
 
 const prisma = new PrismaClient();
+const redis = new IORedis(process.env.REDIS_URL || 'redis://localhost:6380');
 
 export function setupSignaling(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -173,8 +175,46 @@ export function setupSignaling(io: Server) {
         };
         console.log(`New chat message in room ${room} from ${userName}: "${content}"`);
         io.to(room).emit('chat:message', messagePayload);
+
+        // Ground chat messages to live transcript buffer for Ask AI grounding
+        const redisKey = `transcript:${room}`;
+        redis.append(redisKey, `\n[Chat] ${userName}: ${content}`).catch(err => {
+          console.error(`Failed to append chat to transcript buffer for room ${room}:`, err);
+        });
+        redis.expire(redisKey, 43200).catch(() => {});
+
+        // Persist message to database for history audit and fallback Q&A grounding
+        prisma.meeting.findFirst({
+          where: { OR: [{ id: room }, { code: room }] }
+        }).then(dbMeeting => {
+          if (dbMeeting) {
+            prisma.chatMessage.create({
+              data: {
+                meetingId: dbMeeting.id,
+                senderId: userId,
+                content
+              }
+            }).catch(dbErr => {
+              console.error(`Failed to persist chat message to database for room ${room}:`, dbErr.message);
+            });
+          }
+        }).catch(meetingErr => {
+          console.error(`Failed to look up meeting for chat persistence for room ${room}:`, meetingErr.message);
+        });
       }
     );
+
+    // Handle live transcription streams
+    socket.on('live-transcription-chunk', async ({ room, text }: { room: string; text: string }) => {
+      try {
+        const redisKey = `transcript:${room}`;
+        await redis.append(redisKey, `\n${text}`);
+        await redis.expire(redisKey, 43200);
+        console.log(`Appended live transcription chunk to room ${room}: "${text}"`);
+      } catch (err: any) {
+        console.error(`Failed to append live transcription chunk for room ${room}:`, err.message);
+      }
+    });
 
     // Handle in-meeting emoji reactions (broadcast to all)
     socket.on(

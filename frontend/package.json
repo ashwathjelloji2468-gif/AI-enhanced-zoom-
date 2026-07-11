@@ -12,6 +12,7 @@
     "start:socket": "node dist/server/index.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@base-ui/react": "^1.6.0",
     "@livekit/components-react": "^2.9.23",
     "@livekit/components-styles": "^1.2.0",
