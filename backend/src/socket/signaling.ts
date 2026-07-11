@@ -209,6 +209,12 @@ export function setupSignaling(io: Server) {
       io.to(room).emit('meeting-ended');
     });
 
+    // Worker notifies that AI summary is completed and ready
+    socket.on('summary-finished', ({ room, meetingId, summaryId }: { room: string; meetingId: string; summaryId: string }) => {
+      console.log(`Worker completed summary for room ${room}. Broadcasting summary-ready...`);
+      io.to(room).emit('summary-ready', { meetingId, summaryId });
+    });
+
     // Handle explicit disconnect or leaving room
     socket.on('leave-room', async ({ room }: { room: string }) => {
       socket.leave(room);

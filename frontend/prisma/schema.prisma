@@ -67,6 +67,8 @@ model Meeting {
 
   participants Participant[]
   chatMessages ChatMessage[]
+  recordings   Recording[]
+  summary      MeetingSummary?
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -113,4 +115,49 @@ model ChatMessage {
   createdAt DateTime @default(now())
 
   @@index([meetingId])
+}
+
+// ─── RECORDINGS & AI SUMMARIES ──────────────────
+
+enum RecordingStatus {
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Recording {
+  id          String          @id @default(uuid())
+  meetingId   String
+  meeting     Meeting         @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  storageUrl  String
+  durationSec Int?
+  status      RecordingStatus @default(PROCESSING)
+  createdAt   DateTime        @default(now())
+
+  @@index([meetingId])
+}
+
+model MeetingSummary {
+  id           String       @id @default(uuid())
+  meetingId    String       @unique
+  meeting      Meeting      @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  overview     String
+  keyDecisions String[]
+  transcript   String       // full transcript, kept for a future "ask AI about this meeting" feature
+  model        String       // which model generated this, for auditability
+  createdAt    DateTime     @default(now())
+
+  actionItems  ActionItem[]
+}
+
+model ActionItem {
+  id               String         @id @default(uuid())
+  summaryId        String
+  summary          MeetingSummary @relation(fields: [summaryId], references: [id], onDelete: Cascade)
+  description      String
+  assigneeName     String?        // extracted from transcript text, not necessarily a real User row
+  dueDate          DateTime?
+  completed        Boolean        @default(false)
+
+  @@index([summaryId])
 }

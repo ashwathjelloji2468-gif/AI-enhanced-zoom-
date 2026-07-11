@@ -19,6 +19,20 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: zoom_clone_redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build:
       context: ..
@@ -32,14 +46,20 @@ services:
       - JWT_SECRET=your-super-secret-jwt-key-for-development-change-this-in-production
       - JWT_REFRESH_SECRET=your-super-secret-jwt-refresh-key-for-development
       - PORT=3000
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - LIVEKIT_WEBHOOK_SECRET=${LIVEKIT_WEBHOOK_SECRET}
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   socket-server:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.socket
+      context: ../../backend
+      dockerfile: Dockerfile.socket
     container_name: zoom_clone_socket
     restart: always
     ports:
@@ -49,9 +69,30 @@ services:
       - JWT_SECRET=your-super-secret-jwt-key-for-development-change-this-in-production
       - JWT_REFRESH_SECRET=your-super-secret-jwt-refresh-key-for-development
       - PORT=5001
+      - REDIS_URL=redis://redis:6379
     depends_on:
       db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile.worker
+    container_name: zoom_clone_worker
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/zoomclone?schema=public
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
 volumes:
   postgres_data:
+  redis_data:

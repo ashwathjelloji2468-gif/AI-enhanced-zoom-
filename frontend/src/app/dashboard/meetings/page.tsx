@@ -7,7 +7,8 @@ import {
   Users, 
   Clipboard, 
   Check, 
-  Calendar 
+  Calendar,
+  Brain
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -193,9 +194,20 @@ export default function MeetingsPage() {
                           )}
                         </p>
                       </div>
-                      <span className="text-xs text-slate-500 font-bold bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-full uppercase">
-                        Ended
-                      </span>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => router.push(`/dashboard/meetings/${meeting.code}/summary`)}
+                          className="h-8 text-xs bg-slate-900 border-slate-800 text-indigo-400 hover:text-indigo-300 hover:bg-slate-850 flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <Brain className="h-3.5 w-3.5" />
+                          AI Summary
+                        </Button>
+                        <span className="text-[10px] text-slate-500 font-bold bg-slate-950 border border-slate-900 px-2.5 py-1.5 rounded-full uppercase">
+                          Ended
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

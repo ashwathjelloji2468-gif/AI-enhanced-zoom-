@@ -584,6 +584,30 @@ function MeetingCallContent({
     };
   }, [socket, localParticipant, handleToggleMic]);
 
+  const [isProcessingRecording, setIsProcessingRecording] = useState(false);
+
+  const handleToggleRecording = async () => {
+    if (isProcessingRecording) return;
+    setIsProcessingRecording(true);
+    try {
+      const action = isRecording ? 'stop' : 'start';
+      const res = await fetch(`/api/meetings/${meetingCode}/recording/${action}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || `Failed to ${action} recording`);
+        return;
+      }
+      setIsRecording(!isRecording);
+    } catch (err) {
+      console.error('Error toggling recording:', err);
+      alert('Error toggling recording');
+    } finally {
+      setIsProcessingRecording(false);
+    }
+  };
+
   // Active speaker selector for speaker layout
   const activeSpeakerTrack = tracks.find(
     (t) => t.participant.isSpeaking && t.source === Track.Source.Camera
@@ -778,18 +802,19 @@ function MeetingCallContent({
             {isHost && (
               <Tooltip>
                 <TooltipTrigger 
-                  onClick={() => setIsRecording(!isRecording)}
+                  onClick={handleToggleRecording}
+                  disabled={isProcessingRecording}
                   className={`text-slate-400 hover:text-white flex flex-col items-center justify-center p-2 rounded-lg transition-colors cursor-pointer ${
                     isRecording ? 'text-red-500 hover:text-red-400' : ''
-                  }`}
+                  } ${isProcessingRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  <Square className={`h-5 w-5 ${isRecording ? 'fill-red-500' : ''}`} />
+                  <Square className={`h-5 w-5 ${isRecording ? 'fill-red-500' : ''} ${isProcessingRecording ? 'animate-pulse' : ''}`} />
                   <span className="text-[10px] mt-1 hidden sm:block">
-                    {isRecording ? 'Recording' : 'Record'}
+                    {isProcessingRecording ? 'Processing...' : isRecording ? 'Recording' : 'Record'}
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="bg-slate-900 text-slate-200 border-slate-800">
-                  {isRecording ? 'Stop Recording' : 'Start Recording'}
+                  {isProcessingRecording ? 'Processing request...' : isRecording ? 'Stop Recording' : 'Start Recording'}
                 </TooltipContent>
               </Tooltip>
             )}
