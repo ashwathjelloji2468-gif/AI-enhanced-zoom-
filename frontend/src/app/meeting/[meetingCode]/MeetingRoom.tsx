@@ -575,6 +575,62 @@ function MeetingCallContent({
   const localParticipant = useLocalParticipant().localParticipant;
   const connectionState = useConnectionState();
 
+  // Web Speech API for real-time transcription
+  const [captions, setCaptions] = useState<string>('');
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition || !socket) return;
+
+    try {
+      const rec = new SpeechRecognition();
+      rec.continuous = true;
+      rec.interimResults = false;
+      rec.lang = 'en-US';
+
+      rec.onresult = (event: any) => {
+        const lastResultIndex = event.results.length - 1;
+        const text = event.results[lastResultIndex][0].transcript.trim();
+        if (text) {
+          console.log('Transcribed speech:', text);
+          setCaptions(text);
+          // Auto clear captions after 4 seconds
+          setTimeout(() => setCaptions(''), 4000);
+
+          socket.emit('live-transcription-chunk', {
+            room: meetingCode,
+            text: `${user.name}: ${text}`
+          });
+        }
+      };
+
+      rec.onerror = (err: any) => {
+        console.warn('Speech recognition error:', err.error);
+      };
+
+      rec.onend = () => {
+        if (localMicOn && socket.connected) {
+          try { rec.start(); } catch (e) {}
+        }
+      };
+
+      recognitionRef.current = rec;
+      if (localMicOn) {
+        rec.start();
+      }
+    } catch (e) {
+      console.error('Failed to initialize speech recognition:', e);
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.onend = null;
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+    };
+  }, [socket, localMicOn, meetingCode, user.name]);
+
   // Reactively listen to Host's Mute Requests
   useEffect(() => {
     if (!socket || !localParticipant) return;
@@ -672,12 +728,11 @@ function MeetingCallContent({
                 {/* Spotlight Dominant Tile */}
                 <div className="flex-1 rounded-2xl overflow-hidden bg-slate-900 relative shadow-xl border border-slate-800">
                   {activeSpeakerTrack ? (
-                    <>
-                      <VideoTrack trackRef={activeSpeakerTrack as any} className="w-full h-full object-cover" />
-                      <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
-                        {activeSpeakerTrack.participant.name || activeSpeakerTrack.participant.identity} {activeSpeakerTrack.participant.isLocal ? '(You)' : ''}
-                      </span>
-                    </>
+                    <ParticipantTile 
+                      track={activeSpeakerTrack} 
+                      isLocal={activeSpeakerTrack.participant.isLocal} 
+                      captions={activeSpeakerTrack.participant.isLocal ? captions : undefined} 
+                    />
                   ) : (
                     <div className="flex items-center justify-center h-full text-slate-500 text-sm">
                       No feed available
@@ -691,11 +746,12 @@ function MeetingCallContent({
                     {tracks
                       .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                       .map((track) => (
-                        <div key={track.participant.identity} className="h-full aspect-video rounded-xl overflow-hidden bg-slate-900 relative border border-slate-850 shadow flex-shrink-0">
-                          <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
-                          <span className="absolute bottom-1 left-1 bg-black/75 px-1.5 py-0.5 rounded text-[8px] font-semibold text-white truncate max-w-[80px]">
-                            {track.participant.name || track.participant.identity}
-                          </span>
+                        <div key={track.participant.identity} className="h-full aspect-video rounded-xl overflow-hidden shadow flex-shrink-0">
+                          <ParticipantTile 
+                            track={track} 
+                            isLocal={track.participant.isLocal} 
+                            captions={track.participant.isLocal ? captions : undefined} 
+                          />
                         </div>
                       ))}
                   </div>
@@ -713,11 +769,12 @@ function MeetingCallContent({
                     tracks.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'
                   }`}>
                     {tracks.map((track) => (
-                      <div key={track.participant.identity} className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video shadow-lg border border-slate-800">
-                        <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
-                        <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
-                          {track.participant.name || track.participant.identity} {track.participant.isLocal ? '(You)' : ''}
-                        </span>
+                      <div key={track.participant.identity} className="relative rounded-2xl overflow-hidden aspect-video shadow-lg">
+                        <ParticipantTile 
+                          track={track} 
+                          isLocal={track.participant.isLocal} 
+                          captions={track.participant.isLocal ? captions : undefined} 
+                        />
                       </div>
                     ))}
                   </div>
@@ -728,11 +785,11 @@ function MeetingCallContent({
                   <div className="flex flex-col md:flex-row gap-4 w-full h-full max-w-6xl">
                     {activeSpeakerTrack && (
                       <div className="flex-1 rounded-2xl overflow-hidden bg-slate-900 relative shadow-xl border border-slate-800">
-                        <VideoTrack trackRef={activeSpeakerTrack as any} className="w-full h-full object-cover" />
-                        <span className="absolute bottom-4 left-4 bg-black/60 backdrop-blur px-4 py-2 rounded-xl text-sm font-bold text-white flex items-center">
-                          <Award className="h-4 w-4 text-yellow-500 mr-2" />
-                          {activeSpeakerTrack.participant.name || activeSpeakerTrack.participant.identity} {activeSpeakerTrack.participant.isLocal ? '(You)' : ''}
-                        </span>
+                        <ParticipantTile 
+                          track={activeSpeakerTrack} 
+                          isLocal={activeSpeakerTrack.participant.isLocal} 
+                          captions={activeSpeakerTrack.participant.isLocal ? captions : undefined} 
+                        />
                       </div>
                     )}
 
@@ -742,11 +799,12 @@ function MeetingCallContent({
                           {tracks
                             .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                             .map((track) => (
-                              <div key={track.participant.identity} className="rounded-xl overflow-hidden bg-slate-900 aspect-video relative border border-slate-800 shadow">
-                                <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
-                                <span className="absolute bottom-2 left-2 bg-black/75 px-2 py-1 rounded-lg text-[10px] font-semibold text-white">
-                                  {track.participant.name || track.participant.identity}
-                                </span>
+                              <div key={track.participant.identity} className="rounded-xl overflow-hidden aspect-video relative shadow">
+                                <ParticipantTile 
+                                  track={track} 
+                                  isLocal={track.participant.isLocal} 
+                                  captions={track.participant.isLocal ? captions : undefined} 
+                                />
                               </div>
                             ))}
                         </div>
@@ -1118,6 +1176,72 @@ function MeetingCallContent({
         </aside>
       )}
 
+    </div>
+  );
+}
+
+interface ParticipantTileProps {
+  track: any;
+  isLocal: boolean;
+  captions?: string;
+}
+
+function ParticipantTile({ track, isLocal, captions }: ParticipantTileProps) {
+  const isCameraEnabled = track.participant.isCameraEnabled;
+  const isSpeaking = track.participant.isSpeaking;
+  const name = track.participant.name || track.participant.identity;
+  const initials = name
+    .split(' ')
+    .map((n: string) => n.charAt(0))
+    .join('')
+    .toUpperCase()
+    .substring(0, 2);
+
+  return (
+    <div className="relative w-full h-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-lg group">
+      {isCameraEnabled ? (
+        <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black flex flex-col items-center justify-center p-4">
+          <div className="relative">
+            {/* Pulsing speak ring */}
+            <div className={`absolute -inset-4 rounded-full bg-blue-500/10 blur-md transition-opacity duration-300 ${isSpeaking ? 'opacity-100 animate-ping' : 'opacity-0'}`} />
+            
+            <div className={`h-20 w-20 rounded-full flex items-center justify-center bg-gradient-to-tr from-slate-800 to-slate-900 border-2 transition-all duration-300 ${isSpeaking ? 'border-blue-500 shadow-lg shadow-blue-500/20 scale-105' : 'border-slate-850'}`}>
+              <span className="text-white font-extrabold text-2xl tracking-wide">{initials}</span>
+            </div>
+            
+            {/* Mini mic state icon */}
+            <div className={`absolute -bottom-1 -right-1 h-6 w-6 rounded-full flex items-center justify-center shadow border ${track.participant.isMicrophoneEnabled ? 'bg-slate-900 border-slate-800 text-blue-500' : 'bg-red-600 border-red-500 text-white'}`}>
+              {track.participant.isMicrophoneEnabled ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                  <path d="M7 4a3 3 0 016 0v6a3 3 0 11-6 0V4z" />
+                  <path d="M5.5 9.643a.75.75 0 00-1.5 0V10c0 3.06 2.29 5.585 5.25 5.957V17.25a.75.75 0 001.5 0v-1.293c2.96-.372 5.25-2.897 5.25-5.957v-.357a.75.75 0 00-1.5 0V10c0 2.485-2.015 4.5-4.5 4.5S5.5 12.485 5.5 10v-.357z" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                  <path fillRule="evenodd" d="M10 2a3 3 0 00-3 3v4.328l6.758 6.759A5.25 5.25 0 0015 10v-.357a.75.75 0 00-1.5 0V10c0 2.122-1.24 3.955-3.031 4.792L7 11.23V5a3 3 0 013-3h.001zM4 10V9.643a.75.75 0 00-1.5 0V10c0 2.76 1.865 5.084 4.394 5.765l1.107-1.107A4.48 4.48 0 014.5 10zM12 17.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM8.5 17.25a.75.75 0 00.75.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 00-.75.75z" clipRule="evenodd" />
+                  <path d="M2.22 2.22a.75.75 0 011.06 0l14.5 14.5a.75.75 0 11-1.06 1.06L2.22 3.28a.75.75 0 010-1.06z" />
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic subtitling captions popup overlay */}
+      {captions && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-4/5 text-center z-20 pointer-events-none">
+          <div className="inline-block bg-black/80 backdrop-blur border border-slate-800 text-slate-100 text-xs py-2 px-4 rounded-xl shadow-2xl animate-fade-in font-medium leading-relaxed max-w-full">
+            {captions}
+          </div>
+        </div>
+      )}
+
+      {/* Participant name tag */}
+      <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
+        {name} {isLocal ? '(You)' : ''}
+      </span>
     </div>
   );
 }
