@@ -1024,7 +1024,7 @@ function MeetingCallContent({
           {/* Leave Button */}
           <Button 
             onClick={handleLeaveTrigger}
-            className="bg-danger hover:bg-danger-hover text-white font-medium px-4 md:px-6 h-12 rounded-lg flex items-center shadow-lg active:scale-[0.98] transition-all min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none"
+            className="pointer-events-auto bg-danger hover:bg-danger-hover text-white font-medium px-4 md:px-6 h-12 rounded-lg flex items-center shadow-lg active:scale-[0.98] transition-all min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none"
             aria-label="Leave Meeting"
           >
             <PhoneOff className="h-4 w-4 md:mr-2" />
