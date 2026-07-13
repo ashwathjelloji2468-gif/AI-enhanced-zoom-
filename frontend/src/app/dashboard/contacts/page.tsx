@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Users, 
   UserPlus, 
@@ -32,6 +33,7 @@ const INITIAL_CONTACTS: Contact[] = [
 ];
 
 export default function ContactsPage() {
+  const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>(INITIAL_CONTACTS);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -76,6 +78,29 @@ export default function ContactsPage() {
     setContacts([...contacts, newContact]);
     setAddSuccess(`${formattedName} has been added to your contacts list.`);
     setAddEmail('');
+  };
+
+  const startCall = async (contact: Contact) => {
+    try {
+      const response = await fetch('/api/meetings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: `Call with ${contact.name}`,
+          waitingRoom: false,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      // Redirect to meeting room
+      router.push(`/meeting/${data.meeting.code}`);
+    } catch (err: any) {
+      alert(err.message || 'Could not start instant call');
+    }
   };
 
   const filteredContacts = contacts.filter(c => 
@@ -164,6 +189,7 @@ export default function ContactsPage() {
                   <div className="flex items-center space-x-2">
                     <Button 
                       size="sm" 
+                      onClick={() => alert("Direct messaging is coming soon! Start a video call to chat in real-time.")}
                       className="border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                       aria-label={`Send chat message to ${contact.name}`}
                     >
@@ -171,6 +197,7 @@ export default function ContactsPage() {
                     </Button>
                     <Button 
                       size="sm"
+                      onClick={() => startCall(contact)}
                       className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-colors duration-150 ease-out text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                       aria-label={`Start video call with ${contact.name}`}
                     >
