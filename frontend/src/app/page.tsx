@@ -50,7 +50,7 @@ export default function LandingPage() {
             <Link href="/login">
               <Button 
                 variant="ghost" 
-                className="text-ink-muted hover:text-ink hover:bg-surface-sunken font-medium min-h-[44px] px-4 rounded-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                className="text-ink-muted hover:text-ink hover:bg-surface-sunken font-medium min-h-[44px] px-4 rounded-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 transition-colors duration-150 ease-out"
                 aria-label="Sign In to your account"
               >
                 Sign In
@@ -58,7 +58,7 @@ export default function LandingPage() {
             </Link>
             <Link href="/signup">
               <Button 
-                className="bg-brand hover:bg-brand-hover text-white font-medium min-h-[44px] px-5 rounded-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                className="bg-brand hover:bg-brand-hover text-white font-medium min-h-[44px] px-5 rounded-sm shadow-sm transition-colors duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                 aria-label="Sign Up for a free account"
               >
                 Sign Up
@@ -92,7 +92,7 @@ export default function LandingPage() {
               <Link href="/signup">
                 <Button 
                   size="lg" 
-                  className="w-full sm:w-auto bg-brand hover:bg-brand-hover text-white font-medium px-8 py-6 rounded-md shadow-sm transition-all flex items-center justify-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  className="w-full sm:w-auto bg-brand hover:bg-brand-hover text-white font-medium px-8 py-6 rounded-md shadow-sm transition-colors duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm flex items-center justify-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                   aria-label="Get Started Free and sign up"
                 >
                   Get Started Free
@@ -102,8 +102,7 @@ export default function LandingPage() {
               <Link href="/login">
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="w-full sm:w-auto border-surface-border bg-surface hover:bg-surface-sunken text-ink font-medium px-8 py-6 rounded-md min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  className="w-full sm:w-auto border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text transition-colors duration-150 ease-out text-ink font-medium px-8 py-6 rounded-md min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                   aria-label="Sign In to active dashboard"
                 >
                   Sign In
@@ -161,7 +160,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm">
               <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Cpu className="h-5 w-5" />
               </div>
@@ -172,7 +171,7 @@ export default function LandingPage() {
             </div>
             
             {/* Card 2 */}
-            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm">
               <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Shield className="h-5 w-5" />
               </div>
@@ -183,7 +182,7 @@ export default function LandingPage() {
             </div>
 
             {/* Card 3 */}
-            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm">
               <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Zap className="h-5 w-5" />
               </div>

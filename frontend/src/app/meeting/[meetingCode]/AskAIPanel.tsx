@@ -103,7 +103,7 @@ export default function AskAIPanel({ meetingCode, onClose }: AskAIPanelProps) {
           variant="ghost" 
           size="sm" 
           onClick={onClose} 
-          className="text-ink-inverse-muted hover:text-white h-8 w-8 p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface rounded-sm outline-none"
+          className="h-8 w-8 rounded-full flex items-center justify-center text-ink-inverse-muted hover:bg-dark-tile hover:text-white p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out"
           aria-label="Close Ask AI Panel"
         >
           <X className="h-4 w-4" />
@@ -156,13 +156,13 @@ export default function AskAIPanel({ meetingCode, onClose }: AskAIPanelProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={isPending}
-          className="bg-dark-bg text-white border-dark-border text-xs py-1.5 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface flex-1 min-h-[44px]"
+          className="bg-dark-bg text-white border border-dark-border hover:border-brand-light/35 text-xs py-1.5 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface flex-1 min-h-[44px] transition-colors duration-150 ease-out"
         />
         <Button 
           type="submit" 
           size="sm" 
           disabled={!input.trim() || isPending}
-          className="bg-brand hover:bg-brand-hover disabled:opacity-50 text-white h-11 px-4 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface rounded-sm min-h-[44px]"
+          className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm disabled:pointer-events-none disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none text-white h-11 px-4 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface rounded-sm min-h-[44px] transition-all duration-150 ease-out"
           aria-label="Send query"
         >
           <Send className="h-3.5 w-3.5" />

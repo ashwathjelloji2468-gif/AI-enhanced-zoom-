@@ -682,7 +682,7 @@ function MeetingCallContent({
               size="sm" 
               variant="outline" 
               onClick={handleLayoutToggle}
-              className="border-dark-border bg-dark-surface/60 hover:bg-dark-tile text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none min-h-[44px] px-4 rounded-sm transition-all"
+              className="border-dark-border bg-dark-surface/60 hover:bg-dark-tile text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none min-h-[44px] px-4 rounded-sm transition-colors duration-150 ease-out"
             >
               <Grid className="h-4 w-4 mr-2" />
               {layoutMode === 'gallery' ? 'Speaker View' : 'Gallery View'}
@@ -805,10 +805,10 @@ function MeetingCallContent({
             <Tooltip>
               <TooltipTrigger 
                 onClick={() => localParticipant && handleToggleMic(localParticipant)}
-                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none ${
+                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none ${
                   localMicOn 
-                    ? 'bg-dark-surface border border-dark-border text-white hover:bg-dark-tile' 
-                    : 'bg-danger hover:bg-danger-hover text-white'
+                    ? 'bg-white/10 hover:bg-white/15 text-white' 
+                    : 'bg-danger hover:brightness-110 text-white'
                 }`}
                 aria-label={localMicOn ? 'Mute Microphone' : 'Unmute Microphone'}
               >
@@ -822,10 +822,10 @@ function MeetingCallContent({
             <Tooltip>
               <TooltipTrigger 
                 onClick={() => localParticipant && handleToggleCam(localParticipant)}
-                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none ${
+                className={`h-12 w-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none ${
                   localCamOn 
-                    ? 'bg-dark-surface border border-dark-border text-white hover:bg-dark-tile' 
-                    : 'bg-danger hover:bg-danger-hover text-white'
+                    ? 'bg-white/10 hover:bg-white/15 text-white' 
+                    : 'bg-danger hover:brightness-110 text-white'
                 }`}
                 aria-label={localCamOn ? 'Stop Video' : 'Start Video'}
               >
@@ -848,8 +848,10 @@ function MeetingCallContent({
                   setIsChatOpen(false);
                   setIsAskAIOpen(false);
                 }}
-                className={`flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none ${
-                  isParticipantsOpen ? 'text-brand hover:text-brand-light' : 'text-ink-inverse-muted hover:text-white'
+                className={`flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out ${
+                  isParticipantsOpen 
+                    ? 'text-brand hover:brightness-110' 
+                    : 'text-ink-inverse-muted hover:bg-white/10 hover:text-white'
                 }`}
                 aria-label="Toggle Participants"
               >
@@ -867,8 +869,10 @@ function MeetingCallContent({
                   setIsParticipantsOpen(false);
                   setIsAskAIOpen(false);
                 }}
-                className={`flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none ${
-                  isChatOpen ? 'text-brand hover:text-brand-light' : 'text-ink-inverse-muted hover:text-white'
+                className={`flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out ${
+                  isChatOpen 
+                    ? 'text-brand hover:brightness-110' 
+                    : 'text-ink-inverse-muted hover:bg-white/10 hover:text-white'
                 }`}
                 aria-label="Toggle Chat"
               >
@@ -887,8 +891,10 @@ function MeetingCallContent({
                     setIsChatOpen(false);
                     setIsParticipantsOpen(false);
                   }}
-                  className={`flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none ${
-                    isAskAIOpen ? 'text-brand hover:text-brand-light' : 'text-ink-inverse-muted hover:text-white'
+                  className={`flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out ${
+                    isAskAIOpen 
+                      ? 'text-brand hover:brightness-110' 
+                      : 'text-ink-inverse-muted hover:bg-white/10 hover:text-white'
                   }`}
                   aria-label="Ask AI Companion"
                 >
@@ -909,10 +915,10 @@ function MeetingCallContent({
                       localParticipant.setScreenShareEnabled(!isSharing);
                     }
                   }}
-                  className={`flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none ${
+                  className={`flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out ${
                     localParticipant?.isScreenShareEnabled 
-                      ? 'text-brand hover:text-brand-light' 
-                      : 'text-ink-inverse-muted hover:text-white'
+                      ? 'text-brand hover:brightness-110' 
+                      : 'text-ink-inverse-muted hover:bg-white/10 hover:text-white'
                   }`}
                   aria-label="Share Screen"
                 >
@@ -930,8 +936,10 @@ function MeetingCallContent({
                   <TooltipTrigger 
                     onClick={handleToggleRecording}
                     disabled={isProcessingRecording}
-                    className={`flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none ${
-                      isRecording ? 'text-danger hover:text-danger/90' : 'text-ink-inverse-muted hover:text-white'
+                    className={`flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out ${
+                      isRecording 
+                        ? 'text-danger hover:brightness-110' 
+                        : 'text-ink-inverse-muted hover:bg-white/10 hover:text-white'
                     } ${isProcessingRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
                     aria-label="Toggle Recording"
                   >
@@ -947,7 +955,7 @@ function MeetingCallContent({
 
             {/* Reactions Menubar */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex flex-col items-center justify-center p-2 rounded-sm transition-colors cursor-pointer min-h-[44px] min-w-[44px] text-ink-inverse-muted hover:text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none">
+              <DropdownMenuTrigger className="flex flex-col items-center justify-center p-2 rounded-sm cursor-pointer min-h-[44px] min-w-[44px] text-ink-inverse-muted hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out">
                 <Smile className="h-5 w-5" />
                 <span className="text-[10px] mt-0.5 hidden sm:block font-sans font-medium">Reactions</span>
               </DropdownMenuTrigger>
@@ -1024,7 +1032,7 @@ function MeetingCallContent({
           {/* Leave Button */}
           <Button 
             onClick={handleLeaveTrigger}
-            className="pointer-events-auto bg-danger hover:bg-danger-hover text-white font-medium px-4 md:px-6 h-12 rounded-lg flex items-center shadow-lg active:scale-[0.98] transition-all min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none"
+            className="pointer-events-auto bg-danger hover:bg-danger-hover active:translate-y-0 active:shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-150 ease-out text-white font-medium px-4 md:px-6 h-12 rounded-lg flex items-center shadow-lg min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg outline-none"
             aria-label="Leave Meeting"
           >
             <PhoneOff className="h-4 w-4 md:mr-2" />
@@ -1052,7 +1060,7 @@ function MeetingCallContent({
                   variant="ghost" 
                   size="sm" 
                   onClick={() => setIsChatOpen(false)} 
-                  className="text-ink-inverse-muted hover:text-white h-8 w-8 p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none"
+                  className="h-8 w-8 rounded-full flex items-center justify-center text-ink-inverse-muted hover:bg-dark-tile hover:text-white p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out"
                   aria-label="Close Chat Panel"
                 >
                   ✕
@@ -1081,12 +1089,12 @@ function MeetingCallContent({
                   placeholder="Send a message..."
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  className="bg-dark-bg text-white border-dark-border text-xs py-1.5 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface flex-1 min-h-[44px]"
+                  className="bg-dark-bg text-white border border-dark-border hover:border-brand-light/35 text-xs py-1.5 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface flex-1 min-h-[44px] transition-colors duration-150 ease-out"
                 />
                 <Button 
                   type="submit" 
                   size="sm" 
-                  className="bg-brand hover:bg-brand-hover text-white min-h-[44px] px-4 font-medium"
+                  className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out text-white min-h-[44px] px-4 font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
                 >
                   Send
                 </Button>
@@ -1103,7 +1111,7 @@ function MeetingCallContent({
                   variant="ghost" 
                   size="sm" 
                   onClick={() => setIsParticipantsOpen(false)} 
-                  className="text-ink-inverse-muted hover:text-white h-8 w-8 p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none"
+                  className="h-8 w-8 rounded-full flex items-center justify-center text-ink-inverse-muted hover:bg-dark-tile hover:text-white p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none transition-colors duration-150 ease-out"
                   aria-label="Close Participants Panel"
                 >
                   ✕
@@ -1126,7 +1134,7 @@ function MeetingCallContent({
                             <Button 
                               size="sm"
                               onClick={() => handleAdmitParticipant(p.socketId)}
-                              className="bg-brand hover:bg-brand-hover text-white text-[10px] px-3 h-8 rounded-sm pointer-events-auto min-h-[32px]"
+                              className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out text-white text-[10px] px-3 h-8 rounded-sm pointer-events-auto min-h-[32px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
                             >
                               Admit
                             </Button>
@@ -1157,7 +1165,7 @@ function MeetingCallContent({
                                 size="sm"
                                 variant="outline"
                                 onClick={() => handleRequestMute(p.socketId)}
-                                className="h-8 text-[10px] px-3.5 bg-dark-surface border border-dark-border hover:bg-danger text-white rounded-sm cursor-pointer min-h-[32px] transition-all"
+                                className="h-8 text-[10px] px-3.5 bg-dark-surface border border-dark-border hover:bg-danger text-white rounded-sm cursor-pointer min-h-[32px] transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
                               >
                                 Mute
                               </Button>
@@ -1204,7 +1212,7 @@ function ParticipantTile({ track, isLocal, captions }: ParticipantTileProps) {
     .substring(0, 2);
 
   return (
-    <div className="relative w-full h-full rounded-lg overflow-hidden bg-dark-bg border border-dark-border shadow-lg group">
+    <div className="relative w-full h-full rounded-lg overflow-hidden bg-dark-bg border border-dark-border shadow-lg group hover:ring-1 hover:ring-white/20 transition-all duration-150 ease-out">
       {isCameraEnabled ? (
         <VideoTrack trackRef={track as any} className="w-full h-full object-cover" />
       ) : (

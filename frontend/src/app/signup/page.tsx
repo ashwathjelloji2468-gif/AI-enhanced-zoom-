@@ -145,7 +145,7 @@ export default function SignupPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                  className="bg-surface text-ink border-surface-border hover:border-ink-faint focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5 transition-colors duration-150 ease-out"
                   disabled={isLoading}
                 />
               </div>
@@ -160,7 +160,7 @@ export default function SignupPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                  className="bg-surface text-ink border-surface-border hover:border-ink-faint focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5 transition-colors duration-150 ease-out"
                   disabled={isLoading}
                 />
               </div>
@@ -175,7 +175,7 @@ export default function SignupPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                  className="bg-surface text-ink border-surface-border hover:border-ink-faint focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5 transition-colors duration-150 ease-out"
                   disabled={isLoading}
                 />
               </div>
@@ -188,7 +188,7 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-brand hover:bg-brand-hover text-white font-medium py-2.5 rounded-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px]"
+                className="w-full bg-brand hover:bg-brand-hover text-white font-medium py-2.5 rounded-sm shadow-sm transition-colors duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] disabled:pointer-events-none disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
                 disabled={isLoading}
               >
                 {isLoading ? 'Creating Account...' : 'Sign Up'}
@@ -198,7 +198,7 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col space-y-2 border-t border-surface-border pt-4 text-center">
             <p className="text-xs text-ink-muted">
               Already have an account?{' '}
-              <Link href="/login" className="text-brand-text hover:text-brand-hover font-semibold transition-colors focus-visible:underline outline-none">
+              <Link href="/login" className="text-brand-text hover:underline font-semibold transition-colors duration-150 ease-out focus-visible:underline outline-none">
                 Sign in
               </Link>
             </p>

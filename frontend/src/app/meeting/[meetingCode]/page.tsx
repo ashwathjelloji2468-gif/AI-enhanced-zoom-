@@ -91,7 +91,7 @@ export default function MeetingPage() {
           </div>
           <button 
             onClick={() => router.push('/dashboard')}
-            className="w-full bg-brand hover:bg-brand-hover text-white font-medium py-2.5 rounded-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] shadow-sm"
+            className="w-full bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out text-white font-medium py-2.5 rounded-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] shadow-sm"
           >
             Back to Dashboard
           </button>

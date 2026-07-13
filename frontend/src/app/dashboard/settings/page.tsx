@@ -130,7 +130,7 @@ export default function SettingsPage() {
                     id="displayName"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px]"
+                    className="bg-surface text-ink border-surface-border hover:border-ink-faint focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] transition-colors duration-150 ease-out"
                   />
                 </div>
 
@@ -156,7 +156,7 @@ export default function SettingsPage() {
                 <Button 
                   type="submit" 
                   disabled={isUpdating}
-                  className="w-full bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                  className="w-full bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] disabled:pointer-events-none disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
                 >
                   {isUpdating ? 'Updating...' : 'Save Profile'}
                 </Button>
@@ -193,7 +193,7 @@ export default function SettingsPage() {
                   <select 
                     value={selectedCam}
                     onChange={(e) => setSelectedCam(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-surface-border bg-surface text-ink text-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none transition-colors"
+                    className="w-full p-2.5 rounded-lg border border-surface-border hover:border-ink-faint bg-surface text-ink text-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none transition-colors duration-150 ease-out"
                   >
                     {cameras.map(cam => (
                       <option key={cam.deviceId} value={cam.deviceId}>
@@ -218,7 +218,7 @@ export default function SettingsPage() {
                   <select 
                     value={selectedMic}
                     onChange={(e) => setSelectedMic(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-surface-border bg-surface text-ink text-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none transition-colors"
+                    className="w-full p-2.5 rounded-lg border border-surface-border hover:border-ink-faint bg-surface text-ink text-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none transition-colors duration-150 ease-out"
                   >
                     {microphones.map(mic => (
                       <option key={mic.deviceId} value={mic.deviceId}>

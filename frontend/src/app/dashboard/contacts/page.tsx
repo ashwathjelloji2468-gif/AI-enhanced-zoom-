@@ -92,7 +92,7 @@ export default function ContactsPage() {
         </div>
         <Button 
           onClick={() => setIsAddOpen(true)}
-          className="bg-brand hover:bg-brand-hover text-white font-medium flex items-center focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+          className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-colors duration-150 ease-out text-white font-medium flex items-center focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
           aria-label="Add Contact Button"
         >
           <UserPlus className="h-4 w-4 mr-2" />
@@ -109,7 +109,7 @@ export default function ContactsPage() {
               placeholder="Search contacts by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px]"
+              className="pl-10 bg-surface text-ink border-surface-border hover:border-ink-faint transition-colors duration-150 ease-out focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px]"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function ContactsPage() {
             <p className="text-xs text-ink-muted mt-1 max-w-xs">Invite coworkers and friends to connect instantly for secure video calls.</p>
             <Button 
               onClick={() => setIsAddOpen(true)} 
-              className="mt-4 bg-brand hover:bg-brand-hover text-white font-medium text-xs focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+              className="mt-4 bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-colors duration-150 ease-out text-white font-medium text-xs focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
             >
               Add Contact
             </Button>
@@ -139,7 +139,7 @@ export default function ContactsPage() {
               {filteredContacts.map((contact) => (
                 <div 
                   key={contact.id} 
-                  className="flex items-center justify-between p-4 hover:bg-surface-sunken transition-colors"
+                  className="flex items-center justify-between p-4"
                 >
                   <div className="flex items-center space-x-3">
                     <div className="relative">
@@ -164,15 +164,14 @@ export default function ContactsPage() {
                   <div className="flex items-center space-x-2">
                     <Button 
                       size="sm" 
-                      variant="outline" 
-                      className="border-surface-border hover:bg-surface-sunken text-ink-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      className="border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                       aria-label={`Send chat message to ${contact.name}`}
                     >
                       <MessageSquare className="h-4 w-4" />
                     </Button>
                     <Button 
                       size="sm"
-                      className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-colors duration-150 ease-out text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                       aria-label={`Start video call with ${contact.name}`}
                     >
                       <Video className="h-4 w-4" />

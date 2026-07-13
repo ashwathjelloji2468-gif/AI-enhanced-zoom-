@@ -108,13 +108,13 @@ export default function MeetingsPage() {
             <TabsList className="bg-surface border border-surface-border text-ink-muted grid w-full grid-cols-2 p-1 rounded-lg">
               <TabsTrigger 
                 value="upcoming"
-                className="rounded-md data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-all py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
+                className="rounded-md text-ink-muted hover:text-ink data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-colors duration-150 ease-out py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               >
                 Upcoming
               </TabsTrigger>
               <TabsTrigger 
                 value="previous"
-                className="rounded-md data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-all py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
+                className="rounded-md text-ink-muted hover:text-ink data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-colors duration-150 ease-out py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               >
                 History
               </TabsTrigger>
@@ -132,7 +132,7 @@ export default function MeetingsPage() {
                   {upcomingMeetings.map((meeting) => (
                     <div 
                       key={meeting.id} 
-                      className="flex items-center justify-between p-4 rounded-lg border border-surface-border bg-white hover:bg-surface-sunken transition-all"
+                      className="flex items-center justify-between p-4 rounded-lg border border-surface-border bg-white"
                     >
                       <div className="space-y-1">
                         <p className="font-bold text-ink">{meeting.title}</p>
@@ -146,8 +146,7 @@ export default function MeetingsPage() {
                       <div className="flex items-center space-x-2">
                         <Button 
                           size="sm" 
-                          variant="outline" 
-                          className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                          className="border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                           onClick={() => copyToClipboard(meeting.code)}
                           aria-label={`Copy meeting code for ${meeting.title}`}
                         >
@@ -159,7 +158,7 @@ export default function MeetingsPage() {
                         </Button>
                         <Button 
                           size="sm" 
-                          className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                          className="bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-colors duration-150 ease-out text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                           onClick={() => router.push(`/meeting/${meeting.code}`)}
                         >
                           Start
@@ -199,7 +198,7 @@ export default function MeetingsPage() {
                           size="sm"
                           variant="outline"
                           onClick={() => router.push(`/dashboard/meetings/${meeting.code}/summary`)}
-                          className="h-8 text-xs bg-brand-subtle border-brand-light/10 text-brand-text hover:bg-brand hover:text-white flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[32px] sm:min-h-[44px] transition-all"
+                          className="h-8 text-xs bg-brand-subtle border border-brand-light/10 text-brand-text hover:bg-brand hover:text-white flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[32px] sm:min-h-[44px] transition-colors duration-150 ease-out"
                         >
                           <Brain className="h-3.5 w-3.5" />
                           AI Summary

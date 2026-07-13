@@ -132,7 +132,7 @@ export default function DashboardLayout({
             <button 
               onClick={() => router.push('/dashboard')}
               aria-label="Navigate to Home Dashboard"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname === '/dashboard' 
                   ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
                   : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
@@ -145,7 +145,7 @@ export default function DashboardLayout({
             <button 
               onClick={() => router.push('/dashboard/meetings')}
               aria-label="Navigate to Meetings"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/meetings') 
                   ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
                   : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
@@ -158,7 +158,7 @@ export default function DashboardLayout({
             <button 
               onClick={() => router.push('/dashboard/contacts')}
               aria-label="Navigate to Contacts"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/contacts') 
                   ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
                   : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
@@ -171,7 +171,7 @@ export default function DashboardLayout({
             <button 
               onClick={() => router.push('/dashboard/settings')}
               aria-label="Navigate to Settings"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/settings') 
                   ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
                   : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
@@ -210,14 +210,14 @@ export default function DashboardLayout({
               <DropdownMenuSeparator className="lg:hidden" />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <Settings className="mr-2 h-4 w-4 text-ink-muted" />
                 Settings
@@ -225,7 +225,7 @@ export default function DashboardLayout({
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-danger-subtle focus:text-danger text-danger cursor-pointer py-2"
+                className="focus:bg-danger-subtle focus:text-danger text-danger hover:bg-danger-subtle transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
@@ -240,7 +240,7 @@ export default function DashboardLayout({
         <button 
           onClick={() => router.push('/dashboard')}
           aria-label="Navigate to Home Dashboard"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname === '/dashboard' 
               ? 'text-brand-text font-semibold' 
               : 'text-ink-muted hover:text-ink'
@@ -253,7 +253,7 @@ export default function DashboardLayout({
         <button 
           onClick={() => router.push('/dashboard/meetings')}
           aria-label="Navigate to Meetings"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/meetings') 
               ? 'text-brand-text font-semibold' 
               : 'text-ink-muted hover:text-ink'
@@ -266,7 +266,7 @@ export default function DashboardLayout({
         <button 
           onClick={() => router.push('/dashboard/contacts')}
           aria-label="Navigate to Contacts"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/contacts') 
               ? 'text-brand-text font-semibold' 
               : 'text-ink-muted hover:text-ink'
@@ -279,7 +279,7 @@ export default function DashboardLayout({
         <button 
           onClick={() => router.push('/dashboard/settings')}
           aria-label="Navigate to Settings"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/settings') 
               ? 'text-brand-text font-semibold' 
               : 'text-ink-muted hover:text-ink'
@@ -309,14 +309,14 @@ export default function DashboardLayout({
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <Settings className="mr-2 h-4 w-4 text-ink-muted" />
                 Settings
@@ -324,7 +324,7 @@ export default function DashboardLayout({
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-danger-subtle focus:text-danger text-danger cursor-pointer py-2"
+                className="focus:bg-danger-subtle focus:text-danger text-danger hover:bg-danger-subtle transition-colors duration-150 ease-out cursor-pointer py-2"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out

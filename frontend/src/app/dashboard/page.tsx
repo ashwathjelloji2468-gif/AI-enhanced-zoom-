@@ -217,7 +217,7 @@ export default function DashboardHome() {
           <button 
             onClick={startInstantMeeting}
             aria-label="Start a new instant meeting"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg bg-brand hover:bg-brand-hover active:scale-[0.98] transition-all text-white font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg bg-brand hover:bg-brand-hover active:translate-y-0 active:shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-150 ease-out text-white font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-md bg-white/15 mb-3">
               <Video className="h-7 w-7 text-white" />
@@ -229,7 +229,7 @@ export default function DashboardHome() {
           <button 
             onClick={() => setIsJoinOpen(true)}
             aria-label="Join a meeting using a code"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-surface hover:bg-surface-sunken active:scale-[0.98] transition-all text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
               <PlusSquare className="h-7 w-7" />
@@ -241,7 +241,7 @@ export default function DashboardHome() {
           <button 
             onClick={() => setIsScheduleOpen(true)}
             aria-label="Schedule an upcoming meeting"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-surface hover:bg-surface-sunken active:scale-[0.98] transition-all text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
               <Calendar className="h-7 w-7" />
@@ -253,7 +253,7 @@ export default function DashboardHome() {
           <button 
             onClick={startPersonalRoom}
             aria-label="Enter your personal meeting room"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-surface hover:bg-surface-sunken active:scale-[0.98] transition-all text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
               <Tv className="h-7 w-7" />
