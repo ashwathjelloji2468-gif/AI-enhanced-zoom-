@@ -109,7 +109,11 @@ ${transcript}
         answer = message.content[0].type === 'text' ? message.content[0].text : '';
       } catch (err: any) {
         console.error('Claude API call failed inside Ask API:', err.message);
-        answer = `Failed to get response from AI. Fallback: ${getMockAnswer(transcript, question)}`;
+        if (err.message?.includes('credit balance') || err.status === 400 && err.message?.includes('credit')) {
+          answer = `Anthropic API Error: Your account credit balance is too low to complete this request. Please add credits at console.anthropic.com.`;
+        } else {
+          answer = `AI Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+        }
       }
     } else {
       console.log('Anthropic API key not configured. Triggering local mock fallback...');
