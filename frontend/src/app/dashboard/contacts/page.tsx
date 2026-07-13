@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Users, 
@@ -41,6 +41,22 @@ export default function ContactsPage() {
   const [addError, setAddError] = useState('');
   const [addSuccess, setAddSuccess] = useState('');
 
+  // Load contacts from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('connect_contacts');
+      if (saved) {
+        try {
+          setContacts(JSON.parse(saved));
+        } catch (e) {
+          console.error('Failed to parse saved contacts:', e);
+        }
+      } else {
+        localStorage.setItem('connect_contacts', JSON.stringify(INITIAL_CONTACTS));
+      }
+    }
+  }, []);
+
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setAddError('');
@@ -75,7 +91,11 @@ export default function ContactsPage() {
       status: 'offline',
     };
 
-    setContacts([...contacts, newContact]);
+    const updatedContacts = [...contacts, newContact];
+    setContacts(updatedContacts);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('connect_contacts', JSON.stringify(updatedContacts));
+    }
     setAddSuccess(`${formattedName} has been added to your contacts list.`);
     setAddEmail('');
   };
