@@ -47,7 +47,7 @@ export default function LandingPage() {
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-4">
-            <Link href="/login" passHref legacyBehavior>
+            <Link href="/login">
               <Button 
                 variant="ghost" 
                 className="text-ink-muted hover:text-ink hover:bg-surface-sunken font-medium min-h-[44px] px-4 rounded-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
@@ -56,7 +56,7 @@ export default function LandingPage() {
                 Sign In
               </Button>
             </Link>
-            <Link href="/signup" passHref legacyBehavior>
+            <Link href="/signup">
               <Button 
                 className="bg-brand hover:bg-brand-hover text-white font-medium min-h-[44px] px-5 rounded-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                 aria-label="Sign Up for a free account"
@@ -89,7 +89,7 @@ export default function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <Link href="/signup" passHref legacyBehavior>
+              <Link href="/signup">
                 <Button 
                   size="lg" 
                   className="w-full sm:w-auto bg-brand hover:bg-brand-hover text-white font-medium px-8 py-6 rounded-md shadow-sm transition-all flex items-center justify-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
@@ -99,7 +99,7 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/login" passHref legacyBehavior>
+              <Link href="/login">
                 <Button 
                   size="lg" 
                   variant="outline" 
