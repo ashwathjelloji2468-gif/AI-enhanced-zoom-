@@ -37,9 +37,10 @@ const getRedisOptions = (url: string) => {
 
 const connection = getRedisOptions(redisUrl);
 
-// Setup Anthropic Client
 const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
 const anthropic = anthropicKey ? new Anthropic({ apiKey: anthropicKey }) : null;
+const openaiKey = process.env.OPENAI_API_KEY || '';
+const geminiKey = process.env.GEMINI_API_KEY || '';
 
 // Setup Socket Client for notifying signaling server
 const socket = io(socketUrl, {
@@ -119,18 +120,15 @@ Alex: Perfect. Let's also wrap up the call and end the session. Thanks everyone.
         transcript = transcript.slice(0, 35000) + "\n\n[... Transcript Truncated Due to Length ...] \n\n" + transcript.slice(-15000);
       }
 
-      // 3. Summarization phase (Anthropic Claude or Mock Fallback)
+      // 3. Summarization phase (Gemini, OpenAI, Anthropic Claude, or Mock Fallback)
       let summaryObj: {
         overview: string;
         keyDecisions: string[];
         actionItems: { description: string; assigneeName: string | null; dueDate: string | null }[];
       };
 
-      if (anthropic) {
-        console.log(`[Job ${job.id}] Prompting Claude for structured JSON summary...`);
-        try {
-          const systemPrompt = `
-You are a expert meeting assistant. Analyze the transcript and extract key information. 
+      const systemPrompt = `
+You are an expert meeting assistant. Analyze the transcript and extract key information. 
 You MUST respond with a single JSON object. Do not include markdown codeblocks, preambles, or explanations. Just output raw JSON.
 JSON keys required:
 {
@@ -144,8 +142,81 @@ JSON keys required:
     }
   ]
 }
-          `.trim();
+      `.trim();
 
+      if (geminiKey) {
+        console.log(`[Job ${job.id}] Prompting Google Gemini for structured JSON summary...`);
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: 'user',
+                  parts: [
+                    { text: `${systemPrompt}\n\nAnalyze this transcript:\n\n${transcript}` }
+                  ]
+                }
+              ],
+              generationConfig: {
+                maxOutputTokens: 1500,
+              }
+            }),
+          });
+          const data = await res.json();
+          if (data.error) {
+            throw new Error(data.error.message || 'Gemini API call failed');
+          }
+          let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            rawText = jsonMatch[0];
+          }
+          summaryObj = JSON.parse(rawText.trim());
+          console.log(`[Job ${job.id}] Gemini successfully returned parsed meeting summary.`);
+        } catch (summaryErr: any) {
+          console.error(`[Job ${job.id}] Gemini summarization failed, falling back to mock summary:`, summaryErr.message);
+          summaryObj = getFallbackSummary();
+        }
+      } else if (openaiKey) {
+        console.log(`[Job ${job.id}] Prompting OpenAI for structured JSON summary...`);
+        try {
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${openaiKey}`,
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: `Analyze this transcript:\n\n${transcript}` }
+              ],
+              max_tokens: 1500,
+            }),
+          });
+          const data = await res.json();
+          if (data.error) {
+            throw new Error(data.error.message || 'OpenAI API call failed');
+          }
+          let rawText = data.choices?.[0]?.message?.content || '';
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            rawText = jsonMatch[0];
+          }
+          summaryObj = JSON.parse(rawText.trim());
+          console.log(`[Job ${job.id}] OpenAI successfully returned parsed meeting summary.`);
+        } catch (summaryErr: any) {
+          console.error(`[Job ${job.id}] OpenAI summarization failed, falling back to mock summary:`, summaryErr.message);
+          summaryObj = getFallbackSummary();
+        }
+      } else if (anthropic) {
+        console.log(`[Job ${job.id}] Prompting Claude for structured JSON summary...`);
+        try {
           const message = await anthropic.messages.create({
             model: 'claude-3-5-sonnet-20241022',
             max_tokens: 1500,
@@ -159,8 +230,6 @@ JSON keys required:
           });
 
           let rawText = message.content[0].type === 'text' ? message.content[0].text : '';
-          
-          // Robust JSON Parser: Extract JSON substring if Claude returns markdown codeblocks
           const jsonMatch = rawText.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             rawText = jsonMatch[0];
@@ -173,7 +242,7 @@ JSON keys required:
           summaryObj = getFallbackSummary();
         }
       } else {
-        console.log(`[Job ${job.id}] Anthropic API key missing. Generating mock summary...`);
+        console.log(`[Job ${job.id}] No LLM API key configured. Generating mock summary...`);
         summaryObj = getFallbackSummary();
       }
 

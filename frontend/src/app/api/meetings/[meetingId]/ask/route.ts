@@ -6,6 +6,8 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6380';
 const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
+const openaiKey = process.env.OPENAI_API_KEY || '';
+const geminiKey = process.env.GEMINI_API_KEY || '';
 
 export const POST = withAuth(async (req, { params, user }) => {
   try {
@@ -77,23 +79,83 @@ export const POST = withAuth(async (req, { params, user }) => {
       });
     }
 
-    // 3. Prompt Claude (or execute local mock fallback if API key is missing)
+    // 3. Prompt AI (Gemini, OpenAI, Claude, or local mock fallback)
     let answer = '';
 
-    if (anthropicKey) {
-      console.log(`Submitting question to Claude grounded in transcript (${transcript.length} chars)`);
-      try {
-        const anthropic = new Anthropic({ apiKey: anthropicKey });
-        const systemPrompt = `
+    const systemPrompt = `
 You are answering a question about a meeting that is currently in progress.
-Only use the transcript below to answer — do not use outside knowledge, and do not guess at anything not explicitly said. If the answer isn't in the transcript yet, say so plainly rather than speculating.
+Only use the transcript below to answer — do not use outside knowledge, and do not guess at anything not explicitly said. If the answer isn't in the transcript yet, say so plainly rather than speculating. Keep the answer concise (maximum 3 sentences).
 
 Transcript so far:
 """
 ${transcript}
 """
-        `.trim();
+    `.trim();
 
+    if (geminiKey) {
+      console.log(`Submitting question to Google Gemini grounded in transcript (${transcript.length} chars)`);
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  { text: `${systemPrompt}\n\nQuestion: ${question}` }
+                ]
+              }
+            ],
+            generationConfig: {
+              maxOutputTokens: 300,
+            }
+          }),
+        });
+        
+        const data = await res.json();
+        if (data.error) {
+          throw new Error(data.error.message || 'Gemini API call failed');
+        }
+        answer = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      } catch (err: any) {
+        console.error('Gemini API call failed inside Ask API:', err.message);
+        answer = `Gemini API Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+      }
+    } else if (openaiKey) {
+      console.log(`Submitting question to OpenAI (gpt-4o-mini) grounded in transcript (${transcript.length} chars)`);
+      try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openaiKey}`,
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: question }
+            ],
+            max_tokens: 300,
+          }),
+        });
+        
+        const data = await res.json();
+        if (data.error) {
+          throw new Error(data.error.message || 'OpenAI API call failed');
+        }
+        answer = data.choices?.[0]?.message?.content || '';
+      } catch (err: any) {
+        console.error('OpenAI API call failed inside Ask API:', err.message);
+        answer = `OpenAI API Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+      }
+    } else if (anthropicKey) {
+      console.log(`Submitting question to Claude grounded in transcript (${transcript.length} chars)`);
+      try {
+        const anthropic = new Anthropic({ apiKey: anthropicKey });
         const message = await anthropic.messages.create({
           model: 'claude-3-5-sonnet-20241022',
           max_tokens: 300,
@@ -116,7 +178,7 @@ ${transcript}
         }
       }
     } else {
-      console.log('Anthropic API key not configured. Triggering local mock fallback...');
+      console.log('No API keys configured. Triggering local mock fallback...');
       answer = getMockAnswer(transcript, question);
     }
 
