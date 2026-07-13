@@ -67,10 +67,10 @@ export default function MeetingPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-950 text-white">
+      <div className="flex h-screen w-screen items-center justify-center bg-dark-bg text-white font-sans">
         <div className="flex flex-col items-center space-y-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-          <p className="text-slate-400 font-medium">Securing connection to meeting...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand border-t-transparent" />
+          <p className="text-ink-inverse-muted text-sm font-medium">Securing connection to meeting...</p>
         </div>
       </div>
     );
@@ -78,18 +78,20 @@ export default function MeetingPage() {
 
   if (error) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-950 text-white p-4">
+      <div className="flex h-screen w-screen items-center justify-center bg-dark-bg text-white p-4 font-sans">
         <div className="max-w-md w-full text-center space-y-6">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-900/20 text-red-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-danger/10 text-danger border border-danger/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-8 h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-black">Connection Failed</h2>
-          <p className="text-slate-400 text-sm">{error}</p>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight font-display">Connection Failed</h2>
+            <p className="text-ink-inverse-muted text-sm">{error}</p>
+          </div>
           <button 
             onClick={() => router.push('/dashboard')}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg transition-all"
+            className="w-full bg-brand hover:bg-brand-hover text-white font-medium py-2.5 rounded-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] shadow-sm"
           >
             Back to Dashboard
           </button>

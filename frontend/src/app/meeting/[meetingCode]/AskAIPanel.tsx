@@ -91,26 +91,27 @@ export default function AskAIPanel({ meetingCode, onClose }: AskAIPanelProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900 text-slate-100">
+    <div className="flex flex-col h-full bg-dark-surface text-white border-l border-dark-border overflow-hidden">
       
       {/* Panel Header */}
-      <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+      <div className="p-4 border-b border-dark-border flex items-center justify-between bg-dark-surface">
         <div className="flex items-center space-x-2">
-          <Brain className="h-4 w-4 text-indigo-400" />
-          <h3 className="font-bold text-white text-sm">Ask AI Companion</h3>
+          <Brain className="h-4 w-4 text-brand" />
+          <h3 className="font-bold text-white text-sm font-display">Ask AI Companion</h3>
         </div>
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={onClose} 
-          className="text-slate-400 hover:text-white h-8 w-8 p-0 cursor-pointer"
+          className="text-ink-inverse-muted hover:text-white h-8 w-8 p-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface rounded-sm outline-none"
+          aria-label="Close Ask AI Panel"
         >
           <X className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Message History Thread */}
-      <ScrollArea className="flex-1 p-4 bg-slate-900">
+      <ScrollArea className="flex-1 p-4 bg-dark-bg">
         <div className="space-y-4">
           {messages.map((msg) => (
             <div 
@@ -119,21 +120,21 @@ export default function AskAIPanel({ meetingCode, onClose }: AskAIPanelProps) {
                 msg.role === 'user' ? 'items-end' : 'items-start'
               }`}
             >
-              <span className="text-[10px] text-slate-500 font-medium px-1 font-mono">
+              <span className="text-[10px] text-ink-inverse-muted font-medium px-1 font-mono">
                 {msg.role === 'user' ? 'You' : 'AI Companion'}
               </span>
               
               {msg.loading ? (
-                <div className="bg-slate-950 border border-slate-850/60 p-3 rounded-2xl rounded-tl-none flex items-center space-x-2">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-400" />
-                  <span className="text-xs text-slate-450 animate-pulse">Compiling grounded answer...</span>
+                <div className="bg-dark-surface border border-dark-border p-3 rounded-lg rounded-tl-none flex items-center space-x-2">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-brand" />
+                  <span className="text-xs text-ink-inverse-muted animate-pulse">Compiling grounded answer...</span>
                 </div>
               ) : (
                 <div 
-                  className={`px-3 py-2.5 rounded-2xl text-xs leading-relaxed max-w-[90%] break-words ${
+                  className={`px-3 py-2.5 rounded-lg text-xs leading-relaxed max-w-[90%] break-words ${
                     msg.role === 'user'
-                      ? 'bg-indigo-650 border border-indigo-600/50 text-white rounded-tr-none'
-                      : 'bg-slate-950 border border-slate-850/60 text-slate-200 rounded-tl-none'
+                      ? 'bg-brand text-white rounded-tr-none'
+                      : 'bg-dark-surface border border-dark-border text-white rounded-tl-none'
                   }`}
                 >
                   <p className="whitespace-pre-line">{msg.text}</p>
@@ -148,20 +149,21 @@ export default function AskAIPanel({ meetingCode, onClose }: AskAIPanelProps) {
       {/* Input Message Form */}
       <form 
         onSubmit={handleSendQuestion} 
-        className="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center space-x-2"
+        className="p-4 border-t border-dark-border bg-dark-surface flex items-center space-x-2"
       >
         <Input
           placeholder="Ask about this meeting..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={isPending}
-          className="border-slate-800 bg-slate-950 text-white text-xs py-1.5 focus:border-indigo-500 flex-1 focus:ring-0"
+          className="bg-dark-bg text-white border-dark-border text-xs py-1.5 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface flex-1 min-h-[44px]"
         />
         <Button 
           type="submit" 
           size="sm" 
           disabled={!input.trim() || isPending}
-          className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white h-9 px-3 cursor-pointer"
+          className="bg-brand hover:bg-brand-hover disabled:opacity-50 text-white h-11 px-4 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface rounded-sm min-h-[44px]"
+          aria-label="Send query"
         >
           <Send className="h-3.5 w-3.5" />
         </Button>
