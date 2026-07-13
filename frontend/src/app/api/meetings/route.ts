@@ -106,32 +106,30 @@ export const POST = withAuth(async (req, { user }) => {
       );
     }
 
-    // Create meeting and add host as first participant in a transaction
-    const meeting = await prisma.$transaction(async (tx) => {
-      const newMeeting = await tx.meeting.create({
-        data: {
-          code,
-          title,
-          hostId: userId,
-          waitingRoom,
-          isLocked,
-          scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
-          status: 'SCHEDULED',
-        },
-      });
-
-      await tx.participant.create({
-        data: {
-          meetingId: newMeeting.id,
-          userId,
-          role: 'HOST',
-          micOn: true,
-          cameraOn: true,
-        },
-      });
-
-      return newMeeting;
+    // Create meeting and add host as first participant
+    const newMeeting = await prisma.meeting.create({
+      data: {
+        code,
+        title,
+        hostId: userId,
+        waitingRoom,
+        isLocked,
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+        status: 'SCHEDULED',
+      },
     });
+
+    await prisma.participant.create({
+      data: {
+        meetingId: newMeeting.id,
+        userId,
+        role: 'HOST',
+        micOn: true,
+        cameraOn: true,
+      },
+    });
+
+    const meeting = newMeeting;
 
     return NextResponse.json({ meeting }, { status: 201 });
   } catch (error) {
