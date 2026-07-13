@@ -576,7 +576,11 @@ function MeetingCallContent({
 
       recognitionRef.current = rec;
       if (localMicOn) {
-        rec.start();
+        try {
+          rec.start();
+        } catch (e) {
+          console.warn('Failed to start speech recognition:', e);
+        }
       }
     } catch (e) {
       console.error('Failed to initialize speech recognition:', e);
