@@ -204,6 +204,27 @@ export function setupSignaling(io: Server) {
       }
     );
 
+    // Direct message relay
+    socket.on(
+      'direct-message',
+      ({
+        recipientId,
+        message,
+      }: {
+        recipientId: string;
+        message: {
+          id: string;
+          senderId: string;
+          senderName: string;
+          content: string;
+          createdAt: string;
+        };
+      }) => {
+        console.log(`Relaying direct message from ${message.senderName} to user-${recipientId}`);
+        io.to(`user-${recipientId}`).emit('direct-message', message);
+      }
+    );
+
     // Handle live transcription streams
     socket.on('live-transcription-chunk', async ({ room, text }: { room: string; text: string }) => {
       try {
