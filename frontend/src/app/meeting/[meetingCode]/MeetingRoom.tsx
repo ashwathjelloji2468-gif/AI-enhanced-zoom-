@@ -397,7 +397,7 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-950 relative overflow-hidden">
+    <div className="w-full h-screen flex flex-col bg-slate-950 relative overflow-hidden">
       
       {/* Reactions floating overlay */}
       <div className="absolute bottom-28 left-6 z-30 space-y-2 pointer-events-none">
@@ -650,6 +650,16 @@ function MeetingCallContent({
     };
   }, [socket, localParticipant, handleToggleMic]);
 
+  const [showLayoutHint, setShowLayoutHint] = useState(false);
+
+  const handleLayoutToggle = () => {
+    setLayoutMode(layoutMode === 'gallery' ? 'speaker' : 'gallery');
+    if (tracks.length === 1) {
+      setShowLayoutHint(true);
+      setTimeout(() => setShowLayoutHint(false), 4000);
+    }
+  };
+
   const [isProcessingRecording, setIsProcessingRecording] = useState(false);
 
   const handleToggleRecording = async () => {
@@ -708,7 +718,7 @@ function MeetingCallContent({
             <Button 
               size="sm" 
               variant="outline" 
-              onClick={() => setLayoutMode(layoutMode === 'gallery' ? 'speaker' : 'gallery')}
+              onClick={handleLayoutToggle}
               className="border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-200"
             >
               <Grid className="h-4 w-4 mr-2" />
@@ -716,6 +726,13 @@ function MeetingCallContent({
             </Button>
           </div>
         </header>
+
+        {showLayoutHint && (
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur border border-slate-800 text-white text-xs px-4 py-2.5 rounded-full shadow-lg z-50 animate-fade-in font-medium flex items-center space-x-2">
+            <Brain className="h-4 w-4 text-blue-400 animate-pulse" />
+            <span>Single participant call: Spotlight view will activate once other users join the room.</span>
+          </div>
+        )}
 
         {/* Video Grid */}
         <div className="flex-1 flex items-center justify-center p-4 md:p-6 pt-20 pb-28 overflow-hidden">
@@ -763,10 +780,10 @@ function MeetingCallContent({
                 {layoutMode === 'gallery' ? (
                   
                   // GALLERY VIEW
-                  <div className={`grid gap-4 w-full h-full max-w-5xl items-center justify-center ${
-                    tracks.length === 1 ? 'grid-cols-1 max-w-2xl' :
-                    tracks.length === 2 ? 'grid-cols-2' :
-                    tracks.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'
+                  <div className={`grid gap-4 w-full h-full items-center justify-center ${
+                    tracks.length === 1 ? 'grid-cols-1 max-w-4xl' :
+                    tracks.length === 2 ? 'grid-cols-2 max-w-5xl' :
+                    tracks.length <= 4 ? 'grid-cols-2 max-w-5xl' : 'grid-cols-2 lg:grid-cols-3 max-w-6xl'
                   }`}>
                     {tracks.map((track) => (
                       <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="relative rounded-2xl overflow-hidden aspect-video shadow-lg">
