@@ -1,5 +1,4 @@
 'use strict';
-'use client';
 
 import React, { useState } from 'react';
 import { 
@@ -85,90 +84,96 @@ export default function ContactsPage() {
   );
 
   return (
-    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-4xl mx-auto w-full">
+    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-4xl mx-auto w-full text-ink">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Contacts</h1>
-          <p className="text-slate-400 text-sm mt-1 font-semibold">Find colleagues, add connections, and start quick audio/video syncs</p>
+          <h1 className="text-3xl font-bold text-ink tracking-tight font-display">Contacts</h1>
+          <p className="text-ink-muted text-sm mt-1">Find colleagues, add connections, and start quick syncs</p>
         </div>
         <Button 
           onClick={() => setIsAddOpen(true)}
-          className="bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center"
+          className="bg-brand hover:bg-brand-hover text-white font-medium flex items-center focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+          aria-label="Add Contact Button"
         >
           <UserPlus className="h-4 w-4 mr-2" />
           Add Contact
         </Button>
       </div>
 
-      <div className="bg-slate-900/40 border border-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-lg min-h-[400px]">
+      <div className="bg-white border border-surface-border rounded-lg flex flex-col overflow-hidden shadow-sm min-h-[400px]">
         {/* Search bar header */}
-        <div className="p-4 border-b border-slate-800 flex items-center bg-slate-900/60">
+        <div className="p-4 border-b border-surface-border flex items-center bg-surface-sunken">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-ink-muted" />
             <Input 
               placeholder="Search contacts by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-slate-800 bg-slate-950 text-white focus:border-blue-500"
+              className="pl-10 bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px]"
             />
           </div>
         </div>
 
         {/* Contacts list */}
         {contacts.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-500">
-            <Users className="h-12 w-12 mb-2 text-slate-600 animate-pulse" />
-            <p className="font-semibold text-slate-400">Your contacts list is empty</p>
-            <p className="text-xs text-slate-500 mt-1 max-w-xs">Invite coworkers and friends to connect instantly for secure, high-definition video calls.</p>
-            <Button onClick={() => setIsAddOpen(true)} className="mt-4 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-ink-muted">
+            <Users className="h-12 w-12 mb-2 text-ink-faint animate-pulse" />
+            <p className="font-semibold">Your contacts list is empty</p>
+            <p className="text-xs text-ink-muted mt-1 max-w-xs">Invite coworkers and friends to connect instantly for secure video calls.</p>
+            <Button 
+              onClick={() => setIsAddOpen(true)} 
+              className="mt-4 bg-brand hover:bg-brand-hover text-white font-medium text-xs focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+            >
               Add Contact
             </Button>
           </div>
         ) : filteredContacts.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-500">
-            <Search className="h-12 w-12 mb-2 text-slate-600" />
-            <p className="font-semibold text-slate-400">No contacts found</p>
-            <p className="text-xs text-slate-500 mt-1">No matches found for "{searchQuery}". Try a different spelling or email format.</p>
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-ink-muted">
+            <Search className="h-12 w-12 mb-2 text-ink-faint" />
+            <p className="font-semibold">No contacts found</p>
+            <p className="text-xs text-ink-muted mt-1">No matches found for "{searchQuery}". Try a different spelling.</p>
           </div>
         ) : (
           <ScrollArea className="flex-1">
-            <div className="divide-y divide-slate-800/50">
+            <div className="divide-y divide-surface-border">
               {filteredContacts.map((contact) => (
                 <div 
                   key={contact.id} 
-                  className="flex items-center justify-between p-4 hover:bg-slate-900/20 transition-colors"
+                  className="flex items-center justify-between p-4 hover:bg-surface-sunken transition-colors"
                 >
                   <div className="flex items-center space-x-3">
                     <div className="relative">
-                      <Avatar className="h-10 w-10 border border-slate-850">
+                      <Avatar className="h-10 w-10 border border-surface-border">
                         <AvatarImage src={contact.avatarUrl} />
-                        <AvatarFallback className="bg-slate-800 text-slate-300 font-bold">
+                        <AvatarFallback className="bg-brand-subtle text-brand-text font-bold">
                           {contact.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       {/* Status indicator badge */}
-                      <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-900 ${
-                        contact.status === 'available' ? 'bg-green-500' :
-                        contact.status === 'busy' ? 'bg-orange-500' : 'bg-slate-600'
+                      <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${
+                        contact.status === 'available' ? 'bg-success' :
+                        contact.status === 'busy' ? 'bg-danger' : 'bg-slate-400'
                       }`} />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-200">{contact.name}</p>
-                      <p className="text-xs text-slate-500">{contact.email}</p>
+                      <p className="font-bold text-ink">{contact.name}</p>
+                      <p className="text-xs text-ink-muted">{contact.email}</p>
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-2">
                     <Button 
                       size="sm" 
-                      variant="secondary" 
-                      className="bg-slate-800 hover:bg-slate-700 text-slate-300"
+                      variant="outline" 
+                      className="border-surface-border hover:bg-surface-sunken text-ink-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      aria-label={`Send chat message to ${contact.name}`}
                     >
                       <MessageSquare className="h-4 w-4" />
                     </Button>
                     <Button 
                       size="sm"
-                      className="bg-blue-600 hover:bg-blue-500 text-white"
+                      className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      aria-label={`Start video call with ${contact.name}`}
                     >
                       <Video className="h-4 w-4" />
                     </Button>
@@ -182,19 +187,19 @@ export default function ContactsPage() {
 
       {/* ──── DIALOG: ADD CONTACT ──── */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100">
+        <DialogContent className="bg-white border-surface-border text-ink rounded-lg shadow-lg p-6">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white flex items-center">
-              <Mail className="h-5 w-5 mr-2 text-blue-500" />
+            <DialogTitle className="text-xl font-bold text-ink font-display flex items-center">
+              <Mail className="h-5 w-5 mr-2 text-brand" />
               Add Contact by Email
             </DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-ink-muted text-sm">
               Input their email address to add them to your contact listing directory.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleAddSubmit} className="space-y-4 py-3">
-            <div className="space-y-2">
-              <Label htmlFor="addEmail" className="text-sm font-semibold text-slate-300">
+            <div className="space-y-1.5">
+              <Label htmlFor="addEmail" className="text-xs font-semibold text-ink">
                 Email Address
               </Label>
               <Input 
@@ -203,16 +208,16 @@ export default function ContactsPage() {
                 required
                 value={addEmail}
                 onChange={(e) => setAddEmail(e.target.value)}
-                className="border-slate-800 bg-slate-950 text-white placeholder-slate-600 focus:border-blue-500"
+                className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
               />
             </div>
             
             {addError && (
-              <p className="text-xs text-red-400 font-semibold">{addError}</p>
+              <p className="text-xs text-danger font-semibold">{addError}</p>
             )}
 
             {addSuccess && (
-              <p className="text-xs text-green-400 font-semibold">{addSuccess}</p>
+              <p className="text-xs text-success font-semibold">{addSuccess}</p>
             )}
 
             <DialogFooter className="pt-2 gap-2 sm:gap-0">
@@ -225,13 +230,13 @@ export default function ContactsPage() {
                   setAddSuccess('');
                   setIsAddOpen(false);
                 }}
-                className="border-slate-800 hover:bg-slate-800 text-slate-300"
+                className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
               >
                 Close
               </Button>
               <Button 
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-500 text-white font-semibold"
+                className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
               >
                 Add
               </Button>

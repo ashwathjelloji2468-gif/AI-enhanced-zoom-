@@ -1,4 +1,3 @@
-'use strict';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -66,11 +65,11 @@ export default function MeetingsPage() {
   const pastMeetings = meetings.filter(m => m.status === 'ENDED' || m.status === 'CANCELLED');
 
   return (
-    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-5xl mx-auto w-full">
+    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-5xl mx-auto w-full text-ink">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Meetings</h1>
-          <p className="text-slate-400 text-sm mt-1">Manage and launch your scheduled conference rooms</p>
+          <h1 className="text-3xl font-bold text-ink tracking-tight font-display">Meetings</h1>
+          <p className="text-ink-muted text-sm mt-1">Manage and launch your scheduled conference rooms</p>
         </div>
       </div>
 
@@ -78,24 +77,24 @@ export default function MeetingsPage() {
         
         {/* Left Column: Personal Meeting Room Box */}
         <div className="md:col-span-4">
-          <Card className="border-slate-800 bg-slate-900/40 backdrop-blur shadow-lg p-6 rounded-2xl text-center space-y-4">
+          <Card className="border-surface-border bg-white shadow-sm p-6 rounded-lg text-center space-y-4">
             <div className="flex justify-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-brand-subtle text-brand-text">
                 <Users className="h-6 w-6" />
               </div>
             </div>
-            <h3 className="font-bold text-white text-lg">Personal Meeting Room</h3>
-            <p className="text-slate-400 text-xs leading-relaxed">
+            <h3 className="font-bold text-ink text-lg font-display">Personal Meeting Room</h3>
+            <p className="text-ink-muted text-xs leading-relaxed font-sans">
               Your personal room uses a fixed meeting code. Share it for instant syncs.
             </p>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Room Code</p>
-              <p className="text-base font-black font-mono text-blue-400 mt-1">
+            <div className="p-3 bg-surface-sunken rounded-lg border border-surface-border">
+              <p className="text-[10px] text-ink-muted font-bold uppercase tracking-wider font-sans">Room Code</p>
+              <p className="text-base font-bold font-mono text-brand-text mt-1">
                 {user?.id ? `${user.id.substring(0, 3)}-${user.id.substring(3, 7)}-${user.id.substring(7, 10)}` : 'personal-room'}
               </p>
             </div>
             <Button 
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+              className="w-full bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
               onClick={() => router.push(`/meeting/${user?.id || 'personal-room'}`)}
             >
               Start Room
@@ -106,16 +105,16 @@ export default function MeetingsPage() {
         {/* Right Column: List of all Meetings with tabs */}
         <div className="md:col-span-8">
           <Tabs defaultValue="upcoming" className="w-full">
-            <TabsList className="bg-slate-900 border border-slate-800 text-slate-400 grid w-full grid-cols-2 p-1 rounded-xl">
+            <TabsList className="bg-surface border border-surface-border text-ink-muted grid w-full grid-cols-2 p-1 rounded-lg">
               <TabsTrigger 
                 value="upcoming"
-                className="rounded-lg data-[state=active]:bg-slate-800 data-[state=active]:text-white font-semibold transition-all py-2"
+                className="rounded-md data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-all py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               >
                 Upcoming
               </TabsTrigger>
               <TabsTrigger 
                 value="previous"
-                className="rounded-lg data-[state=active]:bg-slate-800 data-[state=active]:text-white font-semibold transition-all py-2"
+                className="rounded-md data-[state=active]:bg-brand-subtle data-[state=active]:text-brand-text font-semibold transition-all py-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               >
                 History
               </TabsTrigger>
@@ -124,21 +123,21 @@ export default function MeetingsPage() {
             {/* Upcoming Tab Content */}
             <TabsContent value="upcoming" className="mt-6 space-y-4">
               {upcomingMeetings.length === 0 ? (
-                <div className="p-8 text-center border border-dashed border-slate-800 bg-slate-900/10 rounded-2xl text-slate-400 text-sm flex flex-col items-center">
-                  <Calendar className="h-8 w-8 text-slate-600 mb-2" />
-                  <p>No upcoming meetings scheduled</p>
+                <div className="p-8 text-center border border-dashed border-surface-border bg-white rounded-lg text-ink-muted text-sm flex flex-col items-center">
+                  <Calendar className="h-8 w-8 text-ink-faint mb-2" />
+                  <p>No meetings yet. Create one to get started.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {upcomingMeetings.map((meeting) => (
                     <div 
                       key={meeting.id} 
-                      className="flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900/30 hover:bg-slate-900/50 transition-all"
+                      className="flex items-center justify-between p-4 rounded-lg border border-surface-border bg-white hover:bg-surface-sunken transition-all"
                     >
                       <div className="space-y-1">
-                        <p className="font-bold text-slate-200">{meeting.title}</p>
-                        <p className="text-xs text-slate-400">
-                          Code: <code className="text-blue-400 font-bold">{meeting.code}</code>
+                        <p className="font-bold text-ink">{meeting.title}</p>
+                        <p className="text-xs text-ink-muted">
+                          Code: <code className="text-brand-text font-bold font-mono">{meeting.code}</code>
                           {meeting.scheduledAt && (
                             <span className="ml-3">• {new Date(meeting.scheduledAt).toLocaleString()}</span>
                           )}
@@ -147,19 +146,20 @@ export default function MeetingsPage() {
                       <div className="flex items-center space-x-2">
                         <Button 
                           size="sm" 
-                          variant="secondary" 
-                          className="bg-slate-800 hover:bg-slate-700 text-slate-200"
+                          variant="outline" 
+                          className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                           onClick={() => copyToClipboard(meeting.code)}
+                          aria-label={`Copy meeting code for ${meeting.title}`}
                         >
                           {copiedCode === meeting.code ? (
-                            <Check className="h-4 w-4 text-green-500" />
+                            <Check className="h-4 w-4 text-success" />
                           ) : (
                             <Clipboard className="h-4 w-4" />
                           )}
                         </Button>
                         <Button 
                           size="sm" 
-                          className="bg-blue-600 hover:bg-blue-500 text-white font-semibold"
+                          className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
                           onClick={() => router.push(`/meeting/${meeting.code}`)}
                         >
                           Start
@@ -174,20 +174,20 @@ export default function MeetingsPage() {
             {/* History Tab Content */}
             <TabsContent value="previous" className="mt-6 space-y-4">
               {pastMeetings.length === 0 ? (
-                <div className="p-8 text-center border border-dashed border-slate-800 bg-slate-900/10 rounded-2xl text-slate-400 text-sm flex flex-col items-center">
-                  <Calendar className="h-8 w-8 text-slate-600 mb-2" />
-                  <p>No previous meetings recorded</p>
+                <div className="p-8 text-center border border-dashed border-surface-border bg-white rounded-lg text-ink-muted text-sm flex flex-col items-center">
+                  <Calendar className="h-8 w-8 text-ink-faint mb-2" />
+                  <p>No meetings yet. Create one to get started.</p>
                 </div>
               ) : (
-                <div className="space-y-3 opacity-75">
+                <div className="space-y-3 opacity-90">
                   {pastMeetings.map((meeting) => (
                     <div 
                       key={meeting.id} 
-                      className="flex items-center justify-between p-4 rounded-2xl border border-slate-850 bg-slate-900/15"
+                      className="flex items-center justify-between p-4 rounded-lg border border-surface-border bg-white"
                     >
                       <div>
-                        <p className="font-semibold text-slate-300">{meeting.title}</p>
-                        <p className="text-xs text-slate-500">
+                        <p className="font-semibold text-ink">{meeting.title}</p>
+                        <p className="text-xs text-ink-muted">
                           Code: <code className="font-mono">{meeting.code}</code>
                           {meeting.startedAt && (
                             <span className="ml-3">Conducted on {new Date(meeting.startedAt).toLocaleDateString()}</span>
@@ -199,12 +199,12 @@ export default function MeetingsPage() {
                           size="sm"
                           variant="outline"
                           onClick={() => router.push(`/dashboard/meetings/${meeting.code}/summary`)}
-                          className="h-8 text-xs bg-slate-900 border-slate-800 text-indigo-400 hover:text-indigo-300 hover:bg-slate-850 flex items-center gap-1.5 cursor-pointer"
+                          className="h-8 text-xs bg-brand-subtle border-brand-light/10 text-brand-text hover:bg-brand hover:text-white flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[32px] sm:min-h-[44px] transition-all"
                         >
                           <Brain className="h-3.5 w-3.5" />
                           AI Summary
                         </Button>
-                        <span className="text-[10px] text-slate-500 font-bold bg-slate-950 border border-slate-900 px-2.5 py-1.5 rounded-full uppercase">
+                        <span className="text-[10px] text-ink-muted font-bold bg-surface-sunken border border-surface-border px-2.5 py-1.5 rounded-full uppercase">
                           Ended
                         </span>
                       </div>

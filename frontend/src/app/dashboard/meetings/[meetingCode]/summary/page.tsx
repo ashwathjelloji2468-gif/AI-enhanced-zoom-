@@ -1,5 +1,4 @@
 'use strict';
-'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -16,8 +15,7 @@ import {
   Brain,
   Calendar,
   User,
-  Clock,
-  ExternalLink
+  Clock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -155,17 +153,14 @@ export default function MeetingSummaryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative font-sans p-6 md:p-8">
-      
-      {/* Background glow */}
-      <div className="absolute top-0 right-1/4 -z-10 h-[400px] w-[400px] rounded-full bg-blue-600/5 blur-[128px]" />
+    <div className="min-h-screen bg-surface-sunken text-ink flex flex-col relative font-sans p-6 md:p-8">
       
       {/* Header back button */}
       <div className="max-w-4xl mx-auto w-full mb-6">
         <Button 
           variant="ghost" 
           onClick={() => router.push('/dashboard/meetings')} 
-          className="text-slate-400 hover:text-white flex items-center pl-0"
+          className="text-ink-muted hover:text-ink flex items-center pl-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Meetings
@@ -177,47 +172,50 @@ export default function MeetingSummaryPage() {
         {/* ──── LOADING STATE ──── */}
         {status === 'LOADING' && (
           <div className="flex flex-col items-center justify-center space-y-4 py-20">
-            <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
-            <p className="text-slate-400 font-medium">Retrieving meeting details...</p>
+            <Loader2 className="h-10 w-10 animate-spin text-brand" />
+            <p className="text-ink-muted font-medium text-sm">Retrieving meeting details...</p>
           </div>
         )}
 
         {/* ──── PROCESSING STATE ──── */}
         {status === 'PROCESSING' && (
-          <Card className="border-slate-800 bg-slate-900/40 backdrop-blur-xl p-8 rounded-2xl shadow-xl text-center space-y-6">
+          <Card className="border-surface-border bg-white p-8 rounded-lg shadow-sm text-center space-y-6">
             <div className="flex justify-center">
-              <div className="h-16 w-16 animate-pulse rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+              <div className="h-16 w-16 animate-pulse rounded-full bg-brand-subtle border border-brand-light/35 flex items-center justify-center text-brand-text">
                 <Brain className="h-8 w-8 animate-spin" />
               </div>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-white">AI Summary Processing</h2>
-              <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">
+              <h2 className="text-2xl font-bold text-ink font-display">AI Summary Processing</h2>
+              <p className="text-ink-muted text-sm max-w-sm mx-auto leading-relaxed font-sans">
                 The recording was saved successfully. AI is currently transcribing and compiling the summary.
               </p>
             </div>
             <div className="flex justify-center">
-              <span className="inline-flex items-center bg-blue-950 border border-blue-900/30 px-4 py-1.5 rounded-full text-xs font-semibold text-blue-400 animate-pulse">
+              <span className="inline-flex items-center bg-brand-subtle border border-brand-light/10 px-4 py-1.5 rounded-full text-xs font-semibold text-brand-text animate-pulse">
                 <Loader2 className="h-3 w-3 mr-2 animate-spin" />
                 Compiling decisions & task checklists...
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Real-time compilation page. Do not refresh.</p>
+            <p className="text-[10px] text-ink-muted uppercase tracking-widest font-mono">Real-time compilation page. Do not refresh.</p>
           </Card>
         )}
 
         {/* ──── ERROR STATE ──── */}
         {status === 'ERROR' && (
-          <Card className="border-red-900/30 bg-red-950/10 backdrop-blur p-8 rounded-2xl shadow-xl text-center space-y-4">
+          <Card className="border-danger/10 bg-danger/5 p-8 rounded-lg shadow-sm text-center space-y-4">
             <div className="flex justify-center">
-              <div className="h-12 w-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-full bg-danger/10 text-danger flex items-center justify-center">
                 <FileText className="h-6 w-6" />
               </div>
             </div>
-            <h2 className="text-xl font-bold text-white">Summary Unavailable</h2>
-            <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">{errorMsg || 'Failed to load summaries'}</p>
+            <h2 className="text-xl font-bold text-ink font-display">Summary Unavailable</h2>
+            <p className="text-ink-muted text-sm max-w-sm mx-auto leading-relaxed">{errorMsg || 'Failed to load summaries'}</p>
             <div className="flex justify-center gap-3">
-              <Button onClick={() => router.push('/dashboard/meetings')} className="bg-slate-850 hover:bg-slate-800 text-slate-400 border border-slate-800 cursor-pointer">
+              <Button 
+                onClick={() => router.push('/dashboard/meetings')} 
+                className="border-surface-border hover:bg-surface-sunken text-ink min-h-[44px]"
+              >
                 Go Back
               </Button>
               {(errorMsg?.includes('failed') || errorMsg?.includes('timeout') || errorMsg?.includes('recording')) && (
@@ -238,7 +236,7 @@ export default function MeetingSummaryPage() {
                       setStatus('ERROR');
                     }
                   }} 
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
+                  className="bg-brand hover:bg-brand-hover text-white font-medium min-h-[44px]"
                 >
                   Retry AI Compilation
                 </Button>
@@ -252,18 +250,18 @@ export default function MeetingSummaryPage() {
           <div className="space-y-6 animate-fade-in">
             
             {/* Topic Info */}
-            <div className="border-b border-slate-900 pb-5">
+            <div className="border-b border-surface-border pb-5">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="space-y-1">
-                  <span className="inline-flex items-center space-x-1.5 bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full text-xs font-bold">
+                  <span className="inline-flex items-center space-x-1.5 bg-brand-subtle text-brand-text px-2.5 py-1 rounded-full text-xs font-semibold border border-brand-light/10">
                     <Brain className="h-3.5 w-3.5" />
                     <span>AI Generated Summary</span>
                   </span>
-                  <h1 className="text-3xl font-black tracking-tight text-white mt-2">
-                    Project Conference Summary
+                  <h1 className="text-3xl font-bold tracking-tight text-ink mt-2 font-display">
+                    Meeting Conference Summary
                   </h1>
                 </div>
-                <div className="text-xs text-slate-500 sm:text-right space-y-1 font-mono">
+                <div className="text-xs text-ink-muted sm:text-right space-y-1 font-mono">
                   <p className="flex items-center sm:justify-end gap-1.5"><Calendar className="h-3.5 w-3.5" /> {new Date(summary.createdAt).toLocaleDateString()}</p>
                   <p className="flex items-center sm:justify-end gap-1.5"><Clock className="h-3.5 w-3.5" /> {new Date(summary.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
@@ -271,12 +269,12 @@ export default function MeetingSummaryPage() {
             </div>
 
             {/* Overview paragraph card */}
-            <Card className="border-slate-850 bg-slate-900/20 backdrop-blur rounded-2xl overflow-hidden">
+            <Card className="border-surface-border bg-white rounded-lg overflow-hidden">
               <CardContent className="p-6 space-y-2">
-                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center">
+                <h3 className="text-xs font-bold text-ink-muted uppercase tracking-wider flex items-center font-display">
                   Overview
                 </h3>
-                <p className="text-slate-200 text-base leading-relaxed">
+                <p className="text-ink text-base leading-relaxed font-sans">
                   {summary.overview}
                 </p>
               </CardContent>
@@ -286,19 +284,19 @@ export default function MeetingSummaryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Decisions Column */}
-              <Card className="border-slate-850 bg-slate-900/20 backdrop-blur rounded-2xl flex flex-col">
+              <Card className="border-surface-border bg-white rounded-lg flex flex-col">
                 <CardContent className="p-6 space-y-4 flex-1">
-                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center">
-                    <Award className="h-4 w-4 text-indigo-400 mr-2" />
+                  <h3 className="text-xs font-bold text-ink-muted uppercase tracking-wider flex items-center font-display">
+                    <Award className="h-4 w-4 text-brand mr-2" />
                     Key Decisions
                   </h3>
                   {summary.keyDecisions.length === 0 ? (
-                    <p className="text-slate-500 text-xs italic">No decisions extracted from the meeting transcript.</p>
+                    <p className="text-ink-muted text-xs italic">No decisions extracted from the meeting transcript.</p>
                   ) : (
                     <ul className="space-y-3">
                       {summary.keyDecisions.map((decision, index) => (
-                        <li key={index} className="flex items-start text-sm text-slate-350 leading-relaxed">
-                          <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 mt-2 mr-2.5 flex-shrink-0" />
+                        <li key={index} className="flex items-start text-sm text-ink-muted leading-relaxed">
+                          <span className="h-1.5 w-1.5 rounded-full bg-brand mt-2 mr-2.5 flex-shrink-0" />
                           <span>{decision}</span>
                         </li>
                       ))}
@@ -308,14 +306,14 @@ export default function MeetingSummaryPage() {
               </Card>
 
               {/* Action Items Column */}
-              <Card className="border-slate-850 bg-slate-900/20 backdrop-blur rounded-2xl flex flex-col">
+              <Card className="border-surface-border bg-white rounded-lg flex flex-col">
                 <CardContent className="p-6 space-y-4 flex-1">
-                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center">
-                    <CheckSquare className="h-4 w-4 text-green-400 mr-2" />
+                  <h3 className="text-xs font-bold text-ink-muted uppercase tracking-wider flex items-center font-display">
+                    <CheckSquare className="h-4 w-4 text-success mr-2" />
                     Action Items Checklist
                   </h3>
                   {actionItems.length === 0 ? (
-                    <p className="text-slate-500 text-xs italic">No action items assigned during this meeting.</p>
+                    <p className="text-ink-muted text-xs italic">No action items assigned during this meeting.</p>
                   ) : (
                     <div className="space-y-3.5">
                       {actionItems.map((item) => (
@@ -325,24 +323,24 @@ export default function MeetingSummaryPage() {
                           onClick={() => handleToggleActionItem(item.id, item.completed)}
                         >
                           {item.completed ? (
-                            <CheckSquare className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                            <CheckSquare className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
                           ) : (
-                            <Square className="h-5 w-5 text-slate-600 group-hover:text-slate-400 flex-shrink-0 mt-0.5 transition-colors" />
+                            <Square className="h-5 w-5 text-ink-faint group-hover:text-ink-muted flex-shrink-0 mt-0.5 transition-colors" />
                           )}
                           <div className="space-y-1">
-                            <p className={`text-sm text-slate-300 transition-all leading-normal ${item.completed ? 'line-through text-slate-550' : ''}`}>
+                            <p className={`text-sm text-ink transition-all leading-normal ${item.completed ? 'line-through text-ink-muted' : ''}`}>
                               {item.description}
                             </p>
                             {(item.assigneeName || item.dueDate) && (
-                              <div className="flex flex-wrap gap-2 text-[10px] text-slate-500 font-mono">
+                              <div className="flex flex-wrap gap-2 text-[10px] text-ink-muted font-mono mt-1">
                                 {item.assigneeName && (
-                                  <span className="flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded border border-slate-850">
-                                    <User className="h-2.5 w-2.5 text-blue-500" /> {item.assigneeName}
+                                  <span className="flex items-center gap-1 bg-surface-sunken px-2 py-0.5 rounded border border-surface-border">
+                                    <User className="h-2.5 w-2.5 text-brand" /> {item.assigneeName}
                                   </span>
                                 )}
                                 {item.dueDate && (
-                                  <span className="flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded border border-slate-850">
-                                    <Calendar className="h-2.5 w-2.5 text-purple-500" /> {new Date(item.dueDate).toLocaleDateString()}
+                                  <span className="flex items-center gap-1 bg-surface-sunken px-2 py-0.5 rounded border border-surface-border">
+                                    <Calendar className="h-2.5 w-2.5 text-brand" /> {new Date(item.dueDate).toLocaleDateString()}
                                   </span>
                                 )}
                               </div>
@@ -358,20 +356,20 @@ export default function MeetingSummaryPage() {
             </div>
 
             {/* Collapsible Transcript section */}
-            <Card className="border-slate-850 bg-slate-900/20 backdrop-blur rounded-2xl overflow-hidden">
+            <Card className="border-surface-border bg-white rounded-lg overflow-hidden">
               <div 
-                className="p-4 flex items-center justify-between cursor-pointer bg-slate-900/40 hover:bg-slate-900/60 transition-colors"
+                className="p-4 flex items-center justify-between cursor-pointer bg-surface hover:bg-surface-sunken transition-colors"
                 onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
               >
-                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center">
+                <h3 className="text-xs font-bold text-ink-muted uppercase tracking-wider flex items-center font-display">
                   Full Meeting Transcript
                 </h3>
-                {isTranscriptOpen ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                {isTranscriptOpen ? <ChevronUp className="h-4 w-4 text-ink-muted" /> : <ChevronDown className="h-4 w-4 text-ink-muted" />}
               </div>
               
               {isTranscriptOpen && (
-                <CardContent className="p-0 border-t border-slate-900">
-                  <ScrollArea className="h-80 w-full p-6 bg-slate-950/60 font-mono text-xs text-slate-400 leading-relaxed">
+                <CardContent className="p-0 border-t border-surface-border">
+                  <ScrollArea className="h-80 w-full p-6 bg-surface-sunken font-mono text-xs text-ink-muted leading-relaxed">
                     <pre className="whitespace-pre-wrap font-sans leading-normal">{summary.transcript}</pre>
                   </ScrollArea>
                 </CardContent>
@@ -379,8 +377,8 @@ export default function MeetingSummaryPage() {
             </Card>
 
             {/* Auditability Footer */}
-            <div className="flex items-center justify-between text-[10px] text-slate-600 font-mono px-2 pt-4">
-              <span>Audit Log Model: {summary.model}</span>
+            <div className="flex items-center justify-between text-[10px] text-ink-muted font-mono px-2 pt-4">
+              <span>Model: {summary.model}</span>
               <span>ID: {summary.id.substring(0, 8)}</span>
             </div>
 

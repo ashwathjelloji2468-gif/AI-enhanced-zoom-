@@ -1,5 +1,4 @@
 'use strict';
-'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -96,30 +95,34 @@ export default function DashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-950 text-white">
+      <div className="flex h-screen w-screen items-center justify-center bg-surface-sunken text-ink">
         <div className="flex flex-col items-center space-y-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-          <p className="text-slate-400 font-medium">Starting Zoom...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand border-t-transparent" />
+          <p className="text-ink-muted font-medium text-sm">Starting Connect...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="flex h-screen bg-surface-sunken text-ink overflow-hidden font-sans">
       
       {/* ──── SIDEBAR NAV (Tablet/Desktop) ──── */}
-      <aside className="hidden md:flex md:w-20 lg:w-64 bg-slate-900 border-r border-slate-800 flex-col items-center lg:items-start justify-between py-6 lg:px-4 z-20 transition-all duration-200">
+      <aside className="hidden md:flex md:w-20 lg:w-64 bg-surface border-r border-surface-border flex-col items-center lg:items-start justify-between py-6 lg:px-4 z-20 transition-all duration-200">
         <div className="flex flex-col items-center lg:items-start space-y-8 w-full">
           {/* Logo */}
           <div 
             onClick={() => router.push('/dashboard')}
-            className="flex h-12 w-12 lg:w-auto lg:h-12 items-center justify-center lg:justify-start lg:space-x-3 rounded-2xl bg-blue-600 lg:bg-transparent lg:shadow-none shadow-md shadow-blue-500/20 cursor-pointer active:scale-95 transition-all lg:px-4"
+            className="flex items-center space-x-3 cursor-pointer active:scale-95 transition-all lg:px-4 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 rounded-md outline-none"
+            aria-label="Connect Dashboard Home"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-md shadow-blue-500/20">
-              <Video className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-brand text-white shadow-sm">
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6" />
+              </svg>
             </div>
-            <span className="hidden lg:block font-display font-bold text-lg text-white tracking-wide">
+            <span className="hidden lg:block font-display font-bold text-lg text-ink tracking-wide">
               Connect
             </span>
           </div>
@@ -128,10 +131,11 @@ export default function DashboardLayout({
           <nav className="flex flex-col items-center lg:items-start space-y-3 w-full">
             <button 
               onClick={() => router.push('/dashboard')}
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
+              aria-label="Navigate to Home Dashboard"
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname === '/dashboard' 
-                  ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
-                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
+                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
               }`}
             >
               <Tv className="h-5 w-5 flex-shrink-0" />
@@ -140,10 +144,11 @@ export default function DashboardLayout({
 
             <button 
               onClick={() => router.push('/dashboard/meetings')}
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
+              aria-label="Navigate to Meetings"
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/meetings') 
-                  ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
-                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
+                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
               }`}
             >
               <Clock className="h-5 w-5 flex-shrink-0" />
@@ -152,10 +157,11 @@ export default function DashboardLayout({
 
             <button 
               onClick={() => router.push('/dashboard/contacts')}
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
+              aria-label="Navigate to Contacts"
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/contacts') 
-                  ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
-                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
+                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
               }`}
             >
               <Users className="h-5 w-5 flex-shrink-0" />
@@ -164,10 +170,11 @@ export default function DashboardLayout({
 
             <button 
               onClick={() => router.push('/dashboard/settings')}
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-xl lg:px-4 lg:space-x-3 transition-all cursor-pointer ${
+              aria-label="Navigate to Settings"
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
                 pathname.startsWith('/dashboard/settings') 
-                  ? 'bg-slate-800 text-blue-400 font-semibold shadow-inner' 
-                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
+                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
               }`}
             >
               <Settings className="h-5 w-5 flex-shrink-0" />
@@ -179,46 +186,46 @@ export default function DashboardLayout({
         {/* Profile Dropdown */}
         <div className="lg:px-4 w-full flex justify-center lg:justify-start">
           <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none focus:ring-0 active:scale-95 transition-transform cursor-pointer">
+            <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 active:scale-95 transition-transform cursor-pointer rounded-full">
               <div className="flex items-center space-x-3">
-                <Avatar className="h-10 w-10 ring-2 ring-slate-800 hover:ring-blue-500/50 transition-all">
+                <Avatar className="h-10 w-10 ring-2 ring-surface-border hover:ring-brand transition-all">
                   <AvatarImage src={user?.avatarUrl || undefined} />
-                  <AvatarFallback className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold">
+                  <AvatarFallback className="bg-brand text-white font-bold">
                     {user?.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden lg:flex flex-col items-start text-left max-w-[140px]">
-                  <span className="text-sm font-semibold text-slate-250 truncate w-full">{user?.name}</span>
-                  <span className="text-xs text-slate-500 truncate w-full">{user?.email}</span>
+                  <span className="text-sm font-semibold text-ink truncate w-full">{user?.name}</span>
+                  <span className="text-xs text-ink-muted truncate w-full">{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-xl" align="start">
+            <DropdownMenuContent className="w-56 bg-white border-surface-border text-ink shadow-md p-1" align="start">
               <DropdownMenuLabel className="font-normal lg:hidden">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-semibold">{user?.name}</p>
-                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                  <p className="text-xs text-ink-muted truncate">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-800 lg:hidden" />
+              <DropdownMenuSeparator className="lg:hidden" />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
               >
-                <UserIcon className="mr-2 h-4 w-4 text-slate-400" />
+                <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
               >
-                <Settings className="mr-2 h-4 w-4 text-slate-400" />
+                <Settings className="mr-2 h-4 w-4 text-ink-muted" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-red-900/50 focus:text-red-300 text-red-400 cursor-pointer py-2"
+                className="focus:bg-danger-subtle focus:text-danger text-danger cursor-pointer py-2"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
@@ -229,13 +236,14 @@ export default function DashboardLayout({
       </aside>
 
       {/* ──── MOBILE BOTTOM NAV BAR ──── */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-slate-900 border-t border-slate-800 z-35 flex items-center justify-around px-2 pb-safe">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-white border-t border-surface-border z-35 flex items-center justify-around px-2 pb-safe">
         <button 
           onClick={() => router.push('/dashboard')}
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+          aria-label="Navigate to Home Dashboard"
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname === '/dashboard' 
-              ? 'text-blue-400 font-semibold' 
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'text-brand-text font-semibold' 
+              : 'text-ink-muted hover:text-ink'
           }`}
         >
           <Tv className="h-5 w-5" />
@@ -244,10 +252,11 @@ export default function DashboardLayout({
 
         <button 
           onClick={() => router.push('/dashboard/meetings')}
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+          aria-label="Navigate to Meetings"
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/meetings') 
-              ? 'text-blue-400 font-semibold' 
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'text-brand-text font-semibold' 
+              : 'text-ink-muted hover:text-ink'
           }`}
         >
           <Clock className="h-5 w-5" />
@@ -256,10 +265,11 @@ export default function DashboardLayout({
 
         <button 
           onClick={() => router.push('/dashboard/contacts')}
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+          aria-label="Navigate to Contacts"
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/contacts') 
-              ? 'text-blue-400 font-semibold' 
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'text-brand-text font-semibold' 
+              : 'text-ink-muted hover:text-ink'
           }`}
         >
           <Users className="h-5 w-5" />
@@ -268,10 +278,11 @@ export default function DashboardLayout({
 
         <button 
           onClick={() => router.push('/dashboard/settings')}
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all cursor-pointer min-h-[44px] ${
+          aria-label="Navigate to Settings"
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-all cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/settings') 
-              ? 'text-blue-400 font-semibold' 
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'text-brand-text font-semibold' 
+              : 'text-ink-muted hover:text-ink'
           }`}
         >
           <Settings className="h-5 w-5" />
@@ -280,40 +291,40 @@ export default function DashboardLayout({
 
         <div className="flex-1 flex justify-center items-center h-12 min-h-[44px]">
           <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none focus:ring-0 active:scale-95 transition-transform cursor-pointer">
-              <Avatar className="h-7 w-7 ring-2 ring-slate-800">
+            <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-brand active:scale-95 transition-transform cursor-pointer rounded-full">
+              <Avatar className="h-7 w-7 ring-2 ring-surface-border">
                 <AvatarImage src={user?.avatarUrl || undefined} />
-                <AvatarFallback className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold text-[10px]">
+                <AvatarFallback className="bg-brand text-white font-bold text-[10px]">
                   {user?.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-xl" align="end">
+            <DropdownMenuContent className="w-56 bg-white border-surface-border text-ink shadow-md p-1" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-semibold">{user?.name}</p>
-                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                  <p className="text-xs text-ink-muted truncate">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
               >
-                <UserIcon className="mr-2 h-4 w-4 text-slate-400" />
+                <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+                className="focus:bg-surface-sunken focus:text-ink cursor-pointer py-2"
               >
-                <Settings className="mr-2 h-4 w-4 text-slate-400" />
+                <Settings className="mr-2 h-4 w-4 text-ink-muted" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-slate-800" />
+              <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-red-900/50 focus:text-red-300 text-red-400 cursor-pointer py-2"
+                className="focus:bg-danger-subtle focus:text-danger text-danger cursor-pointer py-2"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
@@ -324,23 +335,22 @@ export default function DashboardLayout({
       </nav>
 
       {/* ──── TAB / PAGE CONTENT VIEWPORT ──── */}
-      <main className="flex-1 flex flex-col bg-slate-950 overflow-hidden relative pb-16 md:pb-0">
-        <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-blue-600/5 blur-[128px]" />
+      <main className="flex-1 flex flex-col bg-surface-sunken overflow-hidden relative pb-16 md:pb-0">
         {children}
       </main>
 
       {/* ──── FLOATING REAL-TIME AI SUMMARY TOAST BANNER ──── */}
       {notification?.show && (
-        <div className="fixed bottom-6 right-6 z-[9999] max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 flex items-start gap-3 animate-slide-in">
-          <div className="h-10 w-10 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0">
+        <div className="fixed bottom-6 right-6 z-[9999] max-w-sm w-full bg-white border border-surface-border rounded-md shadow-lg p-4 flex items-start gap-3 animate-slide-in">
+          <div className="h-10 w-10 rounded-md bg-brand-subtle border border-brand-light/10 text-brand-text flex items-center justify-center flex-shrink-0">
             <Brain className="h-5 w-5 animate-pulse" />
           </div>
           <div className="flex-1 space-y-1">
-            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+            <h4 className="text-sm font-bold text-ink flex items-center gap-1.5 font-display">
               <span>AI Summary Ready</span>
             </h4>
-            <p className="text-xs text-slate-400 leading-normal">
-              The AI summary for meeting <strong className="text-slate-200">"{notification.meetingTitle}"</strong> has finished compiling.
+            <p className="text-xs text-ink-muted leading-normal">
+              The AI summary for meeting <strong className="text-ink">"{notification.meetingTitle}"</strong> has finished compiling.
             </p>
             <div className="flex gap-2.5 pt-1.5">
               <button 
@@ -348,19 +358,23 @@ export default function DashboardLayout({
                   router.push(`/dashboard/meetings/${notification.meetingCode}/summary`);
                   setNotification(null);
                 }} 
-                className="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all active:scale-95 animate-pulse"
+                className="text-[10px] bg-brand hover:bg-brand-hover text-white font-bold px-3 py-1.5 rounded-sm cursor-pointer transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               >
                 View Summary
               </button>
               <button 
                 onClick={() => setNotification(null)} 
-                className="text-[10px] text-slate-400 hover:text-white px-2 py-1.5 cursor-pointer font-medium"
+                className="text-[10px] text-ink-muted hover:text-ink px-2 py-1.5 cursor-pointer font-medium focus-visible:underline outline-none"
               >
                 Dismiss
               </button>
             </div>
           </div>
-          <button onClick={() => setNotification(null)} className="text-slate-500 hover:text-slate-350 cursor-pointer flex-shrink-0">
+          <button 
+            onClick={() => setNotification(null)} 
+            className="text-ink-muted hover:text-ink cursor-pointer flex-shrink-0 focus-visible:ring-2 focus-visible:ring-brand rounded-sm outline-none"
+            aria-label="Close notification"
+          >
             <X className="h-4 w-4" />
           </button>
         </div>
