@@ -144,7 +144,9 @@ JSON keys required:
 }
       `.trim();
 
-      if (geminiKey) {
+      let success = false;
+
+      if (geminiKey && !success) {
         console.log(`[Job ${job.id}] Prompting Google Gemini for structured JSON summary...`);
         try {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
@@ -177,11 +179,13 @@ JSON keys required:
           }
           summaryObj = JSON.parse(rawText.trim());
           console.log(`[Job ${job.id}] Gemini successfully returned parsed meeting summary.`);
+          success = true;
         } catch (summaryErr: any) {
-          console.error(`[Job ${job.id}] Gemini summarization failed, falling back to mock summary:`, summaryErr.message);
-          summaryObj = getFallbackSummary();
+          console.warn(`[Job ${job.id}] Gemini summarization failed, trying next provider:`, summaryErr.message);
         }
-      } else if (openaiKey) {
+      }
+
+      if (openaiKey && !success) {
         console.log(`[Job ${job.id}] Prompting OpenAI for structured JSON summary...`);
         try {
           const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -210,11 +214,13 @@ JSON keys required:
           }
           summaryObj = JSON.parse(rawText.trim());
           console.log(`[Job ${job.id}] OpenAI successfully returned parsed meeting summary.`);
+          success = true;
         } catch (summaryErr: any) {
-          console.error(`[Job ${job.id}] OpenAI summarization failed, falling back to mock summary:`, summaryErr.message);
-          summaryObj = getFallbackSummary();
+          console.warn(`[Job ${job.id}] OpenAI summarization failed, trying next provider:`, summaryErr.message);
         }
-      } else if (anthropic) {
+      }
+
+      if (anthropic && !success) {
         console.log(`[Job ${job.id}] Prompting Claude for structured JSON summary...`);
         try {
           const message = await anthropic.messages.create({
@@ -237,18 +243,23 @@ JSON keys required:
 
           summaryObj = JSON.parse(rawText.trim());
           console.log(`[Job ${job.id}] Claude successfully returned parsed meeting summary.`);
+          success = true;
         } catch (summaryErr: any) {
-          console.error(`[Job ${job.id}] Claude summarization failed, falling back to mock summary:`, summaryErr.message);
-          summaryObj = getFallbackSummary();
+          console.warn(`[Job ${job.id}] Claude summarization failed:`, summaryErr.message);
         }
-      } else {
-        console.log(`[Job ${job.id}] No LLM API key configured. Generating mock summary...`);
+      }
+
+      if (!success) {
+        console.log(`[Job ${job.id}] No active LLM integrations succeeded. Generating mock summary...`);
         summaryObj = getFallbackSummary();
       }
 
       // 4. Persist summary & action items inside database
       console.log(`[Job ${job.id}] Saving summary to database...`);
-      const summaryModel = anthropic ? 'claude-3-5-sonnet-20241022' : 'mock-summary-generator';
+      const summaryModel = geminiKey && success ? 'gemini-1.5-flash' : 
+                           openaiKey && success ? 'gpt-4o-mini' : 
+                           anthropic && success ? 'claude-3-5-sonnet-20241022' : 
+                           'mock-summary-generator';
 
       await prisma.$transaction(async (tx) => {
         // Create Summary row

@@ -1,49 +1,67 @@
-'use strict';
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { 
-  Video, 
   Sparkles, 
   Shield, 
   Cpu, 
   Zap, 
   ArrowRight,
-  MessageSquare,
-  Users
+  Video,
+  Mic,
+  Monitor
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-surface-sunken text-ink flex flex-col relative overflow-hidden font-sans">
       
-      {/* Dynamic ambient background glows */}
-      <div className="absolute top-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[128px]" />
-      <div className="absolute bottom-1/4 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-indigo-600/10 blur-[128px]" />
+      {/* Subtle ambient radial background glow behind the landing hero */}
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 h-[600px] w-[800px] rounded-full opacity-30 blur-[120px] pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(79, 157, 222, 0.25) 0%, rgba(255, 255, 255, 0) 70%)'
+        }}
+      />
 
       {/* ──── HEADER ──── */}
-      <header className="w-full border-b border-slate-900 bg-slate-950/60 backdrop-blur-md sticky top-0 z-50">
+      <header className="w-full border-b border-surface-border bg-surface/60 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 active:scale-95 transition-transform">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-md shadow-blue-500/20">
-              <Video className="h-5 w-5 text-white" />
+          <Link 
+            href="/" 
+            className="flex items-center space-x-3 active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 rounded-md outline-none"
+            aria-label="Connect Home Page"
+          >
+            <div className="relative flex h-9 w-9 items-center justify-center rounded-md bg-brand text-white shadow-sm">
+              <span className="absolute inline-flex h-full w-full rounded-md bg-brand animate-ping opacity-25" />
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6" />
+              </svg>
             </div>
-            <span className="text-xl font-black tracking-tight text-white">ZOOM</span>
+            <span className="text-xl font-bold tracking-tight text-ink font-display">Connect</span>
           </Link>
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-4">
-            <Link href="/login">
-              <Button variant="ghost" className="text-slate-400 hover:text-white font-medium">
+            <Link href="/login" passHref legacyBehavior>
+              <Button 
+                variant="ghost" 
+                className="text-ink-muted hover:text-ink hover:bg-surface-sunken font-medium min-h-[44px] px-4 rounded-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                aria-label="Sign In to your account"
+              >
                 Sign In
               </Button>
             </Link>
-            <Link href="/signup">
-              <Button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">
-                Sign Up, It's Free
+            <Link href="/signup" passHref legacyBehavior>
+              <Button 
+                className="bg-brand hover:bg-brand-hover text-white font-medium min-h-[44px] px-5 rounded-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                aria-label="Sign Up for a free account"
+              >
+                Sign Up
               </Button>
             </Link>
           </div>
@@ -51,66 +69,85 @@ export default function LandingPage() {
       </header>
 
       {/* ──── HERO SECTION ──── */}
-      <section className="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 py-20 lg:py-32 w-full text-center lg:text-left">
+      <section className="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 py-12 lg:py-24 w-full text-center lg:text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Text Column */}
-          <div className="lg:col-span-6 space-y-8">
-            <div className="inline-flex items-center space-x-2 bg-blue-950/40 border border-blue-900/30 px-3 py-1.5 rounded-full text-xs font-semibold text-blue-400">
-              <Sparkles className="h-4 w-4" />
-              <span>Introducing HD Video Capabilities</span>
+          <div className="lg:col-span-6 space-y-6">
+            <div className="inline-flex items-center space-x-2 bg-brand-subtle border border-brand-light/20 px-3.5 py-1.5 rounded-full text-xs font-semibold text-brand-text">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Free AI Companion & Real-Time Summaries</span>
             </div>
             
-            <h1 className="text-5xl lg:text-6xl font-black tracking-tight leading-none text-white">
-              One platform <br />
-              to <span className="bg-gradient-to-r from-blue-500 via-indigo-400 to-indigo-600 bg-clip-text text-transparent">connect</span> and collaborate
+            <h1 className="text-[32px]/[1.15] md:text-[56px]/[1.1] font-medium tracking-tight text-ink font-display">
+              A calmer, faster way <br />
+              to <span className="text-brand-text">connect</span> and collaborate
             </h1>
             
-            <p className="text-slate-400 text-lg max-w-lg leading-relaxed mx-auto lg:mx-0">
-              Bring team chats, phone calls, whiteboards, and high-quality video meetings together in a single workspace.
+            <p className="text-ink-muted text-[16px]/[1.6] md:text-[18px]/[1.6] max-w-lg leading-relaxed mx-auto lg:mx-0 font-sans">
+              Bring team chats, smart transcriptions, and crystal-clear video meetings together in a single workspace. Quietly confident, built for speed.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <Link href="/signup" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-6 rounded-xl transition-all shadow-xl shadow-blue-600/25 flex items-center justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <Link href="/signup" passHref legacyBehavior>
+                <Button 
+                  size="lg" 
+                  className="w-full sm:w-auto bg-brand hover:bg-brand-hover text-white font-medium px-8 py-6 rounded-md shadow-sm transition-all flex items-center justify-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  aria-label="Get Started Free and sign up"
+                >
                   Get Started Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/login" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-800 hover:bg-slate-900/50 text-slate-300 font-semibold px-8 py-6 rounded-xl">
+              <Link href="/login" passHref legacyBehavior>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="w-full sm:w-auto border-surface-border bg-surface hover:bg-surface-sunken text-ink font-medium px-8 py-6 rounded-md min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  aria-label="Sign In to active dashboard"
+                >
                   Sign In
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* Right Mock Graphic Column */}
+          {/* Right Hero Graphic Column: Signature Pulse Rings motif */}
           <div className="lg:col-span-6 flex justify-center relative">
-            {/* Glowing Backdrop */}
-            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-600 opacity-20 blur-xl -z-10" />
-            
-            {/* Main Mock Grid */}
-            <div className="border border-slate-850 bg-slate-900/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden p-6 w-full max-w-lg space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center space-x-2">
-                  <span className="h-3.5 w-3.5 rounded-full bg-red-500/80" />
-                  <span className="h-3.5 w-3.5 rounded-full bg-yellow-500/80" />
-                  <span className="h-3.5 w-3.5 rounded-full bg-green-500/80" />
-                </div>
-                <span className="text-xs text-slate-500 font-mono">zoom_meeting_grid.exe</span>
-              </div>
+            <div className="relative border border-surface-border bg-surface shadow-md rounded-lg p-8 w-full max-w-md h-[340px] flex items-center justify-center overflow-hidden">
               
-              <div className="grid grid-cols-2 gap-3 min-h-60">
-                <div className="rounded-xl bg-slate-950/60 border border-slate-850 flex flex-col items-center justify-center p-4">
-                  <div className="h-10 w-10 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold mb-2">A</div>
-                  <span className="text-xs font-bold text-slate-300">Alex Smith</span>
-                  <span className="text-[10px] text-slate-500 mt-0.5">Host • Audio Active</span>
+              {/* Concentric Pulse Rings Motif */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="absolute h-16 w-16 rounded-full border border-brand/20 bg-brand/5 animate-[ping_4s_infinite_ease-in-out]" />
+                <div className="absolute h-36 w-36 rounded-full border border-brand/10 bg-brand/[0.02] animate-[ping_6s_infinite_ease-in-out]" />
+                <div className="absolute h-60 w-60 rounded-full border border-brand/5 bg-brand/[0.01] animate-[ping_8s_infinite_ease-in-out]" />
+              </div>
+
+              {/* Central Signal Core */}
+              <div className="relative z-10 flex flex-col items-center space-y-4">
+                <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-brand text-white shadow-md">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-brand animate-pulse opacity-40" />
+                  <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6" />
+                  </svg>
                 </div>
-                <div className="rounded-xl bg-slate-950/60 border border-slate-850 flex flex-col items-center justify-center p-4">
-                  <div className="h-10 w-10 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold mb-2">E</div>
-                  <span className="text-xs font-bold text-slate-300">Emma Jones</span>
-                  <span className="text-[10px] text-slate-500 mt-0.5">Video Connecting...</span>
+                
+                {/* Floating client status badge overlay */}
+                <div className="bg-surface border border-surface-border rounded-md px-4 py-2.5 shadow-sm text-center max-w-[200px]">
+                  <p className="text-xs font-bold text-ink">Call Connected</p>
+                  <p className="text-[10px] text-ink-muted mt-0.5 font-mono">120.0.0.1 • LiveKit Active</p>
+                  <div className="flex justify-center space-x-1.5 mt-2">
+                    <div className="p-1 rounded-sm bg-brand-subtle text-brand-text">
+                      <Video className="h-3 w-3" />
+                    </div>
+                    <div className="p-1 rounded-sm bg-brand-subtle text-brand-text">
+                      <Mic className="h-3 w-3" />
+                    </div>
+                    <div className="p-1 rounded-sm bg-brand-subtle text-brand-text">
+                      <Monitor className="h-3 w-3" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -120,38 +157,38 @@ export default function LandingPage() {
       </section>
 
       {/* ──── FEATURE CARDS ──── */}
-      <section className="bg-slate-950/30 border-t border-slate-900 py-16">
+      <section className="bg-surface border-t border-surface-border py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="p-6 rounded-2xl bg-slate-900/30 border border-slate-900 space-y-4">
-              <div className="h-10 w-10 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+              <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Cpu className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-white">Low Client Load</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <h3 className="text-[20px]/[1.3] md:text-[24px]/[1.3] font-medium font-display text-ink">Low Client Load</h3>
+              <p className="text-ink-muted text-sm leading-relaxed">
                 Powered by LiveKit WebRTC SFU. Media routes selectively, lowering server stress and client processor consumption.
               </p>
             </div>
             
             {/* Card 2 */}
-            <div className="p-6 rounded-2xl bg-slate-900/30 border border-slate-900 space-y-4">
-              <div className="h-10 w-10 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+              <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Shield className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-white">Waiting Room Security</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <h3 className="text-[20px]/[1.3] md:text-[24px]/[1.3] font-medium font-display text-ink">Waiting Room Security</h3>
+              <p className="text-ink-muted text-sm leading-relaxed">
                 Admit users selectively before letting them access the video streams, protecting meetings from unauthorized intruders.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="p-6 rounded-2xl bg-slate-900/30 border border-slate-900 space-y-4">
-              <div className="h-10 w-10 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center">
+            <div className="p-6 rounded-md bg-surface border border-surface-border space-y-4 shadow-sm hover:shadow transition-shadow duration-150">
+              <div className="h-10 w-10 rounded-md bg-brand-subtle text-brand-text flex items-center justify-center">
                 <Zap className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-white">Instant Text & Reactions</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <h3 className="text-[20px]/[1.3] md:text-[24px]/[1.3] font-medium font-display text-ink">Instant Text & Reactions</h3>
+              <p className="text-ink-muted text-sm leading-relaxed">
                 Exchange chat messages and interactive emoji reactions instantly using Socket.io synchronization.
               </p>
             </div>
@@ -160,13 +197,18 @@ export default function LandingPage() {
       </section>
 
       {/* ──── FOOTER ──── */}
-      <footer className="w-full border-t border-slate-900 py-8 bg-slate-950 text-slate-500 text-sm">
+      <footer className="w-full border-t border-surface-border py-8 bg-surface text-ink-muted text-sm">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
-            <Video className="h-4 w-4 text-blue-500" />
-            <span className="font-bold text-slate-300">ZOOM CLONE</span>
+            <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-brand text-white">
+              <svg className="h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6" />
+              </svg>
+            </div>
+            <span className="font-bold text-ink">Connect</span>
           </div>
-          <p>© 2026 Zoom Clone. All rights reserved.</p>
+          <p>© 2026 Connect. All rights reserved.</p>
         </div>
       </footer>
 

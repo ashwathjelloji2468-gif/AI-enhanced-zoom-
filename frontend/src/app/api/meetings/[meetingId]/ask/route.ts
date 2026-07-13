@@ -92,7 +92,10 @@ ${transcript}
 """
     `.trim();
 
-    if (geminiKey) {
+    let success = false;
+
+    // Try Gemini if key is provided
+    if (geminiKey && !success) {
       console.log(`Submitting question to Google Gemini grounded in transcript (${transcript.length} chars)`);
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
@@ -119,12 +122,18 @@ ${transcript}
         if (data.error) {
           throw new Error(data.error.message || 'Gemini API call failed');
         }
-        answer = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          answer = text;
+          success = true;
+        }
       } catch (err: any) {
-        console.error('Gemini API call failed inside Ask API:', err.message);
-        answer = `Gemini API Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+        console.warn('Gemini API call failed inside Ask API:', err.message);
       }
-    } else if (openaiKey) {
+    }
+
+    // Try OpenAI if key is provided and Gemini did not succeed
+    if (openaiKey && !success) {
       console.log(`Submitting question to OpenAI (gpt-4o-mini) grounded in transcript (${transcript.length} chars)`);
       try {
         const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -147,12 +156,18 @@ ${transcript}
         if (data.error) {
           throw new Error(data.error.message || 'OpenAI API call failed');
         }
-        answer = data.choices?.[0]?.message?.content || '';
+        const text = data.choices?.[0]?.message?.content;
+        if (text) {
+          answer = text;
+          success = true;
+        }
       } catch (err: any) {
-        console.error('OpenAI API call failed inside Ask API:', err.message);
-        answer = `OpenAI API Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+        console.warn('OpenAI API call failed inside Ask API:', err.message);
       }
-    } else if (anthropicKey) {
+    }
+
+    // Try Anthropic if key is provided and neither Gemini nor OpenAI succeeded
+    if (anthropicKey && !success) {
       console.log(`Submitting question to Claude grounded in transcript (${transcript.length} chars)`);
       try {
         const anthropic = new Anthropic({ apiKey: anthropicKey });
@@ -168,17 +183,19 @@ ${transcript}
           ]
         });
 
-        answer = message.content[0].type === 'text' ? message.content[0].text : '';
-      } catch (err: any) {
-        console.error('Claude API call failed inside Ask API:', err.message);
-        if (err.message?.includes('credit balance') || err.status === 400 && err.message?.includes('credit')) {
-          answer = `Anthropic API Error: Your account credit balance is too low to complete this request. Please add credits at console.anthropic.com.`;
-        } else {
-          answer = `AI Error: ${err.message || 'Unknown error'}. Fallback: ${getMockAnswer(transcript, question)}`;
+        const text = message.content[0].type === 'text' ? message.content[0].text : '';
+        if (text) {
+          answer = text;
+          success = true;
         }
+      } catch (err: any) {
+        console.warn('Claude API call failed inside Ask API:', err.message);
       }
-    } else {
-      console.log('No API keys configured. Triggering local mock fallback...');
+    }
+
+    // If none of the API integrations succeeded
+    if (!success) {
+      console.log('No active API key integrations succeeded. Triggering local mock fallback...');
       answer = getMockAnswer(transcript, question);
     }
 
