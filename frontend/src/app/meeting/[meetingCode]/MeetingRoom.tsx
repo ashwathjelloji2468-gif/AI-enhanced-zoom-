@@ -432,15 +432,14 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
               Are you sure you want to disconnect from this conference tunnel?
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="pt-2 gap-2 sm:gap-0">
-            <Button 
+          <DialogFooter className="bg-transparent border-none m-0 p-0 pt-4 flex flex-row justify-end gap-2">
+            <button 
               type="button" 
-              variant="outline" 
               onClick={() => setIsLeaveDialogOpen(false)}
-              className="border-dark-border hover:bg-dark-tile text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none min-h-[44px]"
+              className="border border-dark-border bg-transparent hover:bg-dark-tile text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark-surface outline-none min-h-[44px] px-6 rounded-lg text-sm font-medium transition-colors duration-150 ease-out cursor-pointer"
             >
               Cancel
-            </Button>
+            </button>
             <Button 
               type="button"
               onClick={executeLeave}
