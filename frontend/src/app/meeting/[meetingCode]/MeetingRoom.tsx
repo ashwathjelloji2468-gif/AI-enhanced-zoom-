@@ -742,13 +742,16 @@ function MeetingCallContent({
                 {layoutMode === 'gallery' ? (
                   
                   // GALLERY VIEW
-                  <div className={`grid gap-4 w-full h-full items-center justify-center ${
-                    tracks.length === 1 ? 'grid-cols-1 max-w-4xl' :
-                    tracks.length === 2 ? 'grid-cols-2 max-w-5xl' :
-                    tracks.length <= 4 ? 'grid-cols-2 max-w-5xl' : 'grid-cols-2 lg:grid-cols-3 max-w-6xl'
-                  }`}>
+                  <div className="flex flex-wrap items-center justify-center gap-4 w-full h-full max-w-6xl mx-auto my-auto">
                     {tracks.map((track) => (
-                      <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="relative rounded-lg overflow-hidden aspect-video shadow-lg border border-dark-border bg-dark-tile">
+                      <div 
+                        key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} 
+                        className={`relative rounded-lg overflow-hidden aspect-video shadow-lg border border-dark-border bg-dark-tile flex-shrink-0 transition-all ${
+                          tracks.length === 1 ? 'w-full max-w-4xl max-h-[70vh]' :
+                          tracks.length === 2 ? 'w-[calc(50%-8px)] max-w-2xl' :
+                          tracks.length <= 4 ? 'w-[calc(50%-8px)] max-w-xl' : 'w-[calc(33.33%-11px)] max-w-md'
+                        }`}
+                      >
                         <ParticipantTile 
                           track={track} 
                           isLocal={track.participant.isLocal} 
@@ -761,9 +764,11 @@ function MeetingCallContent({
                 ) : (
 
                   // SPEAKER VIEW
-                  <div className="flex flex-col md:flex-row gap-4 w-full h-full max-w-6xl">
+                  <div className="flex flex-col md:flex-row gap-6 w-full h-full max-w-6xl items-center justify-center my-auto">
                     {activeSpeakerTrack && (
-                      <div className="flex-1 rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border">
+                      <div className={`rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border aspect-video max-h-[70vh] flex items-center justify-center transition-all ${
+                        tracks.length === 1 ? 'w-full max-w-4xl' : 'flex-1 w-full'
+                      }`}>
                         <ParticipantTile 
                           track={activeSpeakerTrack} 
                           isLocal={activeSpeakerTrack.participant.isLocal} 
@@ -773,12 +778,12 @@ function MeetingCallContent({
                     )}
 
                     {tracks.length > 1 && (
-                      <ScrollArea className="md:w-60 flex flex-col gap-2 max-h-full">
-                        <div className="space-y-3 pr-2">
+                      <ScrollArea className="md:w-60 w-full flex-shrink-0 max-h-[70vh] border border-dark-border/40 rounded-lg p-2 bg-dark-surface/40">
+                        <div className="space-y-3 pr-2 flex flex-row md:flex-col gap-3 md:gap-0 md:space-y-3">
                           {tracks
                             .filter((t) => t.participant.identity !== activeSpeakerTrack?.participant.identity)
                             .map((track) => (
-                              <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="rounded-lg overflow-hidden aspect-video relative shadow border border-dark-border bg-dark-tile">
+                              <div key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} className="rounded-lg overflow-hidden aspect-video relative shadow border border-dark-border bg-dark-tile w-32 md:w-full flex-shrink-0">
                                 <ParticipantTile 
                                   track={track} 
                                   isLocal={track.participant.isLocal} 
