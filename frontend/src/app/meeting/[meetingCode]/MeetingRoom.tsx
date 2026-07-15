@@ -770,9 +770,11 @@ function MeetingCallContent({
           ) : (
             <>
               {/* MOBILE SPOTLIGHT + FILMSTRIP VIEW (<768px) */}
-              <div className="flex md:hidden flex-col w-full h-full gap-3 overflow-hidden">
+              <div className="flex md:hidden flex-col w-full h-full items-center justify-center gap-3 overflow-hidden">
                 {/* Spotlight Dominant Tile */}
-                <div className="flex-1 rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border">
+                <div className={`rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border aspect-video transition-all ${
+                  tracks.length === 1 ? 'w-full max-w-sm' : 'flex-1 w-full'
+                }`}>
                   {activeSpeakerTrack ? (
                     <ParticipantTile 
                       track={activeSpeakerTrack} 
@@ -805,7 +807,7 @@ function MeetingCallContent({
               </div>
 
               {/* TABLET / DESKTOP VIEWS (>=768px) */}
-              <div className="hidden md:flex w-full h-full items-center justify-center">
+              <div className="hidden md:flex w-full flex-1 items-center justify-center">
                 {layoutMode === 'gallery' ? (
                   
                   // GALLERY VIEW
@@ -1030,12 +1032,16 @@ function MeetingCallContent({
                 <Smile className="h-5 w-5" />
                 <span className="text-[10px] mt-0.5 hidden sm:block font-sans font-medium">Reactions</span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex items-center space-x-1.5 p-2 bg-dark-surface border border-dark-border shadow-xl rounded-lg">
+              <DropdownMenuContent 
+                side="top" 
+                sideOffset={12} 
+                className="grid grid-cols-6 gap-1 p-2 bg-dark-surface border border-dark-border shadow-xl rounded-lg w-auto min-w-[280px]"
+              >
                 {['👍', '👏', '🎉', '❤️', '✋', '👎', '😮', '😂', '🔥', '💡', '💯', '🚀'].map(emoji => (
                   <button 
                     key={emoji}
                     onClick={() => handleSendReaction(emoji)}
-                    className="text-2xl hover:scale-125 transition-transform p-2 rounded hover:bg-dark-tile cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                    className="text-2xl hover:scale-125 transition-transform p-2 rounded hover:bg-dark-tile cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                   >
                     {emoji}
                   </button>
