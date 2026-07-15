@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  frontend-ci:
+    name: Frontend CI (Next.js)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Generate Prisma Client
+        run: |
+          cd frontend
+          npx prisma generate
+
+      - name: Typecheck TypeScript
+        run: |
+          cd frontend
+          npx tsc --noEmit
+
+      - name: Run Next.js Linter
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Build Next.js Application
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/zoomclone?schema=public"
+          JWT_SECRET: "ci-dummy-jwt-secret-key"
+          JWT_REFRESH_SECRET: "ci-dummy-jwt-refresh-secret-key"
+          NEXT_PUBLIC_SOCKET_URL: "http://localhost:5001"
+          NEXT_PUBLIC_LIVEKIT_URL: "ws://localhost:7880"
+          LIVEKIT_API_KEY: "devkey"
+          LIVEKIT_API_SECRET: "secret"
+        run: |
+          cd frontend
+          npm run build
+
+  backend-ci:
+    name: Backend CI (Express/Sockets)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Generate Prisma Client
+        run: |
+          cd backend
+          npx prisma generate
+
+      - name: Build Backend Application
+        run: |
+          cd backend
+          npm run build
