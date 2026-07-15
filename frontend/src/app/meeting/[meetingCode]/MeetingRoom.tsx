@@ -118,6 +118,24 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   const [localMicOn, setLocalMicOn] = useState(true);
   const [localCamOn, setLocalCamOn] = useState(true);
 
+  // Media access error states
+  const [roomError, setRoomError] = useState<string | null>(null);
+
+  const handleRoomError = (error: Error) => {
+    console.error('LiveKit room connection error:', error);
+    if (error.name === 'NotAllowedError' || error.message.includes('permission') || error.message.includes('Permission') || error.message.includes('NotAllowedError')) {
+      setRoomError('Permission denied: Camera and microphone access are blocked. Please allow browser access in settings to join with media, or continue in view-only mode.');
+    } else {
+      setRoomError(error.message || 'An error occurred connecting to the WebRTC video engine.');
+    }
+  };
+
+  const handleJoinViewOnly = () => {
+    setLocalCamOn(false);
+    setLocalMicOn(false);
+    setRoomError(null);
+  };
+
   // Refs
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isHost = meetingDetails?.hostId === user.id;
@@ -334,6 +352,39 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   const waitingList = socketParticipants.filter((p) => !p.isAdmitted);
   const admittedList = socketParticipants.filter((p) => p.isAdmitted);
 
+  // ──── MEDIA ACCESS ERROR SCREEN ────
+  if (roomError) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-dark-bg text-white p-6 font-sans">
+        <div className="max-w-md w-full text-center space-y-6 bg-dark-surface border border-dark-border p-8 rounded-2xl shadow-2xl animate-fade-in">
+          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-danger/10 text-danger border border-danger/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-8 h-8 animate-pulse">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold tracking-tight font-display text-white">Media Access Denied</h2>
+            <p className="text-ink-inverse-muted text-xs leading-relaxed">{roomError}</p>
+          </div>
+          <div className="flex flex-col space-y-3 pt-2">
+            <button 
+              onClick={handleJoinViewOnly}
+              className="w-full bg-brand hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out text-white font-medium py-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] shadow-sm cursor-pointer"
+            >
+              Continue in View-Only Mode
+            </button>
+            <button 
+              onClick={() => window.location.reload()}
+              className="w-full border border-dark-border bg-transparent hover:bg-dark-tile text-white transition-colors duration-150 ease-out font-medium py-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px] cursor-pointer"
+            >
+              Retry Permissions
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ──── LOBBY WAITING SCREEN ────
   if (isWaiting && !isHost) {
     return (
@@ -372,6 +423,7 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
       audio={localMicOn}
       token={liveKitToken || undefined}
       serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
+      onError={handleRoomError}
       data-lk-theme="default"
       className="flex h-screen w-screen bg-dark-bg overflow-hidden text-white"
     >
