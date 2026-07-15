@@ -90,6 +90,7 @@ interface EmojiReaction {
   id: string;
   senderName: string;
   reaction: string;
+  leftOffset?: number;
 }
 
 export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }: MeetingRoomProps) {
@@ -241,12 +242,16 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
 
     // Real-time emoji reaction receiver
     socketClient.on('chat:reaction', (reaction: EmojiReaction) => {
-      setActiveReactions((prev) => [...prev, reaction]);
+      const reactionWithOffset = {
+        ...reaction,
+        leftOffset: Math.floor(Math.random() * 160) - 80, // -80px to +80px from center
+      };
+      setActiveReactions((prev) => [...prev, reactionWithOffset]);
       
-      // Remove reaction floating display bubble after 3 seconds
+      // Remove reaction floating display bubble after 4 seconds (matching drift-emoji animation duration)
       setTimeout(() => {
         setActiveReactions((prev) => prev.filter((r) => r.id !== reaction.id));
-      }, 3000);
+      }, 4000);
     });
 
     // Listen for recording changes (from other browser sessions / host commands)
@@ -468,14 +473,19 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
       <RoomAudioRenderer />
 
       {/* Emoji Reactions Floater overlay */}
-      <div className="fixed bottom-28 left-6 z-[999] flex flex-col space-y-2 pointer-events-none">
+      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[999] pointer-events-none flex flex-col items-center">
         {activeReactions.map((r) => (
           <div 
             key={r.id}
-            className="flex items-center space-x-1.5 bg-dark-surface/90 border border-dark-border px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-float-up"
+            style={{ 
+              position: 'absolute',
+              bottom: 0,
+              transform: `translateX(${r.leftOffset || 0}px)`,
+            }}
+            className="flex items-center space-x-1.5 bg-dark-surface/95 border border-dark-border px-3.5 py-2 rounded-full text-xs font-semibold shadow-2xl animate-drift-emoji whitespace-nowrap text-white"
           >
-            <span className="text-sm">{r.reaction}</span>
-            <span className="text-ink-inverse-muted text-[10px] truncate max-w-[80px]">{r.senderName}</span>
+            <span className="text-base">{r.reaction}</span>
+            <span className="text-ink-inverse-muted text-[9px] truncate max-w-[70px]">{r.senderName}</span>
           </div>
         ))}
       </div>
@@ -799,7 +809,7 @@ function MeetingCallContent({
                 {layoutMode === 'gallery' ? (
                   
                   // GALLERY VIEW
-                  <div className="flex flex-wrap items-center justify-center gap-4 w-full max-w-6xl mx-auto my-auto">
+                  <div className="flex flex-wrap items-center justify-center gap-4 w-full max-w-6xl">
                     {tracks.map((track) => (
                       <div 
                         key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} 
@@ -821,7 +831,7 @@ function MeetingCallContent({
                 ) : (
 
                   // SPEAKER VIEW
-                  <div className="flex flex-col md:flex-row gap-6 w-full max-w-6xl items-center justify-center my-auto">
+                  <div className="flex flex-col md:flex-row gap-6 w-full max-w-6xl items-center justify-center">
                     {activeSpeakerTrack && (
                       <div className={`rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border aspect-video max-h-[70vh] flex items-center justify-center transition-all ${
                         tracks.length === 1 ? 'w-full max-w-4xl' : 'flex-1 w-full'
@@ -1021,7 +1031,7 @@ function MeetingCallContent({
                 <span className="text-[10px] mt-0.5 hidden sm:block font-sans font-medium">Reactions</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="flex items-center space-x-1.5 p-2 bg-dark-surface border border-dark-border shadow-xl rounded-lg">
-                {['👍', '👏', '🎉', '❤️', '✋', '👎'].map(emoji => (
+                {['👍', '👏', '🎉', '❤️', '✋', '👎', '😮', '😂', '🔥', '💡', '💯', '🚀'].map(emoji => (
                   <button 
                     key={emoji}
                     onClick={() => handleSendReaction(emoji)}
