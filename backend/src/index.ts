@@ -25,10 +25,19 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', service: 'zoom-clone-signaling-server' });
 });
 
+import { startBackgroundWorker } from './worker';
+
 // Initialize Socket Server
 initSocketServer(server);
 
 // Start server listening
 server.listen(PORT, () => {
   console.log(`Express and Socket.io Signaling Server is running on port ${PORT}`);
+  
+  // Start the background worker in-process!
+  try {
+    startBackgroundWorker();
+  } catch (err) {
+    console.error('Failed to start in-process background worker:', err);
+  }
 });

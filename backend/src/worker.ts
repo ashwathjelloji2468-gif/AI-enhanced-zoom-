@@ -13,8 +13,15 @@ const redisUrl = process.env.REDIS_URL || 'redis://localhost:6380';
 const prisma = new PrismaClient();
 const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5001';
 
-console.log('Starting BullMQ background worker...');
-console.log(`Connecting to Redis: ${redisUrl}`);
+// We will start the worker inside the main process when called
+let workerStarted = false;
+
+export function startBackgroundWorker() {
+  if (workerStarted) return;
+  workerStarted = true;
+
+  console.log('Starting BullMQ background worker in-process...');
+  console.log(`Connecting to Redis: ${redisUrl}`);
 
 const getRedisOptions = (url: string) => {
   try {
@@ -333,9 +340,10 @@ worker.on('completed', (job) => {
   console.log(`[Job ${job.id}] Job completed successfully!`);
 });
 
-worker.on('failed', (job, err) => {
-  console.error(`[Job ${job?.id}] Job failed with error:`, err.message);
-});
+  worker.on('failed', (job, err) => {
+    console.error(`[Job ${job?.id}] Job failed with error:`, err.message);
+  });
+}
 
 // Helper for realistic mock summary content
 function getFallbackSummary() {

@@ -24,36 +24,14 @@ services:
         sync: false
       - key: NEXT_PUBLIC_LIVEKIT_URL
         sync: false
-
-  # 2. Background AI Worker (connect-worker)
-  - type: worker
-    name: connect-worker
-    env: node
-    plan: free
-    buildCommand: cd backend && npm install && npm run build
-    startCommand: cd backend && npm run start:worker
-    envVars:
-      - key: NODE_VERSION
-        value: 20
-      - key: DATABASE_URL
-        sync: false
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: connect-redis
-          property: connectionString
-      - key: LIVEKIT_API_KEY
-        sync: false
-      - key: LIVEKIT_API_SECRET
-        sync: false
-      - key: NEXT_PUBLIC_LIVEKIT_URL
-        sync: false
       - key: OPENAI_API_KEY
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: GEMINI_API_KEY
+        sync: false
 
-  # 3. Redis Instance (connect-redis)
+  # 2. Redis Instance (connect-redis)
   - type: redis
     name: connect-redis
     plan: free
