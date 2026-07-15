@@ -1,5 +1,7 @@
 # 🎥 Connect: AI-Enhanced Video Conferencing Platform
 
+[![CI/CD Pipeline](https://github.com/ashwathjelloji2468-gif/AI-enhanced-zoom-/actions/workflows/ci.yml/badge.svg)](https://github.com/ashwathjelloji2468-gif/AI-enhanced-zoom-/actions/workflows/ci.yml)
+
 Connect is a high-fidelity, premium video conferencing platform built to mirror the seamless experience of Zoom, augmented with real-time AI summaries, secure peer signaling, and interactive social streams. 
 
 The application is structured as a modern, decoupled monorepo leveraging Next.js for high-performance frontend interfaces and Express/Socket.io for synchronized WebRTC state orchestration.
@@ -12,6 +14,7 @@ The application is structured as a modern, decoupled monorepo leveraging Next.js
 *   **💬 Real-Time Direct Messaging**: Self-contained DM chat channels between contacts, synchronized in real-time via Socket.io channels and persisted locally.
 *   **✨ Interactive Floating Reactions**: Wavy, drifting live emoji reactions (👍, 👏, 🎉, ❤️, ✋, 👎, 😮, 😂, 🔥, 💡, 💯, 🚀) that float upwards with custom keyframe animations and randomized offsets.
 *   **🤖 AI Meeting Summaries**: Cloud recording integration that triggers background worker jobs to process transcription logs and generate key decisions and action items via Anthropic & OpenAI API models.
+*   **🔁 CI/CD Pipeline (GitHub Actions)**: Automatic build verification, Next.js linter validation, TypeScript compilation type-checks, and Prisma DB Client generation on every commit and pull request.
 *   **🔒 Secure JWT Authentication**: Robust cookie-based access token lifecycle (15m expiry) and database-persisted session-refresh token validation.
 *   **🛠️ Modern Responsive UI**: Curated dark modes, glassmorphism panel slideouts, hover transition lifts, and accessible layouts built on Radix UI, Base UI, and Tailwind.
 
