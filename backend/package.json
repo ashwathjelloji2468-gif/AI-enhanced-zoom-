@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
-    "dev:worker": "nodemon --watch src --exec ts-node src/worker.ts"
+    "dev:worker": "nodemon --watch src --exec ts-node src/worker.ts",
+    "start:worker": "node dist/worker.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
