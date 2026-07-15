@@ -235,12 +235,12 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
     });
 
     // Real-time Chat message receiver
-    socketClient.on('chat-message', (msg: ChatMessage) => {
+    socketClient.on('chat:message', (msg: ChatMessage) => {
       setChatMessages((prev) => [...prev, msg]);
     });
 
     // Real-time emoji reaction receiver
-    socketClient.on('emoji-reaction', (reaction: EmojiReaction) => {
+    socketClient.on('chat:reaction', (reaction: EmojiReaction) => {
       setActiveReactions((prev) => [...prev, reaction]);
       
       // Remove reaction floating display bubble after 3 seconds
@@ -272,7 +272,12 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
       createdAt: new Date().toISOString(),
     };
 
-    socket.emit('chat-message', { room: meetingCode, message: msg });
+    socket.emit('chat:message', { 
+      room: meetingCode, 
+      userId: user.id,
+      userName: user.name,
+      content: chatInput.trim() 
+    });
     setChatInput('');
   };
 
@@ -284,12 +289,12 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   // Handle Send Reaction
   const handleSendReaction = (emoji: string) => {
     if (!socket) return;
-    const reaction: EmojiReaction = {
-      id: crypto.randomUUID(),
-      senderName: user.name,
-      reaction: emoji,
-    };
-    socket.emit('emoji-reaction', { room: meetingCode, reaction });
+    socket.emit('chat:reaction', { 
+      room: meetingCode, 
+      userId: user.id,
+      userName: user.name,
+      reaction: emoji 
+    });
   };
 
   // Admit lobby user
@@ -794,7 +799,7 @@ function MeetingCallContent({
                 {layoutMode === 'gallery' ? (
                   
                   // GALLERY VIEW
-                  <div className="flex flex-wrap items-center justify-center gap-4 w-full h-full max-w-6xl mx-auto my-auto">
+                  <div className="flex flex-wrap items-center justify-center gap-4 w-full max-w-6xl mx-auto my-auto">
                     {tracks.map((track) => (
                       <div 
                         key={track.publication?.trackSid || `${track.participant.identity}-${track.source}`} 
@@ -816,7 +821,7 @@ function MeetingCallContent({
                 ) : (
 
                   // SPEAKER VIEW
-                  <div className="flex flex-col md:flex-row gap-6 w-full h-full max-w-6xl items-center justify-center my-auto">
+                  <div className="flex flex-col md:flex-row gap-6 w-full max-w-6xl items-center justify-center my-auto">
                     {activeSpeakerTrack && (
                       <div className={`rounded-lg overflow-hidden bg-dark-tile relative shadow-xl border border-dark-border aspect-video max-h-[70vh] flex items-center justify-center transition-all ${
                         tracks.length === 1 ? 'w-full max-w-4xl' : 'flex-1 w-full'
