@@ -1160,21 +1160,36 @@ function MeetingCallContent({
               <div className="flex-1 overflow-y-auto p-4 bg-dark-bg">
                 <div className="space-y-4">
                   {chatMessages.map((msg) => (
-                    <div key={msg.id} className="space-y-1">
-                      <div className="flex items-center justify-between text-[10px] text-ink-inverse-muted font-medium">
-                        <span className="font-bold text-brand">{msg.senderName}</span>
-                        <span>{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <div key={msg.id} className="text-xs font-sans leading-relaxed">
+                      <div className="flex items-baseline space-x-1.5">
+                        <span className="font-bold text-sky-400">
+                          {msg.senderId === user.id ? 'Me' : msg.senderName}
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">to</span>
+                        <span className="font-semibold text-slate-300">Everyone</span>
+                        <span className="text-[10px] text-slate-500 font-medium">
+                          ({new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})
+                        </span>
                       </div>
-                      <p className="bg-dark-surface border border-dark-border px-3 py-2 rounded-lg text-xs text-white leading-normal inline-block max-w-[90%] break-words">
+                      <div className="mt-1 text-slate-100 select-text break-words whitespace-pre-wrap pl-1 font-normal">
                         {msg.content}
-                      </p>
+                      </div>
                     </div>
                   ))}
                   <div ref={chatEndRef} />
                 </div>
               </div>
 
-              <form onSubmit={handleSendChat} className="p-4 border-t border-dark-border flex items-center space-x-2 bg-dark-surface">
+              {/* Zoom Style 'To: Everyone' Dropdown Selector */}
+              <div className="px-4 py-2.5 border-t border-dark-border/60 bg-dark-surface/90 flex items-center space-x-2 text-xs select-none">
+                <span className="text-slate-400 font-semibold font-sans">To:</span>
+                <button className="flex items-center space-x-1 bg-dark-tile border border-dark-border/80 px-2 py-0.5 rounded text-sky-400 font-bold hover:bg-dark-tile/80 transition-colors cursor-pointer text-[11px] font-sans">
+                  <span>Everyone</span>
+                  <span className="text-[8px] text-slate-400 font-bold">▼</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSendChat} className="p-4 border-t border-dark-border/40 flex items-center space-x-2 bg-dark-surface">
                 <Input 
                   placeholder="Send a message..."
                   value={chatInput}
