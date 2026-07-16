@@ -238,6 +238,7 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
 
     // Real-time Chat message receiver
     socketClient.on('chat:message', (msg: ChatMessage) => {
+      if (msg.senderId === user.id) return; // Skip self echoes since we render optimistically
       setChatMessages((prev) => [...prev, msg]);
     });
 
@@ -270,14 +271,30 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
   // Handle Send Chat message
   const handleSendChat = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!chatInput.trim() || !socket) return;
+    if (!chatInput.trim()) return;
 
-    socket.emit('chat:message', { 
-      room: meetingCode, 
-      userId: user.id,
-      userName: user.name,
-      content: chatInput.trim() 
-    });
+    const chatContent = chatInput.trim();
+    const localMsgId = Math.random().toString(36).substring(7);
+
+    // 1. Optimistically display message locally instantly for fast responsive UI
+    const localMsg: ChatMessage = {
+      id: localMsgId,
+      senderId: user.id,
+      senderName: user.name,
+      content: chatContent,
+      createdAt: new Date().toISOString(),
+    };
+    setChatMessages((prev) => [...prev, localMsg]);
+
+    // 2. Broadcast to other room participants over socket if connected
+    if (socket) {
+      socket.emit('chat:message', { 
+        room: meetingCode, 
+        userId: user.id,
+        userName: user.name,
+        content: chatContent 
+      });
+    }
     setChatInput('');
   };
 
