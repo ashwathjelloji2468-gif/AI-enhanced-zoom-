@@ -88,6 +88,7 @@ interface ChatMessage {
 
 interface EmojiReaction {
   id: string;
+  senderId?: string;
   senderName: string;
   reaction: string;
   leftOffset?: number;
@@ -242,6 +243,8 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
 
     // Real-time emoji reaction receiver
     socketClient.on('chat:reaction', (reaction: EmojiReaction) => {
+      if (reaction.senderId === user.id) return; // Ignore our own since we render it optimistically
+
       const reactionWithOffset = {
         ...reaction,
         leftOffset: Math.floor(Math.random() * 160) - 80, // -80px to +80px from center
@@ -285,13 +288,31 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
 
   // Handle Send Reaction
   const handleSendReaction = (emoji: string) => {
-    if (!socket) return;
-    socket.emit('chat:reaction', { 
-      room: meetingCode, 
-      userId: user.id,
-      userName: user.name,
-      reaction: emoji 
-    });
+    // 1. Render reaction instantly locally for lag-free visual response
+    const localId = Math.random().toString(36).substring(7);
+    const localReaction = {
+      id: localId,
+      senderId: user.id,
+      senderName: 'You',
+      reaction: emoji,
+      leftOffset: Math.floor(Math.random() * 160) - 80, // -80px to +80px from center
+    };
+    setActiveReactions((prev) => [...prev, localReaction]);
+    
+    // Clear local reaction after 4s
+    setTimeout(() => {
+      setActiveReactions((prev) => prev.filter((r) => r.id !== localId));
+    }, 4000);
+
+    // 2. Emit reaction to other participants
+    if (socket) {
+      socket.emit('chat:reaction', { 
+        room: meetingCode, 
+        userId: user.id,
+        userName: user.name,
+        reaction: emoji 
+      });
+    }
   };
 
   // Admit lobby user
@@ -1136,7 +1157,7 @@ function MeetingCallContent({
                 </Button>
               </div>
 
-              <ScrollArea className="flex-1 p-4 bg-dark-bg">
+              <div className="flex-1 overflow-y-auto p-4 bg-dark-bg">
                 <div className="space-y-4">
                   {chatMessages.map((msg) => (
                     <div key={msg.id} className="space-y-1">
@@ -1151,7 +1172,7 @@ function MeetingCallContent({
                   ))}
                   <div ref={chatEndRef} />
                 </div>
-              </ScrollArea>
+              </div>
 
               <form onSubmit={handleSendChat} className="p-4 border-t border-dark-border flex items-center space-x-2 bg-dark-surface">
                 <Input 
