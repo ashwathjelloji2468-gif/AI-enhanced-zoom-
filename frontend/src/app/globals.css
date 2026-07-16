@@ -13,23 +13,23 @@
   --font-heading: var(--font-display), sans-serif;
 
   /* Brand Colors */
-  --color-brand: #4F9DDE;
-  --color-brand-hover: #3D8BCC;
-  --color-brand-light: #7FB8E8;
-  --color-brand-subtle: #EAF3FC;
-  --color-brand-text: #2E6DA4;
+  --color-brand: #2563EB;
+  --color-brand-hover: #1D4ED8;
+  --color-brand-light: #60A5FA;
+  --color-brand-subtle: #EFF6FF;
+  --color-brand-text: #1D4ED8;
 
   /* Surfaces — light mode */
   --color-surface: #FFFFFF;
   --color-surface-sunken: #F8FAFC;
   --color-surface-raised: #FFFFFF;
-  --color-surface-border: #E2E8F0;
+  --color-surface-border: #E5E7EB;
 
   /* Surfaces — dark mode */
-  --color-dark-bg: #0B0E1A;
-  --color-dark-surface: #12162A;
-  --color-dark-border: rgba(255, 255, 255, 0.10);
-  --color-dark-tile: #1A2036;
+  --color-dark-bg: #090D1A;
+  --color-dark-surface: #101527;
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+  --color-dark-tile: #171C32;
 
   /* Text Colors (ink) */
   --color-ink: #0F172A;
@@ -39,15 +39,15 @@
   --color-ink-inverse-muted: #94A3B8;
 
   /* Semantic Colors */
-  --color-success: #16A34A;
-  --color-success-subtle: #F0FDF4;
-  --color-warning: #D97706;
-  --color-warning-subtle: #FFFBEB;
-  --color-danger: #DC2626;
+  --color-success: #10B981;
+  --color-success-subtle: #ECFDF5;
+  --color-warning: #F59E0B;
+  --color-warning-subtle: #FEF3C7;
+  --color-danger: #EF4444;
   --color-danger-subtle: #FEF2F2;
-  --color-danger-hover: #B91C1C;
-  --color-info: #4F9DDE;
-  --color-info-subtle: #EAF3FC;
+  --color-danger-hover: #DC2626;
+  --color-info: #2563EB;
+  --color-info-subtle: #EFF6FF;
 
   /* Recording / live indicators */
   --color-live: #EF4444;
@@ -56,10 +56,14 @@
   --spacing-touch: 44px;
 
   /* Radii overrides */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
+
+  /* Premium Layered Shadows */
+  --shadow-premium: 0 1px 2px rgba(15, 23, 42, 0.02), 0 4px 16px rgba(15, 23, 42, 0.03), 0 12px 32px rgba(15, 23, 42, 0.04);
+  --shadow-premium-hover: 0 2px 4px rgba(15, 23, 42, 0.02), 0 12px 32px rgba(15, 23, 42, 0.06), 0 32px 64px rgba(15, 23, 42, 0.08);
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

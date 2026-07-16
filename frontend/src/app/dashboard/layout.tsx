@@ -105,80 +105,80 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-surface-sunken text-ink overflow-hidden font-sans">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans">
       
       {/* ──── SIDEBAR NAV (Tablet/Desktop) ──── */}
-      <aside className="hidden md:flex md:w-20 lg:w-64 bg-surface border-r border-surface-border flex-col items-center lg:items-start justify-between py-6 lg:px-4 z-20 transition-all duration-200">
+      <aside className="hidden md:flex md:w-20 lg:w-64 bg-white border-r border-slate-200/80 flex-col items-center lg:items-start justify-between py-6 lg:px-4 z-20 transition-all duration-200 shadow-premium relative">
         <div className="flex flex-col items-center lg:items-start space-y-8 w-full">
           {/* Logo */}
           <div 
             onClick={() => router.push('/dashboard')}
-            className="flex items-center space-x-3 cursor-pointer active:scale-95 transition-all lg:px-4 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 rounded-md outline-none"
+            className="flex items-center space-x-3 cursor-pointer active:scale-95 transition-all lg:px-4 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 rounded-xl outline-none group"
             aria-label="Connect Dashboard Home"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-brand text-white shadow-sm">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-hover text-white shadow-premium shadow-brand/10 transition-all duration-300 group-hover:shadow-brand/25">
               <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <circle cx="12" cy="12" r="3" />
                 <path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6" />
               </svg>
             </div>
-            <span className="hidden lg:block font-display font-bold text-lg text-ink tracking-wide">
+            <span className="hidden lg:block font-display font-extrabold text-lg text-slate-800 tracking-wide transition-colors group-hover:text-brand">
               Connect
             </span>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-col items-center lg:items-start space-y-3 w-full">
+          <nav className="flex flex-col items-center lg:items-start space-y-2.5 w-full">
             <button 
               onClick={() => router.push('/dashboard')}
               aria-label="Navigate to Home Dashboard"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-11 rounded-2xl lg:px-4 lg:space-x-3 transition-all duration-200 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none group ${
                 pathname === '/dashboard' 
-                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
-                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
+                  ? 'bg-brand/5 text-brand font-bold border border-brand/10 shadow-sm' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
               }`}
             >
-              <Tv className="h-5 w-5 flex-shrink-0" />
-              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Home</span>
+              <Tv className="h-5 w-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-semibold lg:block hidden">Home</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/meetings')}
               aria-label="Navigate to Meetings"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-11 rounded-2xl lg:px-4 lg:space-x-3 transition-all duration-200 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none group ${
                 pathname.startsWith('/dashboard/meetings') 
-                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
-                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
+                  ? 'bg-brand/5 text-brand font-bold border border-brand/10 shadow-sm' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
               }`}
             >
-              <Clock className="h-5 w-5 flex-shrink-0" />
-              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Meetings</span>
+              <Clock className="h-5 w-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-semibold lg:block hidden">Meetings</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/contacts')}
               aria-label="Navigate to Contacts"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-11 rounded-2xl lg:px-4 lg:space-x-3 transition-all duration-200 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none group ${
                 pathname.startsWith('/dashboard/contacts') 
-                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
-                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
+                  ? 'bg-brand/5 text-brand font-bold border border-brand/10 shadow-sm' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
               }`}
             >
-              <Users className="h-5 w-5 flex-shrink-0" />
-              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Contacts</span>
+              <Users className="h-5 w-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-semibold lg:block hidden">Contacts</span>
             </button>
 
             <button 
               onClick={() => router.push('/dashboard/settings')}
               aria-label="Navigate to Settings"
-              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-12 rounded-md lg:px-4 lg:space-x-3 transition-colors duration-150 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none ${
+              className={`flex flex-col lg:flex-row items-center justify-center lg:justify-start w-16 lg:w-full h-16 lg:h-11 rounded-2xl lg:px-4 lg:space-x-3 transition-all duration-200 ease-out cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none group ${
                 pathname.startsWith('/dashboard/settings') 
-                  ? 'bg-brand-subtle text-brand-text font-semibold shadow-inner' 
-                  : 'text-ink-muted hover:bg-surface-sunken hover:text-ink'
+                  ? 'bg-brand/5 text-brand font-bold border border-brand/10 shadow-sm' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
               }`}
             >
-              <Settings className="h-5 w-5 flex-shrink-0" />
-              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-medium lg:block hidden">Settings</span>
+              <Settings className="h-5 w-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+              <span className="text-[10px] lg:text-sm mt-1 lg:mt-0 font-semibold lg:block hidden">Settings</span>
             </button>
           </nav>
         </div>
@@ -188,46 +188,46 @@ export default function DashboardLayout({
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 active:scale-95 transition-transform cursor-pointer rounded-full">
               <div className="flex items-center space-x-3">
-                <Avatar className="h-10 w-10 ring-2 ring-surface-border hover:ring-brand transition-all">
+                <Avatar className="h-10 w-10 ring-2 ring-slate-100 hover:ring-brand/35 transition-all duration-300">
                   <AvatarImage src={user?.avatarUrl || undefined} />
-                  <AvatarFallback className="bg-brand text-white font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-brand to-brand-hover text-white font-extrabold shadow-sm">
                     {user?.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden lg:flex flex-col items-start text-left max-w-[140px]">
-                  <span className="text-sm font-semibold text-ink truncate w-full">{user?.name}</span>
-                  <span className="text-xs text-ink-muted truncate w-full">{user?.email}</span>
+                  <span className="text-sm font-bold text-slate-800 truncate w-full">{user?.name}</span>
+                  <span className="text-xs text-slate-400 truncate w-full">{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-white border-surface-border text-ink shadow-md p-1" align="start">
-              <DropdownMenuLabel className="font-normal lg:hidden">
+            <DropdownMenuContent className="w-56 bg-white/95 backdrop-blur-md border border-slate-200/60 text-slate-800 shadow-premium p-1.5 rounded-2xl" align="start">
+              <DropdownMenuLabel className="font-normal lg:hidden px-2 py-1.5">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-semibold">{user?.name}</p>
-                  <p className="text-xs text-ink-muted truncate">{user?.email}</p>
+                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="lg:hidden" />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-slate-50 focus:text-slate-900 hover:bg-slate-50 text-slate-700 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
+                <UserIcon className="mr-2.5 h-4 w-4 text-slate-400" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-slate-50 focus:text-slate-900 hover:bg-slate-50 text-slate-700 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <Settings className="mr-2 h-4 w-4 text-ink-muted" />
+                <Settings className="mr-2.5 h-4 w-4 text-slate-400" />
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-danger-subtle focus:text-danger text-danger hover:bg-danger-subtle transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-rose-50 focus:text-rose-600 text-rose-600 hover:bg-rose-50 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="mr-2.5 h-4 w-4" />
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -236,97 +236,97 @@ export default function DashboardLayout({
       </aside>
 
       {/* ──── MOBILE BOTTOM NAV BAR ──── */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-white border-t border-surface-border z-35 flex items-center justify-around px-2 pb-safe">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-white/90 backdrop-blur-md border-t border-slate-200/80 z-35 flex items-center justify-around px-2 pb-safe shadow-premium">
         <button 
           onClick={() => router.push('/dashboard')}
           aria-label="Navigate to Home Dashboard"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all duration-200 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname === '/dashboard' 
-              ? 'text-brand-text font-semibold' 
-              : 'text-ink-muted hover:text-ink'
+              ? 'text-brand font-bold' 
+              : 'text-slate-400 hover:text-slate-700'
           }`}
         >
           <Tv className="h-5 w-5" />
-          <span className="text-[10px] mt-0.5 font-medium">Home</span>
+          <span className="text-[10px] mt-0.5 font-semibold">Home</span>
         </button>
 
         <button 
           onClick={() => router.push('/dashboard/meetings')}
           aria-label="Navigate to Meetings"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all duration-200 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/meetings') 
-              ? 'text-brand-text font-semibold' 
-              : 'text-ink-muted hover:text-ink'
+              ? 'text-brand font-bold' 
+              : 'text-slate-400 hover:text-slate-700'
           }`}
         >
           <Clock className="h-5 w-5" />
-          <span className="text-[10px] mt-0.5 font-medium">Meetings</span>
+          <span className="text-[10px] mt-0.5 font-semibold">Meetings</span>
         </button>
 
         <button 
           onClick={() => router.push('/dashboard/contacts')}
           aria-label="Navigate to Contacts"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all duration-200 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/contacts') 
-              ? 'text-brand-text font-semibold' 
-              : 'text-ink-muted hover:text-ink'
+              ? 'text-brand font-bold' 
+              : 'text-slate-400 hover:text-slate-700'
           }`}
         >
           <Users className="h-5 w-5" />
-          <span className="text-[10px] mt-0.5 font-medium">Contacts</span>
+          <span className="text-[10px] mt-0.5 font-semibold">Contacts</span>
         </button>
 
         <button 
           onClick={() => router.push('/dashboard/settings')}
           aria-label="Navigate to Settings"
-          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-md transition-colors duration-150 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
+          className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all duration-200 ease-out cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-brand outline-none ${
             pathname.startsWith('/dashboard/settings') 
-              ? 'text-brand-text font-semibold' 
-              : 'text-ink-muted hover:text-ink'
+              ? 'text-brand font-bold' 
+              : 'text-slate-400 hover:text-slate-700'
           }`}
         >
           <Settings className="h-5 w-5" />
-          <span className="text-[10px] mt-0.5 font-medium">Settings</span>
+          <span className="text-[10px] mt-0.5 font-semibold">Settings</span>
         </button>
 
         <div className="flex-1 flex justify-center items-center h-12 min-h-[44px]">
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-brand active:scale-95 transition-transform cursor-pointer rounded-full">
-              <Avatar className="h-7 w-7 ring-2 ring-surface-border">
+              <Avatar className="h-7 w-7 ring-2 ring-slate-100">
                 <AvatarImage src={user?.avatarUrl || undefined} />
-                <AvatarFallback className="bg-brand text-white font-bold text-[10px]">
+                <AvatarFallback className="bg-brand text-white font-extrabold text-[10px]">
                   {user?.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-white border-surface-border text-ink shadow-md p-1" align="end">
-              <DropdownMenuLabel className="font-normal">
+            <DropdownMenuContent className="w-56 bg-white/95 backdrop-blur-md border border-slate-200/60 text-slate-800 shadow-premium p-1.5 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-200" align="end">
+              <DropdownMenuLabel className="font-normal px-2 py-1.5">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-semibold">{user?.name}</p>
-                  <p className="text-xs text-ink-muted truncate">{user?.email}</p>
+                  <p className="text-xs text-slate-400 truncate">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-slate-50 focus:text-slate-900 hover:bg-slate-50 text-slate-700 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <UserIcon className="mr-2 h-4 w-4 text-ink-muted" />
+                <UserIcon className="mr-2.5 h-4 w-4 text-slate-400" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => router.push('/dashboard/settings')}
-                className="focus:bg-surface-sunken focus:text-ink hover:bg-surface-sunken text-ink transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-slate-50 focus:text-slate-900 hover:bg-slate-50 text-slate-700 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <Settings className="mr-2 h-4 w-4 text-ink-muted" />
+                <Settings className="mr-2.5 h-4 w-4 text-slate-400" />
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={handleLogout}
-                className="focus:bg-danger-subtle focus:text-danger text-danger hover:bg-danger-subtle transition-colors duration-150 ease-out cursor-pointer py-2"
+                className="focus:bg-rose-50 focus:text-rose-600 text-rose-600 hover:bg-rose-50 transition-colors duration-150 ease-out cursor-pointer py-2.5 rounded-xl px-3"
               >
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="mr-2.5 h-4 w-4" />
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -335,22 +335,22 @@ export default function DashboardLayout({
       </nav>
 
       {/* ──── TAB / PAGE CONTENT VIEWPORT ──── */}
-      <main className="flex-1 flex flex-col bg-surface-sunken overflow-hidden relative pb-16 md:pb-0">
+      <main className="flex-1 flex flex-col bg-slate-50 overflow-hidden relative pb-16 md:pb-0">
         {children}
       </main>
 
       {/* ──── FLOATING REAL-TIME AI SUMMARY TOAST BANNER ──── */}
       {notification?.show && (
-        <div className="fixed bottom-6 right-6 z-[9999] max-w-sm w-full bg-white border border-surface-border rounded-md shadow-lg p-4 flex items-start gap-3 animate-slide-in">
-          <div className="h-10 w-10 rounded-md bg-brand-subtle border border-brand-light/10 text-brand-text flex items-center justify-center flex-shrink-0">
+        <div className="fixed bottom-6 right-6 z-[9999] max-w-sm w-full bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl shadow-premium p-4 flex items-start gap-3 animate-in fade-in slide-in-from-bottom-5 duration-350 ease-out">
+          <div className="h-10 w-10 rounded-xl bg-brand/10 border border-brand/5 text-brand flex items-center justify-center flex-shrink-0">
             <Brain className="h-5 w-5 animate-pulse" />
           </div>
           <div className="flex-1 space-y-1">
-            <h4 className="text-sm font-bold text-ink flex items-center gap-1.5 font-display">
+            <h4 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 font-display">
               <span>AI Summary Ready</span>
             </h4>
-            <p className="text-xs text-ink-muted leading-normal">
-              The AI summary for meeting <strong className="text-ink">"{notification.meetingTitle}"</strong> has finished compiling.
+            <p className="text-xs text-slate-500 leading-normal font-sans">
+              The AI summary for meeting <strong className="text-slate-800 font-semibold">"{notification.meetingTitle}"</strong> has finished compiling.
             </p>
             <div className="flex gap-2.5 pt-1.5">
               <button 
@@ -358,13 +358,13 @@ export default function DashboardLayout({
                   router.push(`/dashboard/meetings/${notification.meetingCode}/summary`);
                   setNotification(null);
                 }} 
-                className="text-[10px] bg-brand hover:bg-brand-hover text-white font-bold px-3 py-1.5 rounded-sm cursor-pointer transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
+                className="text-[10px] bg-brand hover:bg-brand-hover text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 active:scale-95 shadow-premium hover:shadow-brand/20 outline-none"
               >
                 View Summary
               </button>
               <button 
                 onClick={() => setNotification(null)} 
-                className="text-[10px] text-ink-muted hover:text-ink px-2 py-1.5 cursor-pointer font-medium focus-visible:underline outline-none"
+                className="text-[10px] text-slate-500 hover:text-slate-800 px-2 py-1.5 cursor-pointer font-semibold outline-none"
               >
                 Dismiss
               </button>
@@ -372,7 +372,7 @@ export default function DashboardLayout({
           </div>
           <button 
             onClick={() => setNotification(null)} 
-            className="text-ink-muted hover:text-ink cursor-pointer flex-shrink-0 focus-visible:ring-2 focus-visible:ring-brand rounded-sm outline-none"
+            className="text-slate-400 hover:text-slate-600 cursor-pointer flex-shrink-0 focus-visible:ring-2 focus-visible:ring-brand rounded-lg outline-none"
             aria-label="Close notification"
           >
             <X className="h-4 w-4" />

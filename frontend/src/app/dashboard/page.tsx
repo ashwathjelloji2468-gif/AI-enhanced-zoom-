@@ -207,7 +207,7 @@ export default function DashboardHome() {
   const todayMeetings = meetings.filter(m => m.status === 'SCHEDULED' || m.status === 'ONGOING');
 
   return (
-    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-7xl mx-auto w-full text-ink">
+    <div className="flex-1 flex flex-col p-8 md:p-12 overflow-y-auto max-w-7xl mx-auto w-full text-slate-800 animate-in fade-in duration-300">
       
       {/* Upper Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-stretch">
@@ -217,136 +217,136 @@ export default function DashboardHome() {
           <button 
             onClick={startInstantMeeting}
             aria-label="Start a new instant meeting"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg bg-brand hover:bg-brand-hover active:translate-y-0 active:shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-150 ease-out text-white font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-3xl bg-gradient-to-br from-brand to-brand-hover active:scale-[0.99] hover:-translate-y-1 shadow-premium hover:shadow-brand/20 transition-all duration-300 ease-out text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer group"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-white/15 mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 mb-3 transition-transform group-hover:scale-105">
               <Video className="h-7 w-7 text-white" />
             </div>
             <span className="text-base font-bold font-display">New Meeting</span>
-            <span className="text-xs text-brand-subtle mt-0.5 font-sans">Start instantly</span>
+            <span className="text-xs text-brand-subtle mt-1 font-sans">Start instantly</span>
           </button>
-
+ 
           <button 
             onClick={() => setIsJoinOpen(true)}
             aria-label="Join a meeting using a code"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-3xl border border-slate-200/80 bg-white hover:border-brand/30 hover:bg-brand/5 hover:text-brand active:scale-[0.99] hover:-translate-y-1 shadow-premium hover:shadow-premium-hover transition-all duration-300 ease-out text-slate-700 font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer group"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-subtle text-brand mb-3 transition-all duration-300 group-hover:bg-brand group-hover:text-white">
               <PlusSquare className="h-7 w-7" />
             </div>
             <span className="text-base font-bold font-display">Join</span>
-            <span className="text-xs text-ink-muted mt-0.5 font-sans">Use meeting ID</span>
+            <span className="text-xs text-slate-400 mt-1 font-sans">Use meeting ID</span>
           </button>
-
+ 
           <button 
             onClick={() => setIsScheduleOpen(true)}
             aria-label="Schedule an upcoming meeting"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-3xl border border-slate-200/80 bg-white hover:border-brand/30 hover:bg-brand/5 hover:text-brand active:scale-[0.99] hover:-translate-y-1 shadow-premium hover:shadow-premium-hover transition-all duration-300 ease-out text-slate-700 font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer group"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-subtle text-brand mb-3 transition-all duration-300 group-hover:bg-brand group-hover:text-white">
               <Calendar className="h-7 w-7" />
             </div>
             <span className="text-base font-bold font-display">Schedule</span>
-            <span className="text-xs text-ink-muted mt-0.5 font-sans">Plan a session</span>
+            <span className="text-xs text-slate-400 mt-1 font-sans">Plan a session</span>
           </button>
-
+ 
           <button 
             onClick={startPersonalRoom}
             aria-label="Enter your personal meeting room"
-            className="flex flex-col items-center justify-center p-6 h-40 rounded-lg border border-surface-border bg-transparent hover:border-brand hover:bg-brand-subtle hover:text-brand-text active:scale-[0.98] transition-colors duration-150 ease-out text-ink font-medium shadow-sm focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="flex flex-col items-center justify-center p-6 h-40 rounded-3xl border border-slate-200/80 bg-white hover:border-brand/30 hover:bg-brand/5 hover:text-brand active:scale-[0.99] hover:-translate-y-1 shadow-premium hover:shadow-premium-hover transition-all duration-300 ease-out text-slate-700 font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none cursor-pointer group"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-brand-subtle text-brand-text mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-subtle text-brand mb-3 transition-all duration-300 group-hover:bg-brand group-hover:text-white">
               <Tv className="h-7 w-7" />
             </div>
             <span className="text-base font-bold font-display">Personal Room</span>
-            <span className="text-xs text-ink-muted mt-0.5 font-sans">Your fixed space</span>
+            <span className="text-xs text-slate-400 mt-1 font-sans">Your fixed space</span>
           </button>
         </div>
-
+ 
         {/* Right Side: Clock Card */}
         <div className="lg:col-span-5">
-          <Card className="h-full border-surface-border bg-white text-ink rounded-lg shadow-sm flex flex-col justify-between p-8 min-h-60 relative overflow-hidden">
-            <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-brand/5 blur-3xl pointer-events-none" />
+          <Card className="h-full border-slate-200/85 bg-white text-slate-800 rounded-3xl shadow-premium hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between p-8 min-h-60 relative overflow-hidden group">
+            <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-brand/5 blur-3xl pointer-events-none group-hover:bg-brand/10 transition-colors duration-300" />
             
             <div>
-              <h3 className="text-5xl font-medium tracking-tight text-ink font-display select-none">
+              <h3 className="text-5xl font-bold tracking-tight text-slate-800 font-display select-none">
                 {formatTime(currentTime)}
               </h3>
-              <p className="text-ink-muted text-sm mt-2 font-medium font-sans">
+              <p className="text-slate-400 text-sm mt-2.5 font-semibold font-sans">
                 {formatDate(currentTime)}
               </p>
             </div>
-
-            <div className="border-t border-surface-border pt-6 mt-6">
-              <p className="text-xs text-ink-muted flex items-center">
-                <Clock className="h-4 w-4 text-brand-text mr-2" />
+ 
+            <div className="border-t border-slate-100 pt-6 mt-6">
+              <p className="text-xs text-slate-400 flex items-center font-medium font-sans">
+                <Clock className="h-4 w-4 text-brand mr-2" />
                 Timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
               </p>
             </div>
           </Card>
         </div>
-
+ 
       </div>
-
+ 
       {/* Bottom Area: Today's Scheduled Meetings list */}
       <div className="flex-1 flex flex-col min-h-60">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-ink font-display">Scheduled Sessions</h2>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-bold text-slate-800 font-display">Scheduled Sessions</h2>
           <Button 
             variant="link" 
             onClick={() => router.push('/dashboard/meetings')}
-            className="text-brand-text hover:text-brand-hover font-semibold p-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
+            className="text-brand hover:text-brand-hover font-bold p-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
           >
             Manage Meetings
           </Button>
         </div>
 
         {todayMeetings.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center rounded-lg border border-dashed border-surface-border p-8 bg-white text-center">
-            <VideoOff className="h-10 w-10 text-ink-faint mb-2" />
-            <p className="text-ink-muted text-sm">No meetings yet. Create one to get started.</p>
+          <div className="flex-1 flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 p-12 bg-white text-center shadow-premium">
+            <VideoOff className="h-12 w-12 text-slate-300 mb-3" />
+            <p className="text-slate-500 font-semibold text-sm font-sans">No meetings yet. Create one to get started.</p>
             <Button 
               variant="outline" 
               onClick={() => setIsScheduleOpen(true)}
-              className="mt-4 border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+              className="mt-5 border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[40px] rounded-2xl shadow-sm hover:shadow-premium transition-all duration-200"
             >
               Schedule a Meeting
             </Button>
           </div>
         ) : (
           <ScrollArea className="flex-1 max-h-[300px]">
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               {todayMeetings.slice(0, 5).map((meeting) => (
                 <div 
                   key={meeting.id} 
-                  className="flex items-center justify-between p-4 rounded-lg border border-surface-border bg-white hover:bg-surface-sunken transition-colors"
+                  className="flex items-center justify-between p-5 rounded-3xl border border-slate-200/60 bg-white hover:bg-slate-50/50 shadow-premium hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <div className="space-y-1">
-                    <p className="font-bold text-ink">{meeting.title}</p>
-                    <div className="flex items-center text-xs text-ink-muted space-x-3">
-                      <span>Code: <code className="text-brand-text font-bold font-mono">{meeting.code}</code></span>
+                  <div className="space-y-1.5">
+                    <p className="font-bold text-slate-800 text-[15px] font-sans">{meeting.title}</p>
+                    <div className="flex items-center text-xs text-slate-400 space-x-3 font-medium">
+                      <span>Code: <code className="bg-slate-100 text-brand font-bold font-mono px-2 py-0.5 rounded-lg text-xs">{meeting.code}</code></span>
                       {meeting.scheduledAt && (
                         <span>• {new Date(meeting.scheduledAt).toLocaleString()}</span>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2.5">
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      className="border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[38px] w-10 p-0 rounded-xl transition-colors duration-200"
                       onClick={() => copyToClipboard(meeting.code)}
                       aria-label={`Copy meeting code for ${meeting.title}`}
                     >
                       {copiedCode === meeting.code ? (
-                        <Check className="h-4 w-4 text-success" />
+                        <Check className="h-4 w-4 text-emerald-500" />
                       ) : (
                         <Clipboard className="h-4 w-4" />
                       )}
                     </Button>
                     <Button 
                       size="sm"
-                      className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                      className="bg-brand hover:bg-brand-hover text-white font-semibold focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[38px] px-5 rounded-xl shadow-premium shadow-brand/10 hover:shadow-brand/20 transition-all duration-200"
                       onClick={() => router.push(`/meeting/${meeting.code}`)}
                     >
                       Start
@@ -358,19 +358,19 @@ export default function DashboardHome() {
           </ScrollArea>
         )}
       </div>
-
+ 
       {/* ──── DIALOG: JOIN MEETING ──── */}
       <Dialog open={isJoinOpen} onOpenChange={setIsJoinOpen}>
-        <DialogContent className="bg-white border-surface-border text-ink rounded-lg shadow-lg p-6">
+        <DialogContent className="bg-white border-slate-200/80 text-slate-800 rounded-3xl shadow-premium p-6 max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-ink font-display">Join Meeting</DialogTitle>
-            <DialogDescription className="text-ink-muted text-sm">
+            <DialogTitle className="text-xl font-bold text-slate-800 font-display">Join Meeting</DialogTitle>
+            <DialogDescription className="text-slate-400 text-sm font-medium">
               Enter the meeting ID or code to connect to the WebRTC video stream.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleJoinSubmit} className="space-y-4 py-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="joinCode" className="text-xs font-semibold text-ink">
+          <form onSubmit={handleJoinSubmit} className="space-y-4 py-3">
+            <div className="space-y-2">
+              <Label htmlFor="joinCode" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Meeting Code
               </Label>
               <Input 
@@ -379,14 +379,14 @@ export default function DashboardHome() {
                 required
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value)}
-                className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                className="bg-slate-50/50 text-slate-800 border-slate-200 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[42px] px-4 rounded-2xl shadow-sm transition-all duration-200"
               />
             </div>
             
             {joinError && (
-              <p className="text-xs text-danger font-semibold">{joinError}</p>
+              <p className="text-xs text-rose-500 font-bold">{joinError}</p>
             )}
-
+ 
             <DialogFooter className="pt-2 gap-2 sm:gap-0">
               <Button 
                 type="button" 
@@ -396,13 +396,13 @@ export default function DashboardHome() {
                   setJoinError('');
                   setIsJoinOpen(false);
                 }}
-                className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                className="border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[40px] rounded-2xl transition-colors duration-200"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit"
-                className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                className="bg-brand hover:bg-brand-hover text-white font-semibold focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[40px] rounded-2xl shadow-premium shadow-brand/10 hover:shadow-brand/20 transition-all duration-200"
               >
                 Join
               </Button>
@@ -413,16 +413,16 @@ export default function DashboardHome() {
 
       {/* ──── DIALOG: SCHEDULE MEETING ──── */}
       <Dialog open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
-        <DialogContent className="bg-white border-surface-border text-ink max-w-md rounded-lg shadow-lg p-6">
+        <DialogContent className="bg-white border-slate-200/80 text-slate-800 max-w-md rounded-3xl shadow-premium p-6">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-ink font-display">Schedule Meeting</DialogTitle>
-            <DialogDescription className="text-ink-muted text-sm">
+            <DialogTitle className="text-xl font-bold text-slate-800 font-display">Schedule Meeting</DialogTitle>
+            <DialogDescription className="text-slate-400 text-sm font-medium">
               Set date and time parameters for your meeting.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleScheduleSubmit} className="space-y-4 py-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="scheduleTitle" className="text-xs font-semibold text-ink">
+            <div className="space-y-2">
+              <Label htmlFor="scheduleTitle" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Topic
               </Label>
               <Input 
@@ -431,13 +431,13 @@ export default function DashboardHome() {
                 required
                 value={scheduleTitle}
                 onChange={(e) => setScheduleTitle(e.target.value)}
-                className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                className="bg-slate-50/50 text-slate-800 border-slate-200 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[42px] px-4 rounded-2xl shadow-sm transition-all duration-200"
               />
             </div>
-
+ 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="scheduleDate" className="text-xs font-semibold text-ink">
+              <div className="space-y-2">
+                <Label htmlFor="scheduleDate" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Date
                 </Label>
                 <Input 
@@ -446,11 +446,11 @@ export default function DashboardHome() {
                   required
                   value={scheduleDate}
                   onChange={(e) => setScheduleDate(e.target.value)}
-                  className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                  className="bg-slate-50/50 text-slate-800 border-slate-200 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[42px] px-4 rounded-2xl shadow-sm transition-all duration-200"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="scheduleTime" className="text-xs font-semibold text-ink">
+              <div className="space-y-2">
+                <Label htmlFor="scheduleTime" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Time
                 </Label>
                 <Input 
@@ -459,28 +459,28 @@ export default function DashboardHome() {
                   required
                   value={scheduleTime}
                   onChange={(e) => setScheduleTime(e.target.value)}
-                  className="bg-surface text-ink border-surface-border focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[44px] px-3.5"
+                  className="bg-slate-50/50 text-slate-800 border-slate-200 focus-visible:ring-brand focus-visible:ring-offset-2 min-h-[42px] px-4 rounded-2xl shadow-sm transition-all duration-200"
                 />
               </div>
             </div>
-
-            <div className="flex items-center justify-between p-3 bg-surface-sunken rounded-lg border border-surface-border">
+ 
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
               <div className="space-y-0.5">
-                <Label className="text-sm font-bold text-ink">Waiting Room</Label>
-                <p className="text-xs text-ink-muted">Only admitted users can join</p>
+                <Label className="text-sm font-bold text-slate-700">Waiting Room</Label>
+                <p className="text-xs text-slate-400 font-medium">Only admitted users can join</p>
               </div>
               <input 
                 type="checkbox"
                 checked={waitingRoom}
                 onChange={(e) => setWaitingRoom(e.target.checked)}
-                className="h-4 w-4 accent-brand rounded border-surface-border cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
+                className="h-4.5 w-4.5 accent-brand rounded-lg border-slate-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none"
               />
             </div>
-
+ 
             {scheduleError && (
-              <p className="text-xs text-danger font-semibold">{scheduleError}</p>
+              <p className="text-xs text-rose-500 font-bold">{scheduleError}</p>
             )}
-
+ 
             <DialogFooter className="pt-2 gap-2 sm:gap-0">
               <Button 
                 type="button" 
@@ -492,14 +492,14 @@ export default function DashboardHome() {
                   setScheduleError('');
                   setIsScheduleOpen(false);
                 }}
-                className="border-surface-border hover:bg-surface-sunken text-ink focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                className="border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[40px] rounded-2xl transition-colors duration-200"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit"
                 disabled={isScheduling}
-                className="bg-brand hover:bg-brand-hover text-white font-medium focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[44px]"
+                className="bg-brand hover:bg-brand-hover text-white font-semibold focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 outline-none min-h-[40px] rounded-2xl shadow-premium shadow-brand/10 hover:shadow-brand/20 transition-all duration-200"
               >
                 {isScheduling ? 'Scheduling...' : 'Schedule'}
               </Button>
