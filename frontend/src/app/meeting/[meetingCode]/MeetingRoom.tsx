@@ -269,14 +269,6 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
     e.preventDefault();
     if (!chatInput.trim() || !socket) return;
 
-    const msg: ChatMessage = {
-      id: crypto.randomUUID(),
-      senderId: user.id,
-      senderName: user.name,
-      content: chatInput.trim(),
-      createdAt: new Date().toISOString(),
-    };
-
     socket.emit('chat:message', { 
       room: meetingCode, 
       userId: user.id,
@@ -480,8 +472,8 @@ export default function MeetingRoom({ meetingCode, meeting, user, liveKitToken }
             style={{ 
               position: 'absolute',
               bottom: 0,
-              transform: `translateX(${r.leftOffset || 0}px)`,
-            }}
+              '--left-offset': `${r.leftOffset || 0}px`,
+            } as React.CSSProperties}
             className="flex items-center space-x-1.5 bg-dark-surface/95 border border-dark-border px-3.5 py-2 rounded-full text-xs font-semibold shadow-2xl animate-drift-emoji whitespace-nowrap text-white"
           >
             <span className="text-base">{r.reaction}</span>
